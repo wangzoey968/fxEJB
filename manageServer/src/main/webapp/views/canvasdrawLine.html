@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>canvas example</title>
+    <script type="text/javascript">
+        function drawShape() {
+            var canvas = document.getElementById("tutorial");
+            if (canvas.getContext) {
+                var ctx = canvas.getContext("2d");
+                // Draw shapes
+                ctx.beginPath();
+                ctx.moveTo(100, 100);
+                ctx.lineTo(200, 250);
+                ctx.closePath();
+                ctx.stroke();
+            } else {
+                alert("error");
+            }
+        }
+    </script>
+</head>
+
+<body onload="drawShape()">
+<div >
+    <canvas id="tutorial" width="400" height="400"></canvas>
+</div>
+</body>
+
+</html>

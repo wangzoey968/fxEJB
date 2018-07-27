@@ -1,0 +1,47 @@
+数据库
+公司:
+root
+zhundian66
+笔记本:
+root+lighter
+
+
+http://116.62.38.79:6008/luna/trunk
+
+准点账号
+wangzy
+123546
+
+http://test.zhundianyinwu.com:8055/
+http://vip.zhundianyinwu.com
+
+客户客户端测试账号
+18016347400   123   202cb962ac59075b964b07152d234b70
+
+内部客户端测试账号
+admin         123   202cb962ac59075b964b07152d234b70
+
+内部登录
+登录
+12345678901  123123
+
+idea激活server
+填入下面的license server:
+http://intellij.mandroid.cn/
+http://idea.imsxm.com/
+http://idea.iteblog.com/key.php
+
+http://vip.zhundianyinwu.com:8080/product/productPrice/mainFrame/login.jsp  报价网站
+admin1
+4006085466
+
+
+svn  http://116.62.38.79:6008/Machining/trunk
+http://vip.zhundianyinwu.com:6008
+
+
+luna64账号
+韩赛龙
+123
+
+470

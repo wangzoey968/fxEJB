@@ -5,7 +5,7 @@ import com.it.client.EJB;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MemoryCache {
+public class CacheUsername {
 
     private static Map<Long, String> userNameCache = new HashMap<>();
 

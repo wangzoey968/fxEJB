@@ -1,6 +1,6 @@
 package com.it.server;
 
-import com.it.api.UserServiceInter;
+import com.it.api.UserServiceLocal;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -13,11 +13,11 @@ import javax.ejb.TransactionManagementType;
 @Stateless
 @Remote
 @TransactionManagement(TransactionManagementType.BEAN)
-public class UserServiceRemote implements UserServiceInter {
+public class UserServiceRemote implements UserServiceLocal {
 
     @Override
     public void test() throws Exception {
-        System.out.println("this is test of OrderServiceInter");
+        System.out.println("this is test of OrderServiceLocal");
     }
 
     @Override

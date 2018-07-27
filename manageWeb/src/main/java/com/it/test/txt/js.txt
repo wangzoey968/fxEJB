@@ -1,0 +1,18 @@
+常用的函数
+Number(),ParseInt(),ParseFloat()
+
+js中使用方括号来访问对象的属性
+常用person[name]
+或者使用
+person.name
+
+判断是否是某种数据类型
+if( value instanceOf Array){
+}
+
+数组常用的方法,push(),pop(),后入先出的形式,
+    或者push(),shift(),先入先出
+    reverse(),sort()
+
+bom对象
+window对象

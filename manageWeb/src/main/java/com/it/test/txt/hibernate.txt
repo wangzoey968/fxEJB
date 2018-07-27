@@ -1,0 +1,6 @@
+@Table(indexes = [
+        @Index(columnList = 'waresType'),
+        @Index(columnList = 'waresBrand'),
+        @Index(columnList = 'waresName')],
+        uniqueConstraints = @UniqueConstraint(columnNames = ["waresType", "waresBrand", "waresName"])
+)

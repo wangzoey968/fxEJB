@@ -1,0 +1,88 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap-datetimepicker.min.css">
+    <script type="text/javascript" src="../lib/config.js"></script>
+    <script type="text/javascript" src="../lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-table-reorder-rows.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/dateChinese.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/mybootstrap.js"></script>
+    <script type="text/javascript" src="../lib/Ext.js"></script>
+    <title>统计</title>
+</head>
+<!--引入其他的页面-->
+<iframe src="paperContent.html" width="300px" height="200px" name="content"></iframe>
+
+<body>
+<div>
+    <div>
+        <h3>印刷设置</h3>
+        <div>
+            <button>印刷机台</button>
+            <button><a href="paperContent.html" target="_blank">Welcome</a></button>
+        </div>
+        <div>
+            <form method="get" action="/user/getUser.do?" target="_blank">
+                <table>
+                    <thead>新建</thead>
+                    <tbody>
+                    <tr>
+                        <td>1号</td>
+                        <td>
+                            <select id="tbselect" style="width: 60px;height: 30px">
+                                <option selected="selected">---</option>
+                                <option>Single1</option>
+                                <option>Single2</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>sss</td>
+                        <td>
+                            <input type="checkbox" checked="checked" name="hobby1" value="h1">爱好1
+                            <input type="checkbox" value="复选" name="hobby1">爱好2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>sss</td>
+                        <td>
+                            <input type="radio" name="gender" checked="checked" value="male"/>男
+                            <input type="radio" name="gender" value="female"/>女
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>sss</td>
+                        <td>
+                            <input type="file" name="file">
+                            <input type="text" maxlength="1">1
+                            <input type="text" value="此处为自动聚焦" autofocus required>2
+                            <input type="email">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input type="button" value="提交1"/>
+                <button>提交2</button>
+                <button type="reset">重置</button>
+            </form>
+        </div>
+        <div contenteditable="false">
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;北京故宫是中国明清两代的皇家宫殿，旧称为紫禁城，位于北京中轴线的中心，是中国古代宫廷建筑之精华。</p>
+        </div>
+        <div class="left-content">
+        </div>
+        <div style="width: 50px;height: 50px">
+            <video src="/user/getUser.do"></video>
+            <audio src="/user/getUser.do"></audio>
+        </div>
+    </div>
+</div>
+</body>
+</html>

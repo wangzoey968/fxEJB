@@ -1,0 +1,118 @@
+	/*
+	 * 使用递归查找文件名为targetFileName的文件
+	 */
+	@Test
+	public void s2() throws IOException {
+        findFiles("E:/FactorySys","2233.txt");
+	}
+	 public void findFiles(String baseDirName, String targetFileName) throws IOException {
+        List<String> fileList = new ArrayList<String>();
+        File baseDir = new File(baseDirName);       // 创建一个File对象
+        if (!baseDir.exists() || !baseDir.isDirectory()) {  // 判断目录是否存在
+            System.out.println("文件查找失败：" + baseDirName + "不是一个目录！");
+        }
+        String path = baseDir.getCanonicalPath();
+        System.out.println(path);
+        String tempName = null;
+        File tempFile;
+        File[] files = baseDir.listFiles();
+        if (files == null) return;
+        for (int i = 0; i < files.length; i++) {
+            tempFile = files[i];
+            if (tempFile.isDirectory()) {
+                findFiles(tempFile.getAbsolutePath(), targetFileName);
+            } else if (tempFile.isFile()) {
+                tempName = tempFile.getName();
+                if (targetFileName.equals(tempName)) {
+                    // 匹配成功，将文件名添加到结果集
+                    fileList.add(tempFile.getAbsolutePath());
+                    System.out.println(tempFile.getAbsolutePath());
+                }
+            }
+        }
+    }
+	 
+	 
+	 /*
+	  * 不使用递归查找所有文件
+	  */
+    @Test
+    public void s2() throws IOException {
+        File file = new File("E:/FactorySys");
+        if (file.exists()) {
+            List<File> list = new ArrayList<File>();
+            File[] files = file.listFiles();
+            for (File file2 : files) {
+                if (file2.isDirectory()) {
+                    System.out.println("文件夹1:" + file2.getAbsolutePath());
+                    list.add(file2);
+                } else {
+                    System.out.println("文件1:" + file2.getAbsolutePath());
+                }
+            }
+            while (!list.isEmpty()) {
+                File temp_file = list.remove(0);
+                files = temp_file.listFiles();
+                for (File file2 : files) {
+                    if (file2.isDirectory()) {
+                        System.out.println("文件夹2:" + file2.getAbsolutePath());
+                        list.add(file2);
+                    } else {
+                        System.out.println("文件2:" + file2.getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+            System.out.println("文件不存在!");
+        }
+    }
+	 
+	 
+	
+	/*
+	 * 读取文件,并写出到输出流中
+	 */
+	@requestMapping(value="getImg",method=requestMethod.get)
+	void getImg(HttpServletRequest request, HttpServletResponse response, String pathName) {
+		/*
+		 *byte[] b = new byte[is.getChannel().size()]
+		 *byte[] b = new byte[file.length()]
+		 */
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            //读取文件流到byte中,并写出到输出流中
+            File file = new File(ConfigService.getFileRoot() + "/" + pathName);
+            is = new FileInputStream(file)//创建输入流
+            byte[] b = new byte[1024]
+            int len = 0
+            os = response.getOutputStream();
+            while (len != -1) {     //此处不能是len<0
+                os.write(b, 0, len);//把b中的数据写出到输出流中,按照b的长度来
+                len = is.read(b)    //从输入流中读取b长度的字节,如果字节数不够则返回-1
+            }
+            os.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                is.close()
+            }
+            if (os != null) {
+                os.close()
+            }
+        }
+    }
+	
+	
+	/******************documenthelper********************/
+	写出cfg文件
+	writer writer = Paths.get(System.getProperty('user.dir') + "/template/print/打包条码.cfg").toFile().newWriter();
+		Element root = DocumentHelper.createElement("Config");
+		Document doc = DocumentHelper.createDocument(root);
+		root.addAttribute('printer', selPrinter.selectionModel.selectedItem.name);
+		root.addAttribute('width', tfWidth.text);
+
+		doc.write(writer);
+		writer.flush();
+		writer.close();

@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>css3画直线</title>
+</head>
+<body>
+</body>
+<script type="text/javascript">
+    //定义起始坐标
+    var x1 = 0;
+    var y1 = 0;
+    //鼠标按下
+    document.onmousedown = function down(e) {
+        var e = e || window.event;
+        x1 = e.clientX;
+        y1 = e.clientY;
+    };
+    //鼠标弹起
+    document.onmouseup = function up(e) {
+        var e = e || window.event;
+        var x2 = e.clientX;
+        var y2 = e.clientY;
+        var r = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        var deg = Math.abs(Math.atan((y2 - y1) / (x2 - x1))) * 180 / Math.PI;
+        if (x2 > x1) {
+            if (y2 < y1) {
+                deg = -deg;
+            }
+        } else {
+            if (y2 < y1) {
+                deg += 180;
+            } else {
+                deg = -deg - 180;
+            }
+        }
+        var oDiv = document.createElement('div');
+        oDiv.style.position = 'absolute';
+        oDiv.style.height = '1px';
+        oDiv.style.width = r + 'px';
+        oDiv.style.backgroundColor = 'red';
+        oDiv.style.left = x1 + 'px';
+        oDiv.style.top = y1 + 'px';
+        oDiv.style.transformOrigin = "0 0";
+        oDiv.style.transform = "rotate(" + deg + "deg)";
+        document.body.appendChild(oDiv);
+    }
+</script>
+</html>

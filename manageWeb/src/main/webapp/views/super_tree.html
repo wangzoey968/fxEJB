@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+    <TITLE>show tree data </TITLE>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="../lib/jquery-3.2.1.min.js"></script>
+</HEAD>
+
+<BODY>
+<h1>tree 风格</h1>
+<h6></h6>
+
+<div>
+    <ul id="treeDemo_2_ul">
+        <!--ul下的li中-->
+        <li id="treeDemo_4" class="level2" tabindex="0">
+            <a class="level2" onclick="" target="_blank" style="" title="叶子节点112">
+                <span class="node_name">叶子节点112</span>
+            </a>
+            <ul>
+                <li>
+                    <a class="level2" onclick="" target="_blank" style="" title="叶子节点112">
+                        <span class="node_name">叶子节点112<button><a class="tempbtn" name="hre">+</a></button></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!--ul下的li中又包含ul-->
+        <li>
+            <a onclick="" target="_blank" style="" title="叶子节点112">
+                <span class="node_name">叶子节点112<button><a class="tempbtn" name="hre">+</a></button></span>
+            </a>
+            <ul>
+                <li>
+                    <a onclick="" target="_blank" style="" title="叶子节点112">
+                        <span class="node_name">叶子节点112<button><a class="tempbtn" name="hre">+</a></button></span>
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a onclick="" target="_blank" style="" title="叶子节点112">
+                        <span class="node_name">叶子节点112</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div hidden id="btn_add">
+    <span><a name="hre">+</a></span>
+</div>
+<script>
+    $(".tempbtn").click(function () {
+        alert("sss")
+    })
+    /*$(".node_name").hover(function () {
+     $("#btn_add").hide();
+     });
+     $(".node_name").mousemove(function () {
+     $("#btn_add").show()
+     })*/
+</script>
+</BODY>
+</HTML>

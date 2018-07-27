@@ -1,0 +1,133 @@
+分页查询的参数
+当前页码:pageNum;
+每页条数:pageSize;
+
+可以用sql语句解决的问题就不要用java代码去解决
+
+if/while
+    break,是指终止本次循环,不进行后续循环
+    continue,终止本次循环,进行下次循环
+switch (){
+    case aa:
+        break
+    default
+}
+
+public static final int AAAAA=1;
+
+判断是大写还是小写
+if("a".charAt(0)==97),判断是不是小写a
+
+StringBuilder(1.5)是线程不安全的，而StringBuffer(1.1)是线程安全的
+字符串缓冲区中有方法reverse()是对其中的字符串进行反转的
+string的不变性,节省内存空间
+finalize()方法是由垃圾回收器调用的
+
+java中的所有异常都是从throwable接口实现而来的
+
+排序
+1.使用collections进行排序,但是list中的element必须是string类型
+  collections.sort(list)
+  collections.reverse(list)
+2.没有限制(用的较少)
+  要比较的类implement comparable接口,并在compareTo中进行比较,返回负数则表示传入的类大于该类
+3.没有限制
+  在需要比较时new comparator(),调用compareTo()
+
+collections中的fill(list,obj)方法,是将list中的所有element替换为obj,
+    看过源码后可以自己复写fill方法,使只有某些位置替换
+
+集合的选择
+如果多是查询,选择arrayList,当后期发现较多的添加和删除的时候考虑换成linkedList
+使用set的时候,大多选用hashSet
+使用map的时候,大多选中hashMap,创建或添加的时候treeMap的速度快
+
+c和c++中默认是按值传递
+
+对象的传递,实际上传递的只是句柄(handle),可以把句柄理解成c++中的指针,当调用多个方法进行传参数时,多个句柄指向同一个对象
+java中的所有的自变量和参数传递都是通过传递句柄进行的
+两种见解
+1.java中的所有都是按照按值传递(copy值进行传递)
+2.java主要是按值传递,但是对象传递时是按照按引用传递的
+
+垃圾回收
+不可颠倒顺序
+1.system.gc()
+2.system.runFinalization()
+
+java中的线程问题
+    多使用implement来实现runnable接口
+    为了避免死锁,反对使用thread中的stop(),suspend(),resume()和destroy(),
+    可以替代stop()的方法是interrupt(),interrupt()方法可以中止并退出阻塞的代码
+    sleep(),wait(),notify(),notifyAll()
+    getPriority(),setPriority(),设置优先级
+    新建的线程优先级不能比线程组的优先级高
+
+网络编程
+    tcp和udp.tcp严格,不能有数据丢失;udp可以有数据丢失
+    InetAddress.getByName()
+
+RMI
+    rmi严重依赖接口,且接口必须是public
+    远程接口(自己设计的接口)必须extends继承remote接口,抛出异常的时候须是remoteException
+    作为参数或返回值传递的一个远程对象,必须声明为远程接口,不可声明为实现类
+    rmi中常用的类
+        服务端常用(skeleton)
+        Registry registry =LocateRegistry.createRegistry(port)
+        registry.bind(bindName,class)
+        同理还有registry.unbind(bindName)
+        客户端常用(stub)
+        Naming.lookup("rmi://localhost:80/bindName")
+        例如WebCustomerService webCustomerService = (WebCustomerService) Naming.lookup("rmi://localhost:port/WebCustomerService");
+
+java调用非java程序
+    jni(java native interface)只能与c或c++写的程序打交道
+
+Jini(Java Intelligent Network Infrastructure),(网络基础)JINI查询服务
+
+二进制左移和右移
+左移运算符,6<<4,左移4位,最后补0
+右移运算符,6>>4,右移4位,高位补0
+无符号右移运算符,>>>,正负号可能会改变
+
+按位非运算符~,对值取反,
+按位亦或运算符^,相同返回0,否则返回1
+
+java没有c++中的作用域运算符"::"
+
+scheduler调度器
+marshaling 汇集
+encapsulation封装
+**************************************************************************************
+head first java
+
+byte 8,short 16,int 32,long 64,float 32,double 64
+默认初始化的值,0,false,null,0.0
+
+java是按值传递的
+
+对象的生存空间是heap(堆)(垃圾回收的堆)(不管是实例变量还是局部变量)
+方法调用及变量的生存空间stack(栈)
+实例变量被声明在类里面,而不是方法里面
+局部变量和方法的参数被声明在方法中
+
+构造函数不会被继承
+可以使用构造函数对某个类属性进行初始化
+调用super()和this()的时候,可以进行传递参数,以此来找到对应的构造函数
+调用父类构造函数唯一方式是super();
+this()从该类中的一个构造函数中调用另一个构造函数且必须是第一行,super()和this()不能同时存在
+
+静态方法不能调用非静态方法
+静态方法不能调用非静态的变量
+
+try,catch.当try中有return时,会先执行finally语句,然后再执行return语句
+
+MidiSystem是媒体的类
+
+线程
+    synchronized(同步化)可能会导致死锁(deadLock),原则上只做最少量的同步化
+
+如果两个对象的hashcode值相等,对象不一定相等;但是如果对象相等,则hashcode一定相等,复写hashcode则一定会复写equals
+
+**********************************************************java核心卷2
+

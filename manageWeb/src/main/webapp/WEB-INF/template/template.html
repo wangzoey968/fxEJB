@@ -1,0 +1,128 @@
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap-table.min.css">
+    <script type="text/javascript" src="../lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap-table-reorder-rows.js"></script>
+    <script type="text/javascript" src="template.js"></script>
+    <title>印刷setting</title>
+    <style>
+        /*.tr-price {
+            position: fixed;
+            top: auto;
+            background-image: url("../img/1.jpg");
+        }*/
+        div{
+            /*2d 进行缩放的函数,宽度变为原来的2倍,高度变为原来的4倍*/
+            /*transform: scale(2,4);*/
+            /*3d 沿x进行旋转*/
+            /*transform: rotateY(120deg);*/
+        }
+        body{
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div style="margin: 2%;border: 1px solid gray;">
+    <!--引入某个文件-->
+    <div style="width: 400px;height: 200px;">
+        <iframe src="tempContent.html" name="content"></iframe>
+    </div>
+    <div>
+        <!--href中也可以是getUsers.do-->
+        <button><a href="tempContent.html" target="_self">Welcome</a></button>
+        <!--<button><a href="/user/getUsers.do" target="_self">Welcome</a></button>-->
+        <input type="file" name="filename">测试input为file<br>
+        <input type="text" value="此处为自动聚焦" autofocus required title="这是测试input">测试text
+        <input type="email" placeholder="此处为邮箱">邮箱
+    </div>
+    <div>
+        <button id="btn_info">加载详细信息</button>
+        <div>
+            <select id="select">
+                <option selected>请选择</option>
+                <option>option1</option>
+                <option>option2</option>
+                <option>option3</option>
+            </select>
+        </div>
+        <div id="div_checkbox">
+            <label><input type="checkbox" name="pageType" value="1">单面</label>
+            <label><input type="checkbox" name="pageType" value="2">双面</label>
+            <label><input type="checkbox" name="pageType" value="3">哑膜</label>
+        </div>
+        <div id="div_radio">
+            <label><input type="radio" name="printType" value="1" checked>正反</label>
+            <label><input type="radio" name="printType" value="2">自翻</label>
+            <label><input type="radio" name="printType" value="3">滚翻</label>
+        </div>
+    </div>
+
+    <div class="collapse">
+        <form method="get" action="/user/getUser.do?" target="_blank">
+            <br>
+            <table id="tab" style="margin: 1px;border: 1px;padding: 1px;">
+                <thead>title</thead>
+                <tbody>
+                <!--<tr class="tr-price">
+                    <td>产品类型</td>
+                    <td>
+                        <div>
+                            <select id="productTypeSelect">
+                                <option selected>&#45;&#45;&#45;&#45;</option>
+                                <option>option1</option>
+                                <option>option2</option>
+                                <option>option3</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="tr-price">
+                    <td>覆膜</td>
+                    <td>
+                        <div id="fmDiv">
+                            <label><input type="checkbox" name="fmType" value="1">单面</label>
+                            <label><input type="checkbox" name="fmType" value="2">双面</label>
+                            <label><input type="checkbox" name="fmType" value="3">单面</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="tr-price">
+                    <td>印刷方式</td>
+                    <td>
+                        <div id="div_page">
+                            <label><input type="radio" name="printType" value="正反" checked>正反</label>
+                            <label><input type="radio" name="printType" value="自翻">自翻</label>
+                            <label><input type="radio" name="printType" value="滚翻">滚翻</label>
+                        </div>
+                    </td>
+                </tr>-->
+                </tbody>
+            </table>
+            <input type="submit" value="提交"/>
+            <input type="reset" value="重置"/>
+        </form>
+    </div>
+    <div contenteditable="false">
+        <p>&nbsp;北京故宫是中国明清两代的皇家宫殿，旧称为紫禁城，位于北京中轴线的中心，是中国古代宫廷建筑之精华。</p>
+    </div>
+    <div style="width: 50px;height: 50px">
+        <!--<video src="/user/getUser.do"></video>-->
+        <!--<audio src="/user/getUser.do"></audio>-->
+    </div>
+</div>
+
+<script type="text/javascript">
+    //this is place for javaScript
+    $(this).button.text="loading";
+</script>
+</body>
+</html>

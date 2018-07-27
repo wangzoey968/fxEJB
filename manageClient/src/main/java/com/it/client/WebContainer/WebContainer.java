@@ -2,7 +2,7 @@ package com.it.client.WebContainer;
 
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
-import com.it.client.util.MemoryCache;
+import com.it.client.util.CacheUsername;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -100,7 +100,7 @@ public class WebContainer {
      * @return
      */
     String getUserName(Long userId) {
-       return MemoryCache.getUserName(userId);
+       return CacheUsername.getUserName(userId);
     }
 
 }

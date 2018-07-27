@@ -1,0 +1,100 @@
+jquery选择器
+	id选择器  $("#myDiv");
+	元素选择器  $("div")
+	类选择器  $(".myclass")
+	查找所有含有id属性的div元素   $("div[id]")
+
+js中
+window窗口打开某个url  
+window.operateEvents = {
+        "click .TableDetails": function (e, value, row, index) {
+            var url = encodeURI('/machiningServer/jobStatistic/listJobDetail.do?posId=' + row.tb_WorkPosition_id
+                + '&pageNum=1&pageSize=25&workPositionName=' + row.workPositionName + '&jobStartTime=' + $('#jobStartTime').val()
+                + '&jobFinishTime=' + $('#jobFinishTime').val());
+            window.open(url)
+        }
+    };
+	
+--------------------------bootstrap----------------------------------
+
+	$('#btn-update2').click(function () {
+		var selectRow = $('#table-yinShuaPaper').bootstrapTable('getSelections')[0];
+		if (!selectRow){
+			_control.alert("请选择上边一行数据","提示",null);
+			return;
+		}else{
+		}
+		stdUnitPriceUpdate(selectRow);
+		}
+	});
+
+	//删除表格的某行
+	$('#table-yinShuaFullContr').bootstrapTable('remove',{field:"cuttingName",values:[kdeleteRow.cuttingName]});
+	
+	$('#btn-Ok2').click(function () {
+		var obj = {};
+		obj.productType=$('#table-yinShuaPaper').bootstrapTable('getSelections')[0].productType;
+		obj.paperType = $('#table-yinShuaPaper').bootstrapTable('getSelections')[0].paperType;
+		obj.schemeName = $('#schemeName').val();
+		obj.price = $('#price').val();
+		switch (true) {
+			case obj.price == "":
+				_control.alert("请填写纸张吨价", "提示", null);
+				return;
+		}
+	}
+
+	//添加,显示modal
+	var yinShuaPaperAdd = function () {
+		isAdd = true;
+		$('#paperType').val('');
+		$('#weight').val('');
+		$('#mSize').val('');
+		$('#modal-yinShuaPaper .modal-title').text("添加零件纸张");
+		$('#btn-Ok').text("添加");
+		$('#modal-yinShuaPaper').modal('show');
+	}
+		
+	
+	-------------------------------发送ajax,json数据-------------------------
+	var url = "person.action";
+    var jsonStr = {"name":'ji',"age":20};//object类型
+    var jsonArrayFinal = JSON.stringify(jsonStr);//string类型
+	
+	//jquery可以用$替换
+    jQuery.ajax({
+        type: "post", //可选的put delete get post
+        url: url,
+        //dataType : 'json',
+        /*
+         预期服务器返回的数据类型 xml html script  json jsonp  text ;
+         如果不指定，则服务器根据返回数据类型自行判断
+         */
+        async:true,//默认异步
+        data : {mydata:jsonArrayFinal},
+        //或{'mydata':jsonArrayFinal}
+
+        /*
+         要么使用 \ 对json进行手动转译，要么使用JSON.stringify(jsonStr) 将其转换为字符串类型；
+         如果不进行转译，使用【2】中的后台接收方法，那么不会报异常，但是获取不到数据。
+         data : {mydata:jsonStr},//报空指针异常，传不过去
+         */
+        contentType:"application/x-www-form-urlencoded",//默认值
+        success: function(data){
+            alert(data);
+            alert("操作成功");
+        },
+        error: function(data){
+            alert("操作失败!");
+        }
+    });
+	
+	//模拟触发点击事件
+    $("#demandCtpY").trigger('click');
+	
+	常用的jquery的格式
+	$("#id的名称").click(function(){
+		此处可发送ajax请求
+	});
+		
+		

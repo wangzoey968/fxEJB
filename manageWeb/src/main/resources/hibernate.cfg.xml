@@ -1,0 +1,18 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <!--用户-->
+        <mapping class="com.it.entity.Tb_Customer"/>
+        <mapping class="com.it.entity.Tb_User"/>
+        <mapping class="com.it.entity.Tb_User_Role"/>
+        <mapping class="com.it.entity.Tb_Role"/>
+        <mapping class="com.it.entity.Tb_Role_Auth"/>
+        <mapping class="com.it.entity.Tb_Auth"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,7 +1,7 @@
 package com.it.client;
 
-import com.it.api.OrderServiceInter;
-import com.it.api.UserServiceInter;
+import com.it.api.OrderServiceLocal;
+import com.it.api.UserServiceLocal;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.TaskUtil;
 import javafx.beans.property.LongProperty;
@@ -54,28 +54,26 @@ public class EJB {
         }
     }
 
-    private static OrderServiceInter orderService = null;
+    private static OrderServiceLocal orderService = null;
     private static Long orderServiceTime = 0L;
 
-    public static OrderServiceInter getOrderService() {
+    public static OrderServiceLocal getOrderService() {
         orderServiceTime = System.currentTimeMillis();
         try {
-            //orderService.test();
-            orderService = (OrderServiceInter) context.lookup("java:manageServer//OrderServiceRemote!com.it.api.OrderServiceInter");
+            orderService = (OrderServiceLocal) context.lookup("java:manageServer//OrderServiceRemote!com.it.api.OrderServiceLocal");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return orderService;
     }
 
-    private static UserServiceInter userService = null;
+    private static UserServiceLocal userService = null;
     private static Long userServiceTime = 0L;
 
-    public static UserServiceInter getUserService() {
+    public static UserServiceLocal getUserService() {
         userServiceTime = System.currentTimeMillis();
         try {
-            //userService.test();
-            userService = (UserServiceInter) context.lookup("java:manageServer//UserServiceRemote!com.it.api.UserServiceInter");
+            userService = (UserServiceLocal) context.lookup("java:manageServer//UserServiceRemote!com.it.api.UserServiceLocal");
         } catch (Exception e) {
             e.printStackTrace();
         }

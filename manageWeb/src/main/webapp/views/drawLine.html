@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+        /**
+         * 拖拽进行划线,通过获取起始点和结束点的px值.
+         */
+        var mDown = function () {
+            var x0, y0;
+            x0 = window.event.offsetX;
+            y0 = window.event.offsetY;
+            document.form.x.value = x0;
+            document.form.y.value = y0;
+            console.log("mDown = ", x0, y0);
+        };
+        function mMove() {
+
+        }
+        function mUp() {
+            var x1, y1, x2, y2;
+            x1 = document.form.x.value;
+            y1 = document.form.y.value;
+            x2 = window.event.offsetX;
+            y2 = window.event.offsetY;
+            console.log("mUp = ", x1, y1, x2, y2);
+            drawLine(parseInt(x1), parseInt(y1), parseInt(x2), parseInt(y2), "#0000cc ", 2, 0);
+        }
+
+        /*************   画直线   **************
+         x1,y1       起点所在的屏幕坐标（像素）
+         x2,y2       终点所在的屏幕坐标（像素）
+         color       颜色（字符串值）
+         size        大小（像素）
+         style       样式
+         =0         实线
+         =1         虚线
+         =2         虚实线
+         **********************************/
+        function drawLine(x1, y1, x2, y2, color, size, style) {
+            var i = 0;
+            var r = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+            var arctan = Math.atan((x2 - x1) / (y2 - y1));
+            if (((y2 - y1) < 0 && (x2 - x1) > 0) || ((y2 - y1) < 0 && (x2 - x1) < 0)) {
+                arctan = Math.PI + arctan;
+            }
+            var dx = Math.sin(arctan);
+            var dy = Math.cos(arctan);
+            console.log("some num = ", i, r, arctan, dx, dy);
+            for (i = 0; i < r; i++) {
+                switch (style) {
+                    case   0:
+                        drawDot(x1 + i * dx, y1 + i * dy, color, size);
+                        console.log("case 0");
+                        break;
+                    case   1:
+                        i += size * 2;
+                        drawDot(x1 + i * dx, y1 + i * dy, color, size);
+                        console.log("case 1");
+                        break;
+                    case   2:
+                        if (Math.floor(i / 4 / size) % 2 == 0) {
+                            drawDot(x1 + i * dx, y1 + i * dy, color, size);
+                            console.log("case 2 if is 0");
+                        }
+                        else {
+                            i += size * 2;
+                            drawDot(x1 + i * dx, y1 + i * dy, color, size);
+                            console.log("case 2 if not 0")
+                        }
+                        break;
+                    default:
+                        drawDot(x1 + i * dx, y1 + i * dy, color, size);
+                        console.log("case other");
+                        break;
+                }
+            }
+        }
+
+        /*************   画点   **************
+         x,y           点所在的屏幕坐标（像素）
+         color       颜色（字符串值）
+         size         大小（像素）
+         **********************************/
+        function drawDot(x, y, color, size) {
+            document.write(" <table   border= '0 '   cellspacing=0   cellpadding=0> <tr> <td   style= 'position:   absolute;   left:   " + (x) + ";   top:   " + (y) + ";background-color:   " + color + " '   width= " + size + "   height= " + size + "> </td> </tr> </table> ")
+        }
+    </script>
+</head>
+
+<body>
+<div onMouseDown="mDown();" onMouseMove="mMove();" onMouseUp="mUp();"
+     style="width: 100px;height: 100px;border: 1px solid;color: #2f96b4">
+    <form name="form">
+        <input type="hidden" name="x">
+        <input type="hidden" name="y">
+    </form>
+</div>
+</body>
+
+</html>

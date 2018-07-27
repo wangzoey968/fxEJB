@@ -1,0 +1,99 @@
+@aspect 定义切面, 常定义在类上,也就是pointCut的类上
+
+@pointCut 就是具体的执行方法 ,常标记在方法上,
+例如@Pointcut("execution(* com.xyz.myapp.service.*.*(..))")
+
+如例
+@Aspect
+public class Logging {
+
+   @Pointcut("execution(* com.tutorialspoint.*.*(..))")
+   private void selectAll(){}
+   
+   @Before("selectAll()")
+   public void beforeAdvice(){
+      System.out.println("Going to setup student profile.");
+   }
+   
+   @After("selectAll()")
+   public void afterAdvice(){
+      System.out.println("Student profile has been setup.");
+   }
+   
+   @AfterReturning(pointcut = "selectAll()", returning="retVal")
+   public void afterReturningAdvice(Object retVal){
+      System.out.println("Returning:" + retVal.toString() );
+   }
+   
+   @AfterThrowing(pointcut = "selectAll()", throwing = "ex")
+   public void AfterThrowingAdvice(IllegalArgumentException ex){
+      System.out.println("There has been an exception: " + ex.toString());   
+   }  
+}
+
+@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
+可以注解到方法上
+
+springmvc请求时,
+@pathVariable,是请求的路径变量,可以对某一个请求下的所有请求进行批量处理,
+例如@requestMapping(value="/product/main/{pageName}")
+	public string getPage(@pathVariable String pageName){return pageName}
+@requestBody,是将请求的json串转化为requestBody后跟的对象,比如 public Person getPerson(@requestBody Person person)
+@responseBody,是将返回的结果转为json,在写返回值的时候,比如@responseBody public Person getPerson(Long id){return person}
+
+fetchType="lazy" 懒加载
+
+
+Model只是用来传输数据的，并不会进行业务的寻址。但是，ModelAndView却是可以进行业务寻址的，就是设置对应的要请求的静态文件,
+最大的区别，那就是Model是每一次请求都必须会带着的，但是ModelAndView是需要我们自己去新建的。
+springmvc(默认转发)
+转发：一次请求（相同的request），地址栏的URL不会改变,可以带参数
+1.return "forward:test";
+2.return "forward:/index.jsp";
+3.return "index";
+重定向：二次请求（不同的request），地址栏的URL会变成重定向之后的URL,不能带参数
+1.return "redirect:/multiAccount/showMultiAccount";
+2.return "redirect:/index.jsp"
+
+
+注解
+
+/*service层*/
+@Service("paperService")
+@Scope("prototype")    //线程安全
+class PaperServiceImpl implements PaperService {
+    @Autowired
+    @Qualifier("paperDao")   //要与dao层组件名一致
+    private PaperDao paperDao
+	...
+}
+
+/*dao层*/
+@Repository("paperDao")  //标识dao层组建
+@Scope("prototype")   //线程安全
+class PaperDaoImpl implements PaperDao {
+    @Autowired
+    @Qualifier("sessionFactory")  //这个注解名要与hibernate中配置的data  id一致
+    private SessionFactory sessionFactory
+	...
+}
+
+
+hibernate表中的注解
+表对应的类名上的注解
+@AutoClone
+@Entity
+@Table(indexes = [
+        @Index(columnList = "priceListParamId"),
+        @Index(columnList = "amount")],					//索引
+        uniqueConstraints = @UniqueConstraint(columnNames = ["priceListParamId", "amount"]))//联合约束
+class Tb_P_fengTao_PriceListMoney implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//主键生成策略
+    Long id
+	
+	@Column(length = 16, nullable = false,unique=true)	//是否唯一
+    String schemeName 
+	
+}

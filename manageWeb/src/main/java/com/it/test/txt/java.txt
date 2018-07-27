@@ -1,0 +1,45 @@
+println request.getPathInfo()//        null
+println request.getPathTranslated()//  null			
+println request.getServletPath()//    /order/yinShuaCraft/listPaperByProductType.do   就是不带项目名称的请求路径
+println request.getContextPath()//    /MachiningCenterServer    即是项目,不包含具体的请求路径
+
+system.getproperty("user.dir")代表是进入到该模块下的目录
+
+///使用文件管理器打开某个文件
+Runtime.getRuntime().exec("explorer.exe ${localFile}")
+
+引入jstl
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+//校验手机和电话的regx
+	/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/
+
+匹配文件
+img/[A-Za-z0-9-_]{1,}.jpg
+
+timeStamp类的对象的赋值
+	new Timestamp(System.currentTimeMillis())
+	timeStamp.valueof("2018-04-07")
+
+//json转化为list
+	Gson gson=new Gson();
+	List<Tb_RoleAuth> auths = gson.fromJson(arrayStr, new TypeToken<List<Tb_RoleAuth>>() {}.getType());
+
+//去重
+	static ArrayList<Tb_RoleAuth> removeDuplicateByCondition(List<Tb_RoleAuth> auths) {
+		Set<Tb_RoleAuth> set = new TreeSet<Tb_RoleAuth>(new Comparator<Tb_RoleAuth>() {
+			@Override
+			int compare(Tb_RoleAuth r1, Tb_RoleAuth r2) {
+				//字符串,则按照asicc码升序排列
+				return r1.authName.compareTo(r2.authName)
+			}
+		});
+		set.addAll(auths);
+		return new ArrayList<Tb_RoleAuth>(set);
+	}
+
+读取mybatis-config.xml的配置文件
+import sun.security.util.Resources
+String resource="mybatis-config.xml"
+InputStream is=Resources.getResourceAsStream(resource)
+SqlSessionFactory sqlSessionFactory=new SqlSessionFactoryBuilder().build(is)

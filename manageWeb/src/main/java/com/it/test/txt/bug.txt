@@ -1,0 +1,7 @@
+"Cannot cast object 'org.hibernate.query.internal.QueryImpl@103c0fd' can't cast to com.zd.tb_user
+在sql语句后面加上.uniqueresult()
+
+org.hibernate.exception.ConstraintViolationException
+是在前端传递数据的时候,json数据中的某个名字在转化为对应的类中的属性值时,和属性的名称对应不上.
+hibernate映射文件中的属性跟model中名称不一致，导致出错.
+

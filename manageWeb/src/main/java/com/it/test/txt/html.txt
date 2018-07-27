@@ -1,0 +1,52 @@
+<a href="http://www.runoob.com/" target="_blank">访问菜鸟教程!</a>
+<a href="#tips">访问有用的提示部分</a> 
+
+
+<img> 是空标签，意思是说，它只包含属性，并且没有闭合标签。
+alt 属性用来为图像定义一串预备的可替换的文本
+<img src="pulpit.jpg" alt="Pulpit rock" width="304" height="228">
+
+
+<table> 	定义表格
+<th> 	定义表格的表头
+<tr> 	定义表格的行
+<td> 	定义表格单元
+<caption> 	定义表格标题
+<colgroup> 	定义表格列的组
+<col> 	定义用于表格列的属性
+<thead> 	定义表格的页眉
+<tbody> 	定义表格的主体
+<tfoot> 	定义表格的页脚
+
+
+<ul>
+	<li></li>
+	<li></li>
+</ul>
+<ol>
+	<li></li>
+	<li></li>
+</ol>
+
+
+<div> 	定义了文档的区域，块级 (block-level)
+<span> 	用来组合文档中的行内元素， 内联元素(inline)
+
+
+<form action="demo_form.php" method="post/get">
+	<input type="text" name="email" size="40" maxlength="50">
+	<input type="password">
+	<input type="checkbox" checked="checked">
+	<input type="radio" checked="checked">
+	<input type="submit" value="Send">
+	<input type="reset">
+	<input type="hidden">
+	<input type="file" />
+	<input type="image" />
+	<select>
+		<option>苹果</option>
+		<option selected="selected">香蕉</option>
+		<option>樱桃</option>
+	</select>
+	<textarea name="comment" rows="60" cols="20"></textarea>
+</form>

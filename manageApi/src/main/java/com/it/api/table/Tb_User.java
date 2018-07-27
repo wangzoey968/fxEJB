@@ -10,7 +10,7 @@ public class Tb_User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     @Column(length = 45, unique = true, nullable = false)
     private String loginName;            //登录名称，使用手机号；
@@ -46,7 +46,7 @@ public class Tb_User implements Serializable {
     @Override
     public String toString() {
         return "Tb_User{" +
-                "userId=" + userId +
+                "id=" + id +
                 ", loginName='" + loginName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
@@ -57,27 +57,27 @@ public class Tb_User implements Serializable {
                 '}';
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getLoginName() {
+    public String getLoginname() {
         return loginName;
     }
 
-    public void setLoginName(String loginName) {
+    public void setLoginname(String loginName) {
         this.loginName = loginName;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         this.userName = userName;
     }
 

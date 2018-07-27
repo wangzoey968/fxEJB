@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+    <!--<Server host="116.62.38.79" port="8080"/>-->
+    <Server host="localhost" port="8080"/>
+    <!--<Ftp host="116.62.38.79" port="21"/>-->
+    <Ftp host="localhost" port="21"/>
+
+    <LocalFileRoot>A:\个人文件\\测试\流程系统文件</LocalFileRoot>
+
+    <CommunalCache>A:\CommunalCache</CommunalCache>
+</Config>

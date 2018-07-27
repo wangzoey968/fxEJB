@@ -1,0 +1,106 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="paperContent.js"></script>
+</head>
+<body>
+<!--表1开始-->
+<!--零件纸张配置工具栏-->
+<div id="toolbar" class="btn-group">
+    <button class="btn-default" id="btn_search">
+        <span>查找</span>
+    </button>
+    <button class="btn-default" id="btn_add">
+        <span>添加</span>
+    </button>
+    <button class="btn-default" id="btn_update">
+        <span>修改</span>
+    </button>
+    <button class="btn-default" id="btn_delete">
+        <span>删除</span>
+    </button>
+</div>
+<!--零件纸张配置表格-->
+<div>
+    <table id="table-yinShuaPaper"></table>
+</div>
+<!--添加/修改零件纸张配置,模态框-->
+<div class="modal fade" id="modal-yinShuaPaper" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="width:300px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">零件纸张配置</h4>
+            </div>
+            <div class="modal-body">
+                <div style="display: inline-block;width: 280px;vertical-align: top">
+                    <div>
+                        <label>产品类型：<select id="productType" style="width: 180px;display: inline-block"
+                                            class="form-control"></select>
+                        </label>
+                    </div>
+                    <div style="margin: 20px 0">
+                        <label>纸张类型：<input id="paperType" style="width: 180px;display: inline-block"
+                                           class="form-control"/></label>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <label>克　　重：<input type="number" class="form-control" id="weight"
+                                           style="width: 180px;display: inline-block;"></label>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <label>组版方式：</label>
+                        <label><input type="radio" id="pbTypeG" name="pbType" style="margin: 0px 5px 0px 0px;"
+                                      value="固定" checked/>固定</label>
+                        <label><input type="radio" id="pbTypeD" name="pbType" style="margin: 0px 3px 0px 10px"
+                                      value="动态"/>动态</label>
+                    </div>
+                    <div class="pbTypeShow" style="margin: 20px 0;">
+                        <label>　模位数：<input type="number" class="form-control" id="mSize"
+                                           style="width: 180px;display: inline-block;"></label>
+                    </div>
+                    <div class="pbTypeShow" style="margin: 20px 0">
+                        <label>大纸名称：<select id="fullSizeName" style="width: 180px;display: inline-block"
+                                            class="form-control"></select></label>
+                    </div>
+                    <div class="pbTypeShow" style="margin: 20px 0">
+                        <label>开纸名称：<select id="cuttingName" style="width: 180px;display: inline-block"
+                                            class="form-control"></select></label>
+                    </div>
+                    <div class="pbTypeShow" style="margin: 20px 0">
+                        <label>机台名称：<select id="machineType" style="width: 180px;display: inline-block"
+                                            class="form-control"></select></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-Ok">添加</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--表1结束-->
+
+<!--表2开始-->
+<!--印刷价格设置-->
+<div id="toolbar2" class="btn-group" style="line-height: 34px;">
+
+    <button id="btn-refresh2" class="btn btn-default">
+        <span class="glyphicon glyphicon-repeat"></span>刷新
+    </button>
+    <button id="btn-add2" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus"></span>添加
+    </button>
+    <button id="btn-update2" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil"></span>修改
+    </button>
+    <button id="btn-delete2" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove"></span>删除
+    </button>
+</div>
+<div class="col-md-6 col-sm-6">
+    <table id="table-yinShuaPaperPrice"></table>
+</div>
+<!--表2结束-->
+</body>
+</html>

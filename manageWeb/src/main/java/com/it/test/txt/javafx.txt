@@ -1,0 +1,158 @@
+new Alert(Alert.AlertType.INFORMATION, "编辑之前请先选中").showAndWait();
+
+JobDialog.newInstance().load(job)
+
+this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, {
+	it.consume()//清除事件
+	Tb_whWare ware = tbWare.getSelectionModel().getSelectedItem()
+	Tb_whWareSpec spec = tbSpec.getSelectionModel().getSelectedItem()
+	if (ware == null || spec == null) {
+		new Alert(Alert.AlertType.INFORMATION, "请选中表中的行").showAndWait()
+		return
+	}
+	if (!tfAmount.getText().trim().isNumber()) {
+		new Alert(Alert.AlertType.INFORMATION, "请输入进货数量").showAndWait()
+		return
+	}
+	EJB.wareService.wareIn(EJB.sid, ware.getWhWareId(), spec.getWhSpecId(), tfAmount.getText().toDouble())
+	this.close()
+})
+
+
+//tableview
+tableView.setRowFactory {
+	TableRow<BeanTableItem> row = new TableRow<BeanTableItem>()
+	row.setOnContextMenuRequested {
+		if (row.empty) return
+		rowContextMenu.show(row, it.screenX, it.screenY)
+	}
+	row.setOnMouseClicked {
+		if (it.clickCount == 2 && it.button == MouseButton.PRIMARY) {
+			OrderPriceEditorDialog.newInstance().load(row.getItem().order).showAndWait()
+		}
+	}
+	return row
+}
+
+
+<TableColumn fx:id="tcItemName" prefWidth="132.0" text="零件名称">
+   <cellValueFactory>
+	   <PropertyValueFactory property="itemName" />
+   </cellValueFactory>
+</TableColumn>
+
+//格式化某列
+tcOperate.setCellFactory({
+	new TableCell<Tb_whUsageLog, String>() {
+		@Override
+		protected void updateItem(String item, boolean empty) {
+			super.updateItem(item, empty)
+			Tb_whUsageLog row = getTableRow().getItem() as Tb_whUsageLog;
+			tbUsageLog.getSelectionModel().select(row)
+			HBox hBox = new HBox();
+			Button btnPrint = new Button("打印")
+			btnPrint.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				void handle(ActionEvent event) {
+					WarePrintDialog dialog = new WarePrintDialog()
+					dialog.showAndWait()
+				}
+			})
+			hBox.getChildren().add(btnPrint)
+			hBox.setAlignment(Pos.CENTER)
+			hBox.setOpacity(5d)
+			if (row == null) {
+				setGraphic(null)
+			} else {
+				setGraphic(hBox)
+			}
+		}
+	}
+})
+
+//listView
+listView.getSelectionModel().selectedItemProperty().addListener(
+	(ObservableValue<? extends String> observable, String oldValue, String newValue) ->{
+		label.setText(newValue);
+});
+
+listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+	@Override
+	ListCell<String> call(ListView<String> param) {
+		new ListCell<String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty)
+				if (empty || item == null) {
+					setGraphic(null);
+				} else {
+					setGraphic(paperMap.get(item))
+				}
+				setText(item);
+			}
+		}
+	}
+})
+
+listcell
+cmbUsername.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+	public ListCell<String> call(ListView<String> param) {
+		// TODO Auto-generated method stub
+		ListCell<String> cell = new ListCell<String>() {
+			Label label = new Label();
+			Hyperlink link = new Hyperlink("清除");
+			HBox h1 = new HBox()
+			HBox root = new HBox(h1, link);
+			{
+				h1.children.add(label);
+				h1.setAlignment(Pos.CENTER_LEFT);
+				HBox.setHgrow(h1, Priority.ALWAYS);
+				root.setAlignment(Pos.CENTER_LEFT);
+				link.setTextFill(Paint.valueOf("#FF0000"));
+				root.setSpacing(10);
+			}
+
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(root);
+					link.setOnMousePressed({ cmbUsername.getItems().remove(item); });
+					label.setText(item);
+				}
+				super.updateItem(item, empty);
+			}
+		};
+		return cell;
+	}
+});
+
+
+//右键选项
+new AuthedMenu('仓库设置', '显示仓库首页', null,
+	new AuthedMenuItem('品牌设置', '显示仓库首页', null, {
+		PaperParamEditor.newInstance().showAndWait()
+	}),
+	new AuthedMenuItem('供应商设置', '显示仓库首页', null, {
+		SupplierViewer.newInstance().showAndWait()
+	}),
+	new AuthedMenuItem('领料单位设置', '显示仓库首页', null, {
+		ConsumerViewer.newInstance().showAndWait()
+	})
+),
+
+rowContextMenu.items.add(new Menu('定金', null, m401, m402))
+			rowContextMenu.items.add(new SeparatorMenuItem())
+			rowContextMenu.items.add(m200)   //修改交货时间
+			rowContextMenu.items.add(m701)   //加急
+			rowContextMenu.items.add(m202)   //补单
+
+
+m1.setOnAction {
+	def item = tableview.selectionModel.selectedItem;
+	if (item != null) {
+		MyUtil.showObject("客户ID${item.customerId}");
+	}
+}
+

@@ -1,0 +1,156 @@
+查询每科都大于80的学生姓名
+SELECT * FROM tb_sj_mapping AS map GROUP BY map.tb_SpareParts_Id HAVING MIN(tb_Job_Id)>120;
+
+数据库查询的时候,limit 0,100,表示从起始的为值开始查询,共查询100条
+
+根据某个字段的后4位排序,使用order by right(orderId,4)
+SELECT orderId FROM tb_order ORDER BY RIGHT(orderId,4) LIMIT 0,10
+
+使用not对数据筛选
+select * from tb_order where true and not (true or false)
+  between and , in , not in ,not exist
+  max(),min(),avg(),sum(),count(),concat()
+  group by year(createTime),按照结果中的createTime的年份分组
+多表联查
+select distinct tableA.字段,tableB.字段  from tableA inner join tableB on tableA.字段=tabelB.字段 where 子句 group by 子句 having 子句 order by 子句 limit 数字 offset 数字
+
+//1
+SELECT
+	job
+FROM
+	tb_job job
+LEFT JOIN tb_musicwire mw ON job.id = mw.tb_Job_Id
+LEFT JOIN tb_spareparts sp ON mw.tb_SpareParts_Id = sp.id
+WHERE
+	sp.orderId IN ("ZDMP1711243364")
+LIMIT 0,100
+
+//2
+SELECT
+	job.*
+FROM
+	tb_job job,
+	tb_spareparts sp,
+	tb_musicwire mw
+WHERE
+	job.id = mw.tb_Job_Id
+AND mw.tb_SpareParts_Id = sp.id
+AND sp.orderId = "ZDMP1711243364"
+
+正常sql
+insert into tableA （id，userName，password） VALUES (null,'Wang','123')
+
+//不加where,为选中全部,然后操作
+//查询数据
+SELECT * FROM tb_alarm  order by createTime desc
+//插入数据
+INSERT INTO tb_alarm VALUES(NULL,'a',SYSDATE(),SYSDATE(),'a',1,'a','a',1)
+//更新语句
+UPDATE tb_alarm SET alarmTime=SYSDATE(),createTime=SYSDATE() WHERE id=2
+//删除语句,后面记得加上executeUpdate()
+DELETE FROM tb_alarm WHERE alarmRule LIKE "%1234%"
+session.createQuery("DELETE FROM Tb_Accident_Punish_v01 WHERE accidentId=:accidentId")
+                        .setParameter('accidentId', accident.id)
+                        .executeUpdate()
+
+session.createQuery("FROM Tb_User WHERE userName like :keyword").setParameter('keyword', "%" + keyword + "%").list();
+
+
+SELECT p,pfm,f FROM Tb_P_Papers p " +
+		" LEFT JOIN Tb_P_Papers_FullSize_Mapping pfm ON p.id=pfm.papers_id " +
+		" LEFT JOIN Tb_P_Papers_FullSize f ON f.id=pfm.fullSize_id " +
+		" WHERE p.orderType=:orderType
+
+
+数据库的粒度
+表锁,页锁(一般是2-16k),行锁
+
+数据库事务的隔离级别(ISOLATION)有4个，由低到高依次为Read uncommitted、Read committed、Repeatable 		read、Serializable，这四个级别可以逐个解决脏读、不可重复读、幻读这几类问题。
+１. ISOLATION_READ_UNCOMMITTED：这是事务最低的隔离级别，它充许令外一个事务可以看到这个事务未提交的数据。
+      这种隔离级别会产生脏读，不可重复读和幻像读。
+２. ISOLATION_READ_COMMITTED：保证一个事务修改的数据提交后才能被另外一个事务读取。另外一个事务不能读取该事务未提交的数据
+３. ISOLATION_REPEATABLE_READ：这种事务隔离级别可以防止脏读，不可重复读。但是可能出现幻像读。
+      它除了保证一个事务不能读取另一个事务未提交的数据外，还保证了避免下面的情况产生(不可重复读)。
+４. ISOLATION_SERIALIZABLE：这是花费最高代价但是最可靠的事务隔离级别。事务被处理为顺序执行。
+      除了防止脏读，不可重复读外，还避免了幻读。
+
+脏读(Dirty Read)：读取到了未提交的数据
+不可重复读(Nonrepeatable Read)：不可重复读意味着我们在同一个事务中执行完全相同的select语句时可能看到不一样的结果。(多是修改了某条数据)(可以理解为两次读取,读取的结果不一致,即不能重复读取)
+幻读(Phantom Read)：当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行.(多是添加或删除了某行)(可以理解为有幻象)
+
+大致的区别在于不可重复读是由于另一个事务对数据的更改所造成的，而幻读是由于另一个事务插入或删除引起的
+
+spring中的传播机制(PROPAGATION)
+1、PROPAGATION_REQUIRED：	如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务，该设置是最常用的设置。
+2、PROPAGATION_SUPPORTS：	支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就以非事务执行。
+3、PROPAGATION_MANDATORY：	支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就抛出异常。
+4、PROPAGATION_REQUIRES_NEW：创建新事务，无论当前存不存在事务，都创建新事务。
+5、PROPAGATION_NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+6、PROPAGATION_NEVER：		以非事务方式执行，如果当前存在事务，则抛出异常。
+7、PROPAGATION_NESTED：		如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。
+
+//数据库引擎
+Innodb引擎提供了对数据库ACID事务的支持。并且还提供了行级锁和外键的约束.所以当需要使用数据库的事务时，该引擎就是首选。由于锁的粒度小，写操作是不会锁定全表的。所以在并发度较高的场景下使用会提升效率的。一种采用行级锁定的事物引擎.
+MyIASM ,MySql的默认引擎，但不提供事务的支持，也不支持行级锁和外键.执行Insert插入和Update更新语句时，即执行写操作的时候需要锁定这个表。如果表的读操作远远多于写操作时，并且不需要事务的支持的。可以将MyIASM作为数据库引擎的首先。是一个表级锁定的非事物引擎.
+
+
+
+	查询带有group by和where
+	List<Bean_CountDelivery> list = new ArrayList<>();
+	Hibernate.openSession {
+		Session session ->
+			session.createQuery("SELECT preSetDeliveryMan,realityDeliveryMan,productType,count(*),sum(productMoney) " +
+					" FROM Tb_Order WHERE " +
+					(dateType == '下单时间' ? " createTime >= :dateFrom AND createTime <=:dateTo " : "") +
+					(dateType == '预设配送时间' ? " preSetDeliveryTime >= :dateFrom AND preSetDeliveryTime <=:dateTo " : "") +
+					(skipReworkOrder ? " AND tagRework=false " : "") +
+					" GROUP BY preSetDeliveryMan,realityDeliveryMan,productType ")
+					.setParameter('dateFrom', Timestamp.valueOf("${dateFrom} 00:00:00.000"))
+					.setParameter('dateTo', Timestamp.valueOf("${dateTo} 23:59:59.000"))
+					.list().each {
+				list.add(new Bean_CountDelivery(
+						preSetDeliveryMan: it[0] as String,
+						realityDeliveryMan: it[1] as String,
+						productType: it[2] as String,
+						orderCount: it[3] as Integer,
+						productMoneySum: String.format('%.2f', it[4] as Double).toDouble()
+				))
+			}
+	}
+
+		session.createQuery("SELECT o FROM Tb_Order o LEFT JOIN Tb_SpareParts sp ON sp.orderId=o.orderId " +
+				" LEFT JOIN Tb_MusicWire mw ON sp.id=mw.tb_SpareParts_Id " +
+				" LEFT JOIN Tb_Job j ON mw.tb_Job_Id=j.id " +
+				" WHERE o.createTime >= :dateFrom AND o.createTime < :dateTo  AND j.jobId like :keyword " +
+				" AND o.demandPack=true AND o.deleted=false AND j.jobType=:jobType" +
+				(onlyNotPack ? "  AND o.packReady=false " : ""))
+				.setParameter('dateFrom', Timestamp.valueOf("${dateFrom} 00:00:00.000"))
+				.setParameter('dateTo', Timestamp.valueOf("${dateTo} 23:59:59.999"))
+				.setParameter('jobType', Jobs.YinShua)
+				.setParameter('keyword', "%" + keyword).list().each { Tb_Order order ->
+			if (list.find { it.id == order.id } == null) list.add(order);
+		}
+
+
+//查询tb_spareparts和其中的tb_job
+//param中只含有一个orderId
+public static List<Tb_SpareParts> listSpareParts(String sid, CusTb_SparePartsSearchParam param) {
+	def mySelf = RmiUtil.cusUserService.getCusUser(sid);
+	List<Tb_SpareParts> resList = new ArrayList<Tb_SpareParts>()
+	Hibernate.openSession {
+		Session session ->
+			session.createQuery(" select sp from Tb_SpareParts sp where sp.orderId in (:orderIds) ")
+					.setParameter("orderIds", param.orderIds).list().each {
+				Tb_SpareParts sp=it as Tb_SpareParts;
+				resList.add(sp)
+			}
+	//注意需要什么对象就直接select对象,不然容易报转换异常
+	//在left join查询的时候,各个表的属性都会查询出来,要注意防止转化异常
+			session.createQuery(" select job FROM Tb_Job job LEFT JOIN Tb_MusicWire mw ON job.id = mw.tb_Job_Id LEFT JOIN Tb_SpareParts sp ON mw.tb_SpareParts_Id = sp.id WHERE sp.orderId IN (:ids) ")
+					.setParameter("ids", param.orderIds).list().each {
+					Tb_Job job = it as Tb_Job
+					resList.each {it.jobList.add(job)}
+			}
+	}
+	return resList;
+}  
