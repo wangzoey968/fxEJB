@@ -97,7 +97,6 @@ listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 listcell
 cmbUsername.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 	public ListCell<String> call(ListView<String> param) {
-		// TODO Auto-generated method stub
 		ListCell<String> cell = new ListCell<String>() {
 			Label label = new Label();
 			Hyperlink link = new Hyperlink("清除");
