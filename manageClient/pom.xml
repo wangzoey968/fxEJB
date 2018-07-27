@@ -11,5 +11,12 @@
 
     <artifactId>manageClient</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.it.sample</groupId>
+            <artifactId>manageApi</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

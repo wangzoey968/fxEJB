@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--建立sessionFactory-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="configLocations">
+            <list>
+                <value>classpath*:hibernate.jndi.xml</value>
+                <value>classpath*:hibernate.cfg.xml</value>
+            </list>
+        </property>
+    </bean>
+    <!--事务管理器-->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--Hibernate-->
+    <bean id="hibernate" class="com.it.util.HibernateUtil">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+
+    <!--装配的gson-->
+    <bean id="gson" class="com.google.gson.Gson"/>
+    <!--装配的gsonBuilder-->
+    <bean id="gsonBuilder" class="com.google.gson.GsonBuilder"/>
+    <!--装配的jsonParser-->
+    <bean id="parser" class="com.google.gson.JsonParser"/>
+
+</beans>
