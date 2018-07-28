@@ -54,7 +54,7 @@ public class HibernateUtil {
         return jdbcTemplate;
     }
 
-    public static Session getSession() {
+    public static Session openSession() {
         if (session == null) {
             session = sessionFactory.openSession();
         }

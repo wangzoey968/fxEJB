@@ -33,6 +33,17 @@ public class MenuData implements Serializable {
      */
     private List<MenuData> subMenu;
 
+    public MenuData() {
+    }
+
+    public MenuData(String name, String key, String value, String auth, List<MenuData> subMenu) {
+        this.name = name;
+        this.key = key;
+        this.value = value;
+        this.auth = auth;
+        this.subMenu = subMenu;
+    }
+
     public String getName() {
         return name;
     }

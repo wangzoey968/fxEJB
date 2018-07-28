@@ -27,65 +27,65 @@ import java.util.concurrent.TimeUnit
  */
 class HttpPostTask {
 
-    private ScheduledFuture sf
+    /*private ScheduledFuture sf
 
-    /**
+    *//**
      * 头列表；
-     */
+     *//*
     private Map<String, String> header = new HashMap<>();
 
     HttpPostTask addHeader(String key, String value) {
         header.put(key, value)
         return this;
     }
-    /**
+    *//**
      * 参数列表；  添加Key-Value 形式的Post数据；
-     */
+     *//*
     private Map<String, String> stringParams = new HashMap<>();
 
     HttpPostTask addStringValue(String key, String value) {
         stringParams.put(key, value);
         return this;
     }
-    /**
+    *//**
      * Post数据，Body形式；
-     */
+     *//*
     private String stringBody = null;
 
     HttpPostTask addStringBody(String data) {
         stringBody = data;
         return this;
     }
-    /**
+    *//**
      * 访问URL
-     */
+     *//*
     private String url;
 
     HttpPostTask setUrl(String url) {
         this.url = url;
         return this;
     }
-    /**
+    *//**
      * 添加文件；
-     */
+     *//*
     private Map<String, File> files = new HashMap<>();
 
     HttpPostTask addFile(String key, File file) {
         files.put(key, file);
         return this;
     }
-    /**
+    *//**
      * 保存结果
-     */
+     *//*
     private String resultString = null;
 
     String getResultString() {
         return resultString
     }
 
-    /**
+    *//**
      * 完成；
-     */
+     *//*
     Boolean isSuccess = false;
     Closure onSuccess = { String str -> }
 
@@ -93,9 +93,9 @@ class HttpPostTask {
         this.onSuccess = onSuccess;
         return this;
     }
-    /**
+    *//**
      * 开始
-     */
+     *//*
     Boolean isStart = false;
     Closure onStart
 
@@ -103,9 +103,9 @@ class HttpPostTask {
         this.onStart = onStart;
         return this;
     }
-    /**
+    *//**
      * 取消
-     */
+     *//*
     Boolean isAbort = false;
     Closure onAbort
 
@@ -113,9 +113,9 @@ class HttpPostTask {
         this.onAbort = onAbort;
         return this;
     }
-    /**
+    *//**
      * 报错
-     */
+     *//*
     Boolean isError = false;
     Closure onError = { Exception e -> e.printStackTrace() }
 
@@ -124,9 +124,9 @@ class HttpPostTask {
         return this;
     }
 
-    /**
+    *//**
      * 是否同步
-     */
+     *//*
     private boolean sync = false;
 
     HttpPostTask setSync(boolean sync) {
@@ -134,25 +134,25 @@ class HttpPostTask {
         return this;
     }
 
-    /**
+    *//**
      * 执行
-     */
+     *//*
     HttpPostTask execute(String url, ProgressCallback progressCallback = null) {
         this.setUrl(url);
         return this.execute(progressCallback);
     }
-    /**
+    *//**
      * 取消；
-     */
+     *//*
     void abort() {
         if (sf != null && !sf.isDone()) sf.cancel(true)
         isAbort = true;
         if (onAbort != null) onAbort.run();
     }
 
-    /**
+    *//**
      * 执行Post
-     */
+     *//*
     HttpPostTask execute(ProgressCallback progressCallback = null) {
         InputStreamReader reader = null;
         try {
@@ -219,6 +219,6 @@ class HttpPostTask {
             if (reader) reader.close();
         }
         return this;
-    }
+    }*/
 
 }

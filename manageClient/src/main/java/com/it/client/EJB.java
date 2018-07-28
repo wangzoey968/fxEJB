@@ -46,6 +46,7 @@ public class EJB {
             jndiProp.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
             jndiProp.put("remote.connection.default.host", ConfigUtil.getServerAddress());
             jndiProp.put("remote.connection.default.port", ConfigUtil.getServerPort());
+            //使用jboss的security时候用的到
             //jndiProp.put("remote.connection.default.username", "wangzoey911");
             //jndiProp.put("remote.connection.default.password", "lighter110");
             context = new InitialContext(jndiProp);

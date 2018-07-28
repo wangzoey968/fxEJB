@@ -14,28 +14,28 @@ import java.util.concurrent.TimeUnit
 
 class HttpGetTask {
 
-    private ScheduledFuture sf
-    /**
+    /*private ScheduledFuture sf
+    *//**
      * 头列表；
-     */
+     *//*
     private Map<String, String> header = new HashMap<>();
 
     HttpGetTask addHeader(String key, String value) {
         header.put(key, value)
         return this;
     }
-    /**
+    *//**
      * 参数列表；
-     */
+     *//*
     private Map<String, String> stringParams = new HashMap<>();
 
     HttpGetTask addStringValue(String key, String value) {
         stringParams.put(key, value);
         return this;
     }
-    /**
+    *//**
      * 访问URL
-     */
+     *//*
     private String url;
 
     HttpGetTask setUrl(String url) {
@@ -43,17 +43,17 @@ class HttpGetTask {
         return this;
     }
 
-    /**
+    *//**
      * 保存结果
-     */
+     *//*
     private String resultString = null;
 
     String getResultString() {
         return resultString
     }
-    /**
+    *//**
      * 完成；
-     */
+     *//*
     Boolean isSuccess = false;
     Closure onSuccess = { String str -> }
 
@@ -61,9 +61,9 @@ class HttpGetTask {
         this.onSuccess = onSuccess;
         return this;
     }
-    /**
+    *//**
      * 开始
-     */
+     *//*
     Boolean isStart = false;
     Closure onStart
 
@@ -71,9 +71,9 @@ class HttpGetTask {
         this.onStart = onStart;
         return this;
     }
-    /**
+    *//**
      * 取消
-     */
+     *//*
     Boolean isAbort = false;
     Closure onAbort
 
@@ -81,9 +81,9 @@ class HttpGetTask {
         this.onAbort = onAbort;
         return this;
     }
-    /**
+    *//**
      * 报错
-     */
+     *//*
     Boolean isError = false;
     Closure onError = { Exception e -> e.printStackTrace() }
 
@@ -91,9 +91,9 @@ class HttpGetTask {
         this.onError = onError;
         return this;
     }
-    /**
+    *//**
      * 是否同步
-     */
+     *//*
     private boolean sync = false;
 
     HttpGetTask setSync(boolean sync) {
@@ -101,25 +101,25 @@ class HttpGetTask {
         return this;
     }
 
-    /**
+    *//**
      * 执行
-     */
+     *//*
     HttpGetTask execute(String url) {
         this.setUrl(url);
         return this.execute();
     }
-    /**
+    *//**
      * 取消；
-     */
+     *//*
     void abort() {
         if (sf != null && !sf.isDone()) sf.cancel(true)
         isAbort = true;
         if (onAbort != null) onAbort.run();
     }
 
-    /**
+    *//**
      * Get请求数据；
-     */
+     *//*
     HttpGetTask execute() {
         InputStreamReader reader = null;
         try {
@@ -175,9 +175,9 @@ class HttpGetTask {
         return this;
     }
 
-    /**
+    *//**
      * 下载文件；
-     */
+     *//*
     HttpGetTask execute(String path, String fileName, ProgressCallback progressCallBack = null) {
         InputStream ins = null;
         FileOutputStream out = null
@@ -230,13 +230,13 @@ class HttpGetTask {
         return this;
     }
 
-    /**
+    *//**
      * 用于下载文件时探测真实URL
-     */
+     *//*
     private String realUrl;
-    /**
+    *//**
      * 用于下载文件时探测真实URL
-     */
+     *//*
     private HttpResponse getHttpResponse(String url) throws Exception {
         HttpResponse res = null;
         HttpGet httpGet = new HttpGet(url);
@@ -249,7 +249,7 @@ class HttpGetTask {
             return getHttpResponse(realUrl);
         }
         return res;
-    }
+    }*/
 
 
 }

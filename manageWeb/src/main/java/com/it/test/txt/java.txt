@@ -1,7 +1,7 @@
 println request.getPathInfo()//        null
 println request.getPathTranslated()//  null			
 println request.getServletPath()//    /order/yinShuaCraft/listPaperByProductType.do   就是不带项目名称的请求路径
-println request.getContextPath()//    /MachiningCenterServer    即是项目,不包含具体的请求路径
+println request.getContextPath()//    /manageServer    即是项目,不包含具体的请求路径
 
 system.getproperty("user.dir")代表是进入到该模块下的目录
 

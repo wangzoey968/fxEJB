@@ -9,7 +9,7 @@ public class DaoBase {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private Session session;
+    public Session session;
 
     Session getSession() {
         if (session == null) session = sessionFactory.getCurrentSession();
