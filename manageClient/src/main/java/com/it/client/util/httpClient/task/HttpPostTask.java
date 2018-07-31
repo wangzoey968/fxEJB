@@ -1,31 +1,20 @@
-package com.it.client.util.httpClient.task
+package com.it.client.util.httpClient.task;
 
-import com.zd.m.util.httpClient.core.HttpClient
-import com.zd.m.util.httpClient.core.ProgressCallback
-import com.zd.m.util.httpClient.core.ProgressHttpEntityWrapper
-import org.apache.http.HttpEntity
-import org.apache.http.NameValuePair
-import org.apache.http.client.config.RequestConfig
-import org.apache.http.client.entity.UrlEncodedFormEntity
-import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.ContentType
-import org.apache.http.entity.StringEntity
-import org.apache.http.entity.mime.HttpMultipartMode
-import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.entity.mime.content.FileBody
-import org.apache.http.entity.mime.content.StringBody
-import org.apache.http.message.BasicNameValuePair
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 
-import java.nio.charset.Charset
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
+import java.nio.charset.Charset;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-/**
- * Created by qinglans on 15-8-28.
- *
- */
-class HttpPostTask {
+public class HttpPostTask {
 
     /*private ScheduledFuture sf
 

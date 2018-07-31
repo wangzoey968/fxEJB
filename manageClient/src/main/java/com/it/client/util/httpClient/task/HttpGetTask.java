@@ -1,18 +1,18 @@
-package com.it.client.util.httpClient.task
+package com.it.client.util.httpClient.task;
 
-import com.it.client.util.httpClient.core.HttpClient
-import org.apache.http.HttpResponse
-import org.apache.http.client.config.RequestConfig
-import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.client.methods.HttpGet
+import com.it.client.util.httpClient.core.HttpClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 
-import java.nio.charset.Charset
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-class HttpGetTask {
+public class HttpGetTask {
 
     /*private ScheduledFuture sf
     *//**
