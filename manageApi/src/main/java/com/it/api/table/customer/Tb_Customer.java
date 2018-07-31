@@ -20,6 +20,9 @@ public class Tb_Customer implements Serializable {
     @Column(name = "username",length = 255,nullable = false)
     private String username;
 
+    @Column(name = "password",length = 255,nullable = false)
+    private String password;
+
     @Column(name = "address")
     private String address;
 
@@ -31,10 +34,11 @@ public class Tb_Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Tb_User{" +
+        return "Tb_Customer{" +
                 "id=" + id +
                 ", created=" + created +
                 ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", remark='" + remark + '\'' +
@@ -63,6 +67,14 @@ public class Tb_Customer implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getAddress() {

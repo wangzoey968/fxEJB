@@ -43,6 +43,19 @@ public class Tb_User implements Serializable {
         return authList.contains(auth);
     }
 
+    public Tb_User() {
+    }
+
+    public Tb_User(String loginName, String userName, String password, String superPassword, String role, Boolean enable, Set<String> authList) {
+        this.loginName = loginName;
+        this.userName = userName;
+        this.password = password;
+        this.superPassword = superPassword;
+        this.role = role;
+        this.enable = enable;
+        this.authList = authList;
+    }
+
     @Override
     public String toString() {
         return "Tb_User{" +

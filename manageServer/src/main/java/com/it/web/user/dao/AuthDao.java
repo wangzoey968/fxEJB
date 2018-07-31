@@ -4,39 +4,39 @@ import com.it.api.table.Tb_User;
 import com.it.api.table.Tb_UserAuthExtend;
 import com.it.api.table.Tb_UserSession;
 import com.it.util.DaoBase;
-import com.it.web.user.service.UacAuthList;
+import com.it.web.user.service.AuthList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UacDao extends DaoBase {
+public class AuthDao extends DaoBase {
 
-    Tb_User selectUserByUserId(Long userId) {
+    public Tb_User selectUserByUserId(Long userId) {
         return (Tb_User) session.createQuery("FROM Tb_User WHERE id=:userId")
                 .setParameter("userId", userId).uniqueResult();
     }
 
-    Tb_User selectUserByLoginName(String loginName) {
+    public Tb_User selectUserByLoginName(String loginName) {
         return (Tb_User) session.createQuery("FROM Tb_User WHERE loginName=:loginName")
                 .setParameter("loginName", loginName).uniqueResult();
     }
 
-    List<Tb_UserSession> selectUserSession() {
+    public List<Tb_UserSession> selectUserSession() {
         return session.createQuery("FROM Tb_UserSession").list();
     }
 
-    void saveOrUpdate(Tb_UserSession user) {
+    public void saveOrUpdate(Tb_UserSession user) {
         session.saveOrUpdate(user);
     }
 
-    void delete(Tb_UserSession sUser) {
+    public void delete(Tb_UserSession sUser) {
         session.delete(sUser);
     }
 
-    List<String> listUserAuth(Tb_User user) {
+    public List<String> listUserAuth(Tb_User user) {
         List<String> res = new ArrayList<>();
         if (user.getRole().equals("管理员")) {
-            res.addAll(UacAuthList.auths);
+            res.addAll(AuthList.auths);
         } else {
             session.createQuery("FROM Tb_Auth WHERE authname=:authName")
                     .setParameter("authName", user.getRole())

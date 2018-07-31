@@ -17,4 +17,37 @@ public class Tb_CustomerSession implements Serializable {
     @Column
     Long lastAccessTime;
 
+    public Tb_CustomerSession() {
+    }
+
+    public Tb_CustomerSession(String sessionId, Long customerId, Long lastAccessTime) {
+        this.sessionId = sessionId;
+        this.customerId = customerId;
+        this.lastAccessTime = lastAccessTime;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public Long getLastAccessTime() {
+        return lastAccessTime;
+    }
+
+    public void setLastAccessTime(Long lastAccessTime) {
+        this.lastAccessTime = lastAccessTime;
+    }
+
 }
