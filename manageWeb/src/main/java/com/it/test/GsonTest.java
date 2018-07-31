@@ -19,7 +19,7 @@ public class GsonTest {
     public void prep() {
         user = new Tb_User();
         user.setUsername("zhao");
-        user.setRemark("11111.jpg");
+        user.setNote("11111.jpg");
         user.setAddress("11111");
     }
 

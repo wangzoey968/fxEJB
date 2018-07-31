@@ -36,8 +36,8 @@ public class Tb_User implements Serializable, Comparable<Tb_User> {
     @Column(name = "isViewer")
     private Boolean isViewer;
 
-    @Column(name = "remark")
-    private String remark;
+    @Column(name = "note")
+    private String note;
 
     @Column(name = "parentId")
     private Long parentId;
@@ -58,7 +58,7 @@ public class Tb_User implements Serializable, Comparable<Tb_User> {
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", isViewer=" + isViewer +
-                ", remark='" + remark + '\'' +
+                ", note='" + note + '\'' +
                 ", parentId=" + parentId +
                 ", ownedUsers=" + ownedUsers +
                 ", roles=" + roles +
@@ -121,12 +121,12 @@ public class Tb_User implements Serializable, Comparable<Tb_User> {
         isViewer = viewer;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getNote() {
+        return note;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Long getParentId() {

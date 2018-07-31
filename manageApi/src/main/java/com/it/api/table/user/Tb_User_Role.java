@@ -1,4 +1,4 @@
-package com.it.api.table;
+package com.it.api.table.user;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,6 +33,14 @@ public class Tb_User_Role implements Serializable {
                 ", tb_role_id=" + tb_role_id +
                 ", tb_user_id=" + tb_user_id +
                 '}';
+    }
+
+    public Tb_User_Role() {
+    }
+
+    public Tb_User_Role(Long tb_role_id, Long tb_user_id) {
+        this.tb_role_id = tb_role_id;
+        this.tb_user_id = tb_user_id;
     }
 
     public Long getId() {

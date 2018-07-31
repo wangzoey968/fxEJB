@@ -1,4 +1,4 @@
-package com.it.api.table;
+package com.it.api.table.user;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,9 +11,6 @@ import java.util.List;
 @Table(name = "tb_role")
 public class Tb_Role implements Serializable {
 
-    /**
-     * {@link Tb_User_Role#tb_role_id}
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +18,8 @@ public class Tb_Role implements Serializable {
     @Column(name = "rolename", length = 255, nullable = false)
     private String rolename;
 
-    @Column(name = "remark", length = 255)
-    private String remark;
+    @Column(name = "note", length = 255)
+    private String note;
 
     @Transient
     private List<Tb_User> users;
@@ -35,7 +32,7 @@ public class Tb_Role implements Serializable {
         return "Tb_Role{" +
                 "id=" + id +
                 ", rolename='" + rolename + '\'' +
-                ", remark='" + remark + '\'' +
+                ", note='" + note + '\'' +
                 '}';
     }
 
@@ -55,12 +52,12 @@ public class Tb_Role implements Serializable {
         this.rolename = rolename;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getNote() {
+        return note;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public List<Tb_User> getUsers() {

@@ -11,12 +11,12 @@ public class DaoBase {
 
     public Session session;
 
-    Session getSession() {
+    public Session getSession() {
         if (session == null) session = sessionFactory.getCurrentSession();
         return session;
     }
 
-    DaoBase setSession(Session s) {
+    public DaoBase setSession(Session s) {
         this.session = s;
         return this;
     }

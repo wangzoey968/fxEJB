@@ -1,7 +1,7 @@
 package com.it.web.user.dao;
 
-import com.it.api.table.Tb_User;
-import com.it.api.table.Tb_UserAuthExtend;
+import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_UserAuthExtend;
 import com.it.util.DaoBase;
 import org.hibernate.LockMode;
 

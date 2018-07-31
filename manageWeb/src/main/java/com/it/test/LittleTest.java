@@ -115,14 +115,14 @@ public class LittleTest {
         Tb_Auth auth = new Tb_Auth();
         auth.setAuthname("1122");
         auth.setId(1);
-        auth.setRemark("11");
+        auth.setNote("11");
         list1.add(auth);
 
         ArrayList<Tb_Auth> list2 = new ArrayList<>();
         Tb_Auth auth1 = new Tb_Auth();
         auth1.setAuthname("1122");
         auth1.setId(1);
-        auth1.setRemark("11");
+        auth1.setNote("11");
         list2.add(auth1);
 
         System.out.println(list2.contains(auth));

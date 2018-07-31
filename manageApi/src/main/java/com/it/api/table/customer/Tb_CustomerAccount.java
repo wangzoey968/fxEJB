@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class Tb_CustomerAccount implements Serializable {
 
     @Id
-    Long id;         //客户id
+    Long tb_customer_id;         //客户id
 
     @Column(nullable = false)
     BigDecimal credit;      //信用额度

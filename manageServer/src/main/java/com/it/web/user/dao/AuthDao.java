@@ -1,10 +1,12 @@
 package com.it.web.user.dao;
 
-import com.it.api.table.Tb_User;
-import com.it.api.table.Tb_UserAuthExtend;
-import com.it.api.table.Tb_UserSession;
+import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_UserAuthExtend;
+import com.it.api.table.user.Tb_UserLog;
 import com.it.util.DaoBase;
+import com.it.util.HibernateUtil;
 import com.it.web.user.service.AuthList;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +19,20 @@ public class AuthDao extends DaoBase {
     }
 
     public Tb_User selectUserByLoginName(String loginName) {
+        Session session = HibernateUtil.openSession();
         return (Tb_User) session.createQuery("FROM Tb_User WHERE loginName=:loginName")
                 .setParameter("loginName", loginName).uniqueResult();
     }
 
-    public List<Tb_UserSession> selectUserSession() {
-        return session.createQuery("FROM Tb_UserSession").list();
+    public List<Tb_UserLog> selectUserSession() {
+        return session.createQuery("FROM Tb_UserLog").list();
     }
 
-    public void saveOrUpdate(Tb_UserSession user) {
+    public void saveOrUpdate(Tb_UserLog user) {
         session.saveOrUpdate(user);
     }
 
-    public void delete(Tb_UserSession sUser) {
+    public void delete(Tb_UserLog sUser) {
         session.delete(sUser);
     }
 

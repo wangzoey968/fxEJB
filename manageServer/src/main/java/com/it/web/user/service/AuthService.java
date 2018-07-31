@@ -1,9 +1,9 @@
 package com.it.web.user.service;
 
-import com.it.api.table.Tb_Auth;
-import com.it.api.table.Tb_Role;
-import com.it.api.table.Tb_User;
-import com.it.api.table.Tb_UserSession;
+import com.it.api.table.user.Tb_Auth;
+import com.it.api.table.user.Tb_Role;
+import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_UserLog;
 import com.it.api.table.customer.Tb_Customer;
 import com.it.api.table.customer.Tb_CustomerSession;
 import com.it.util.HibernateUtil;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AuthService {
 
-    public static Map<String, Tb_UserSession> userMap = new ConcurrentHashMap<>();
+    public static Map<String, Tb_UserLog> userMap = new ConcurrentHashMap<>();
 
     public static Map<String, Tb_CustomerSession> customerMap = new ConcurrentHashMap<>();
 
@@ -37,8 +37,8 @@ public class AuthService {
         Long now = System.currentTimeMillis();
         AuthDao authDao = new AuthDao();
         //加载用户Session
-        List<Tb_UserSession> list = authDao.selectUserSession();
-        for (Tb_UserSession s : list) {
+        List<Tb_UserLog> list = authDao.selectUserSession();
+        for (Tb_UserLog s : list) {
             if (now - s.getLastAccessTime() < timeOut) {
                 userMap.put(s.getSessionId(), s);
             } else {
@@ -64,7 +64,7 @@ public class AuthService {
             session.save(role);
             Tb_Auth auth = new Tb_Auth();
             auth.setAuthname("管理员");
-            auth.setRemark("备注");
+            auth.setNote("备注");
             session.saveOrUpdate(auth);
         }
         //检查是否有管理员用户；
@@ -83,7 +83,7 @@ public class AuthService {
             @Override
             public void run() {
                 Long now = System.currentTimeMillis();
-                for (Map.Entry<String, Tb_UserSession> entry : userMap.entrySet()) {
+                for (Map.Entry<String, Tb_UserLog> entry : userMap.entrySet()) {
                     if (now - entry.getValue().getLastAccessTime() > timeOut) {
                         try {
                             logout(entry.getKey());
@@ -107,7 +107,7 @@ public class AuthService {
 
     public static void destroy() {
         Session session = HibernateUtil.openSession();
-        for (Map.Entry<String, Tb_UserSession> entry : userMap.entrySet()) {
+        for (Map.Entry<String, Tb_UserLog> entry : userMap.entrySet()) {
             session.saveOrUpdate(entry.getValue());
         }
         for (Map.Entry<String, Tb_CustomerSession> entry : customerMap.entrySet()) {
@@ -158,7 +158,6 @@ public class AuthService {
      * @param ddLogin   是否钉钉登录，如果是钉钉登录，无需验证密码；
      */
     public static String login(String loginName, String password, Boolean ddLogin) throws Exception {
-        Session session = HibernateUtil.openSession();
         AuthDao dao = new AuthDao();
         Tb_User user = dao.selectUserByLoginName(loginName);
         if (user == null) throw new Exception("无此用户");
@@ -166,7 +165,7 @@ public class AuthService {
         if (!ddLogin) {
             if (!user.getPassword().equals(password)) throw new Exception("密码错误");
         }
-        Tb_UserSession userSession = new Tb_UserSession();
+        Tb_UserLog userSession = new Tb_UserLog();
         userSession.setSessionId(UUID.randomUUID().toString());
         userSession.setUserId(user.getId());
         userSession.setLastAccessTime(System.currentTimeMillis());
@@ -181,7 +180,7 @@ public class AuthService {
     public static void logout(String sid) throws Exception {
         try {
             if (userMap.containsKey(sid)) {
-                Tb_UserSession us = userMap.get(sid);
+                Tb_UserLog us = userMap.get(sid);
                 userMap.remove(us);
                 Session session = HibernateUtil.openSession();
                 session.refresh(us);
@@ -195,8 +194,8 @@ public class AuthService {
     /**
      * 获取UserSession对象；
      */
-    public static Tb_UserSession getUserSession(String sid) {
-        Tb_UserSession us = null;
+    public static Tb_UserLog getUserSession(String sid) {
+        Tb_UserLog us = null;
         if (userMap.containsKey(sid)) {
             us = userMap.get(sid);
             us.setLastAccessTime(System.currentTimeMillis());
@@ -210,7 +209,7 @@ public class AuthService {
      * 获取User对象；
      */
     public static Tb_User getUser(String sid) throws Exception {
-        Tb_UserSession us = getUserSession(sid);
+        Tb_UserLog us = getUserSession(sid);
         AuthDao uacDao = new AuthDao();
         Tb_User user = uacDao.selectUserByUserId(us.getUserId());
         //user.setAuthList(uacDao.listUserAuth(user));
@@ -220,7 +219,7 @@ public class AuthService {
     /**
      * 获取UserSession对象；
      */
-    public static Tb_UserSession getUserSession(HttpSession session) {
+    public static Tb_UserLog getUserSession(HttpSession session) {
         return getUserSession(session.getAttribute("userSid").toString());
     }
 

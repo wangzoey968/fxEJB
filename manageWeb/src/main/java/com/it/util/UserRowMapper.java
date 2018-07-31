@@ -20,7 +20,7 @@ public class UserRowMapper implements RowMapper<Tb_User>{
         user.setPhone(resultSet.getString("phone"));
         user.setAddress(resultSet.getString("address"));
         user.setViewer(resultSet.getBoolean("isViewer"));
-        user.setRemark(resultSet.getString("remark"));
+        user.setNote(resultSet.getString("note"));
         return user;
     }
 }

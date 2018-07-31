@@ -2,7 +2,7 @@ package com.it.web;
 
 import com.google.gson.reflect.TypeToken;
 import com.it.api.MenuData;
-import com.it.api.table.Tb_User;
+import com.it.api.table.user.Tb_User;
 import com.it.util.GsonUtil;
 
 import java.util.ArrayList;

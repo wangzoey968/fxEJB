@@ -14,35 +14,43 @@ public class Tb_Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created",length = 255,nullable = true)
-    private Long created = System.currentTimeMillis();
+    @Column(length = 255, nullable = false)
+    private String loginname;
 
-    @Column(name = "username",length = 255,nullable = false)
+    @Column(length = 255, nullable = false)
     private String username;
 
-    @Column(name = "password",length = 255,nullable = false)
+    @Column(length = 255, nullable = false)
     private String password;
 
-    @Column(name = "address")
+    @Column(length = 45)
+    private String superPassword;
+
+    @Column(nullable = false)
+    private Boolean enable = true;
+
+    @Column(length = 255)
+    private Long createTime;
+
+    @Column
     private String address;
 
-    @Column(name = "phone")
+    @Column
     private String phone;
 
-    @Column(name = "remark")
-    private String remark;
+    @Column
+    private String note;
 
-    @Override
-    public String toString() {
-        return "Tb_Customer{" +
-                "id=" + id +
-                ", created=" + created +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", remark='" + remark + '\'' +
-                '}';
+    public Tb_Customer() {
+    }
+
+    public Tb_Customer(Long createTime, String username, String password, String address, String phone, String note) {
+        this.createTime = createTime;
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
     }
 
     public Long getId() {
@@ -53,12 +61,12 @@ public class Tb_Customer implements Serializable {
         this.id = id;
     }
 
-    public Long getCreated() {
-        return created;
+    public Long getCreateTime() {
+        return createTime;
     }
 
-    public void setCreated(Long created) {
-        this.created = created;
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
     public String getUsername() {
@@ -93,11 +101,11 @@ public class Tb_Customer implements Serializable {
         this.phone = phone;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getNote() {
+        return note;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

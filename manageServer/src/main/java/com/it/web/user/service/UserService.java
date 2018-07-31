@@ -1,8 +1,8 @@
 package com.it.web.user.service;
 
 import com.it.api.table.Tb_Computer;
-import com.it.api.table.Tb_User;
-import com.it.api.table.Tb_UserAuthExtend;
+import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_UserAuthExtend;
 import com.it.util.HibernateUtil;
 import com.it.web.user.dao.UserDao;
 import org.hibernate.Session;
@@ -108,7 +108,7 @@ public class UserService {
     public static Tb_Computer updateComputer(Tb_User mySelf, Tb_Computer comp) throws Exception {
         if (mySelf.getRole().equals("管理员")) throw new Exception("您不是管理员");
         Session session = HibernateUtil.openSession();
-        Tb_Computer computer = new Tb_Computer(comp.getComputerName(), comp.getMacId(), comp.getReg(), comp.getRegUserId(), comp.getRemark());
+        Tb_Computer computer = new Tb_Computer(comp.getComputerName(), comp.getMacId(), comp.getReg(), comp.getRegUserId(), comp.getNote());
         session.update(computer);
         return computer;
     }

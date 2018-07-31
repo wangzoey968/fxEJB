@@ -5,3 +5,5 @@ org.hibernate.exception.ConstraintViolationException
 是在前端传递数据的时候,json数据中的某个名字在转化为对应的类中的属性值时,和属性的名称对应不上.
 hibernate映射文件中的属性跟model中名称不一致，导致出错.
 
+http://www.360doc.com/content/17/0810/14/16915_678160312.shtml//通用权限表的设计
+

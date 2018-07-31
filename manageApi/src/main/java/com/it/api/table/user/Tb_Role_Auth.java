@@ -1,4 +1,4 @@
-package com.it.api.table;
+package com.it.api.table.user;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,4 +1,7 @@
-package com.it.api.table;
+package com.it.api.table.user;
+
+import com.it.api.table.user.Tb_Role;
+import com.it.api.table.user.Tb_Role_Auth;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,8 +24,8 @@ public class Tb_Auth implements Serializable {
     @Column(name = "authname", length = 255, nullable = false)
     private String authname;
 
-    @Column(name = "remark", length = 255)
-    private String remark;
+    @Column(name = "note", length = 255)
+    private String note;
 
     @Transient
     private List<Tb_Role> roles;
@@ -32,7 +35,7 @@ public class Tb_Auth implements Serializable {
         return "Tb_Auth{" +
                 "id=" + id +
                 ", authname='" + authname + '\'' +
-                ", remark='" + remark + '\'' +
+                ", note='" + note + '\'' +
                 '}';
     }
 
@@ -52,12 +55,12 @@ public class Tb_Auth implements Serializable {
         this.authname = authname;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getNote() {
+        return note;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public List<Tb_Role> getRoles() {

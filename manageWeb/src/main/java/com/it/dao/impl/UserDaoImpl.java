@@ -64,7 +64,7 @@ public class UserDaoImpl implements UserDaoInter {
                         user.setPhone(resultSet.getString("phone"));
                         user.setViewer(resultSet.getBoolean("isViewer"));
                         user.setAddress(resultSet.getString("address"));
-                        user.setRemark(resultSet.getString("remark"));
+                        user.setNote(resultSet.getString("note"));
                         return user;
                     }
                 });

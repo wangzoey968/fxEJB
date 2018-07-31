@@ -7,7 +7,9 @@
     <session-factory>
         <!--配置信息-->
         <!--<mapping class="com.zd.m.config.model.Tb_Config"/>-->
-        <mapping class="com.it.api.table.Tb_User"/>
+        <mapping class="com.it.api.table.user.Tb_User"/>
+        <mapping class="com.it.api.table.user.Tb_UserLog"/>
+
 
     </session-factory>
 </hibernate-configuration>

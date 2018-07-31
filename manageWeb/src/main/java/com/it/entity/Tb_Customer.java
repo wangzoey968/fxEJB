@@ -26,8 +26,8 @@ public class Tb_Customer implements Serializable {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "remark")
-    private String remark;
+    @Column(name = "note")
+    private String note;
 
     @Override
     public String toString() {
@@ -37,7 +37,7 @@ public class Tb_Customer implements Serializable {
                 ", username='" + username + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
-                ", remark='" + remark + '\'' +
+                ", note='" + note + '\'' +
                 '}';
     }
 
@@ -81,11 +81,11 @@ public class Tb_Customer implements Serializable {
         this.phone = phone;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getNote() {
+        return note;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

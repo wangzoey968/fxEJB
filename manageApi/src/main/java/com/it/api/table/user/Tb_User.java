@@ -1,8 +1,8 @@
-package com.it.api.table;
+package com.it.api.table.user;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_user")
@@ -13,10 +13,10 @@ public class Tb_User implements Serializable {
     private Long id;
 
     @Column(length = 45, unique = true, nullable = false)
-    private String loginName;            //登录名称，使用手机号；
+    private String loginname;            //登录名称，使用手机号,不可重复
 
     @Column(length = 45, nullable = false)
-    private String userName;             //用户名，使用真实名称，可重复；
+    private String username;             //用户名，使用真实名称，可重复；
 
     @Column(length = 45, nullable = false)
     private String password;             //用户密码
@@ -24,14 +24,23 @@ public class Tb_User implements Serializable {
     @Column(length = 45)
     private String superPassword;        //超级密码
 
-    @Column(length = 45, nullable = false)
-    private String role;                 //角色；
-
     @Column(nullable = false)
     private Boolean enable = true;      //用户是否启用；
 
+    /**
+     * 一个用户可能有多个角色,还可能有些许扩展权限
+     */
     @Transient
-    private Set<String> authList;        //权限列表（运行时有效）；
+    private List<Tb_Role> roles;
+
+    /**
+     * 扩展权限
+     */
+    @Transient
+    private List<Tb_UserAuthExtend> extendAuths;
+
+    @Transient
+    private List<String> authList;        //权限列表(运行时有效)
 
     @Transient
     public void checkAuth(String auth) throws Exception {
@@ -46,12 +55,11 @@ public class Tb_User implements Serializable {
     public Tb_User() {
     }
 
-    public Tb_User(String loginName, String userName, String password, String superPassword, String role, Boolean enable, Set<String> authList) {
-        this.loginName = loginName;
-        this.userName = userName;
+    public Tb_User(String loginname, String username, String password, String superPassword, Boolean enable, List<String> authList) {
+        this.loginname = loginname;
+        this.username = username;
         this.password = password;
         this.superPassword = superPassword;
-        this.role = role;
         this.enable = enable;
         this.authList = authList;
     }
@@ -60,11 +68,10 @@ public class Tb_User implements Serializable {
     public String toString() {
         return "Tb_User{" +
                 "id=" + id +
-                ", loginName='" + loginName + '\'' +
-                ", userName='" + userName + '\'' +
+                ", loginname='" + loginname + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", superPassword='" + superPassword + '\'' +
-                ", role='" + role + '\'' +
                 ", enable=" + enable +
                 ", authList=" + authList +
                 '}';
@@ -79,19 +86,19 @@ public class Tb_User implements Serializable {
     }
 
     public String getLoginname() {
-        return loginName;
+        return loginname;
     }
 
-    public void setLoginname(String loginName) {
-        this.loginName = loginName;
+    public void setLoginname(String loginname) {
+        this.loginname = loginname;
     }
 
     public String getUsername() {
-        return userName;
+        return username;
     }
 
-    public void setUsername(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -110,14 +117,6 @@ public class Tb_User implements Serializable {
         this.superPassword = superPassword;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public Boolean getEnable() {
         return enable;
     }
@@ -126,11 +125,27 @@ public class Tb_User implements Serializable {
         this.enable = enable;
     }
 
-    public Set<String> getAuthList() {
+    public List<Tb_Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Tb_Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Tb_UserAuthExtend> getExtendAuths() {
+        return extendAuths;
+    }
+
+    public void setExtendAuths(List<Tb_UserAuthExtend> extendAuths) {
+        this.extendAuths = extendAuths;
+    }
+
+    public List<String> getAuthList() {
         return authList;
     }
 
-    public void setAuthList(Set<String> authList) {
+    public void setAuthList(List<String> authList) {
         this.authList = authList;
     }
 }

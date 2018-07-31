@@ -5,12 +5,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.it.api.MenuData;
 import com.it.api.table.Tb_Computer;
-import com.it.api.table.Tb_User;
-import com.it.api.table.Tb_UserAuthExtend;
+import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_UserAuthExtend;
 import com.it.util.GsonUtil;
 import com.it.util.WebBack;
 import com.it.web.Menus;
-import com.it.web.user.service.AuthService;
 import com.it.web.user.service.AuthService;
 import com.it.web.user.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,11 +39,11 @@ public class UserController {
      * @param userName 用户名
      * @param passWord 密码
      */
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     void userLogin(String userName, String passWord, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            String sid = AuthService.login(userName, DigestUtils.md5Hex(passWord),false);
+            String sid = AuthService.login(userName, DigestUtils.md5Hex(passWord), false);
             request.getSession().setAttribute("userSid", sid);
             object.addProperty("result", true);
             object.addProperty("sid", sid);
@@ -141,7 +141,8 @@ public class UserController {
             e.printStackTrace();
             object.addProperty("result", false);
             object.addProperty("message", e.getCause().getMessage());
-        };
+        }
+        ;
         WebBack.write(request, response, object);
     }
 

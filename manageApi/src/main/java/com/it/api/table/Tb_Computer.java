@@ -30,17 +30,17 @@ public class Tb_Computer implements Serializable {
     Long regUserId;
 
     @Column
-    String remark;
+    String note;
 
     public Tb_Computer() {
     }
 
-    public Tb_Computer(String computerName, String macId, Boolean reg, Long regUserId, String remark) {
+    public Tb_Computer(String computerName, String macId, Boolean reg, Long regUserId, String note) {
         this.computerName = computerName;
         this.macId = macId;
         this.reg = reg;
         this.regUserId = regUserId;
-        this.remark = remark;
+        this.note = note;
     }
 
     public Long getId() {
@@ -83,11 +83,11 @@ public class Tb_Computer implements Serializable {
         this.regUserId = regUserId;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getNote() {
+        return note;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNote(String note) {
+        this.note = note;
     }
 }
