@@ -3,6 +3,9 @@ package com.it.api.table.user;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * 用户日志
+ */
 @Entity
 @Table(name = "tb_usersession")
 public class Tb_UserLog implements Serializable {
@@ -15,23 +18,28 @@ public class Tb_UserLog implements Serializable {
     private Long tb_user_id;
 
     @Column
-    private Long lastAccessTime;
+    private String action;
+
+    @Column
+    private Long actionTime;
 
     @Override
     public String toString() {
         return "Tb_UserLog{" +
                 "id=" + id +
                 ", tb_user_id=" + tb_user_id +
-                ", lastAccessTime=" + lastAccessTime +
+                ", action='" + action + '\'' +
+                ", actionTime=" + actionTime +
                 '}';
     }
 
     public Tb_UserLog() {
     }
 
-    public Tb_UserLog(Long tb_user_id, Long lastAccessTime) {
+    public Tb_UserLog(Long tb_user_id, String action, Long actionTime) {
         this.tb_user_id = tb_user_id;
-        this.lastAccessTime = lastAccessTime;
+        this.action = action;
+        this.actionTime = actionTime;
     }
 
     public Long getId() {
@@ -50,12 +58,19 @@ public class Tb_UserLog implements Serializable {
         this.tb_user_id = tb_user_id;
     }
 
-    public Long getLastAccessTime() {
-        return lastAccessTime;
+    public String getAction() {
+        return action;
     }
 
-    public void setLastAccessTime(Long lastAccessTime) {
-        this.lastAccessTime = lastAccessTime;
+    public void setAction(String action) {
+        this.action = action;
     }
 
+    public Long getActionTime() {
+        return actionTime;
+    }
+
+    public void setActionTime(Long actionTime) {
+        this.actionTime = actionTime;
+    }
 }

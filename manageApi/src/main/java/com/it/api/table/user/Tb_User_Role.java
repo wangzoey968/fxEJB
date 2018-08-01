@@ -5,9 +5,10 @@ import java.io.Serializable;
 
 /**
  * Created by wangzy on 2018/5/26.
+ * 用户表和角色表的中间表
  */
 @Entity
-@Table(name = "tb_user_role")
+@Table(name = "tb_user_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"tb_role_id", "tb_user_id"})})
 public class Tb_User_Role implements Serializable {
 
     @Id
@@ -17,13 +18,13 @@ public class Tb_User_Role implements Serializable {
     /**
      * {@link Tb_Role#id}
      */
-    @Column(name = "tb_role_id",nullable = false)
+    @Column(name = "tb_role_id", nullable = false)
     private Long tb_role_id;
 
     /**
      * {@link Tb_User#id}
      */
-    @Column(name = "tb_user_id",nullable = false)
+    @Column(name = "tb_user_id", nullable = false)
     private Long tb_user_id;
 
     @Override

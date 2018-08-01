@@ -21,6 +21,9 @@ public class Tb_Role implements Serializable {
     @Column(name = "note", length = 255)
     private String note;
 
+    @Column
+    private Long parent_id;
+
     @Transient
     private List<Tb_User> users;
 
@@ -33,7 +36,21 @@ public class Tb_Role implements Serializable {
                 "id=" + id +
                 ", rolename='" + rolename + '\'' +
                 ", note='" + note + '\'' +
+                ", parent_id=" + parent_id +
+                ", users=" + users +
+                ", auths=" + auths +
                 '}';
+    }
+
+    public Tb_Role() {
+    }
+
+    public Tb_Role(String rolename, String note, Long parent_id, List<Tb_User> users, List<Tb_Auth> auths) {
+        this.rolename = rolename;
+        this.note = note;
+        this.parent_id = parent_id;
+        this.users = users;
+        this.auths = auths;
     }
 
     public Long getId() {
@@ -60,6 +77,14 @@ public class Tb_Role implements Serializable {
         this.note = note;
     }
 
+    public Long getParent_id() {
+        return parent_id;
+    }
+
+    public void setParent_id(Long parent_id) {
+        this.parent_id = parent_id;
+    }
+
     public List<Tb_User> getUsers() {
         return users;
     }
@@ -75,5 +100,4 @@ public class Tb_Role implements Serializable {
     public void setAuths(List<Tb_Auth> auths) {
         this.auths = auths;
     }
-
 }

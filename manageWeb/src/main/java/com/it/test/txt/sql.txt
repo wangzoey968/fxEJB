@@ -55,6 +55,7 @@ session.createQuery("DELETE FROM Tb_Accident_Punish_v01 WHERE accidentId=:accide
 
 session.createQuery("FROM Tb_User WHERE userName like :keyword").setParameter('keyword', "%" + keyword + "%").list();
 
+在数据库中执行条件的时候某列例如 where username=null 和 where username is null(列里面的值为null空)效果是不同的
 
 SELECT p,pfm,f FROM Tb_P_Papers p " +
 		" LEFT JOIN Tb_P_Papers_FullSize_Mapping pfm ON p.id=pfm.papers_id " +
@@ -65,7 +66,7 @@ SELECT p,pfm,f FROM Tb_P_Papers p " +
 数据库的粒度
 表锁,页锁(一般是2-16k),行锁
 
-数据库事务的隔离级别(ISOLATION)有4个，由低到高依次为Read uncommitted、Read committed、Repeatable 		read、Serializable，这四个级别可以逐个解决脏读、不可重复读、幻读这几类问题。
+数据库事务的隔离级别(ISOLATION)有4个，由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐个解决脏读、不可重复读、幻读这几类问题。
 １. ISOLATION_READ_UNCOMMITTED：这是事务最低的隔离级别，它充许令外一个事务可以看到这个事务未提交的数据。
       这种隔离级别会产生脏读，不可重复读和幻像读。
 ２. ISOLATION_READ_COMMITTED：保证一个事务修改的数据提交后才能被另外一个事务读取。另外一个事务不能读取该事务未提交的数据

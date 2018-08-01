@@ -25,44 +25,19 @@ public class Tb_User implements Serializable {
     private String superPassword;        //超级密码
 
     @Column(nullable = false)
-    private Boolean enable = true;      //用户是否启用；
+    private Boolean isEnable = true;      //用户是否启用；
 
-    /**
-     * 一个用户可能有多个角色,还可能有些许扩展权限
-     */
+    @Column(length = 45)
+    private String email;
+
     @Transient
     private List<Tb_Role> roles;
 
-    /**
-     * 扩展权限
-     */
     @Transient
-    private List<Tb_UserAuthExtend> extendAuths;
+    private List<Tb_Auth> auths;
 
     @Transient
-    private List<String> authList;        //权限列表(运行时有效)
-
-    @Transient
-    public void checkAuth(String auth) throws Exception {
-        if (!authList.contains(auth)) throw new Exception("没有当前权限:" + auth);
-    }
-
-    @Transient
-    public Boolean containsAuth(String auth) {
-        return authList.contains(auth);
-    }
-
-    public Tb_User() {
-    }
-
-    public Tb_User(String loginname, String username, String password, String superPassword, Boolean enable, List<String> authList) {
-        this.loginname = loginname;
-        this.username = username;
-        this.password = password;
-        this.superPassword = superPassword;
-        this.enable = enable;
-        this.authList = authList;
-    }
+    private List<Tb_Group> groups;
 
     @Override
     public String toString() {
@@ -72,9 +47,27 @@ public class Tb_User implements Serializable {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", superPassword='" + superPassword + '\'' +
-                ", enable=" + enable +
-                ", authList=" + authList +
+                ", isEnable=" + isEnable +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                ", auths=" + auths +
+                ", groups=" + groups +
                 '}';
+    }
+
+    public Tb_User() {
+    }
+
+    public Tb_User(String loginname, String username, String password, String superPassword, Boolean isEnable, String email, List<Tb_Role> roles, List<Tb_Auth> auths, List<Tb_Group> groups) {
+        this.loginname = loginname;
+        this.username = username;
+        this.password = password;
+        this.superPassword = superPassword;
+        this.isEnable = isEnable;
+        this.email = email;
+        this.roles = roles;
+        this.auths = auths;
+        this.groups = groups;
     }
 
     public Long getId() {
@@ -118,11 +111,19 @@ public class Tb_User implements Serializable {
     }
 
     public Boolean getEnable() {
-        return enable;
+        return isEnable;
     }
 
     public void setEnable(Boolean enable) {
-        this.enable = enable;
+        isEnable = enable;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Tb_Role> getRoles() {
@@ -133,19 +134,19 @@ public class Tb_User implements Serializable {
         this.roles = roles;
     }
 
-    public List<Tb_UserAuthExtend> getExtendAuths() {
-        return extendAuths;
+    public List<Tb_Auth> getAuths() {
+        return auths;
     }
 
-    public void setExtendAuths(List<Tb_UserAuthExtend> extendAuths) {
-        this.extendAuths = extendAuths;
+    public void setAuths(List<Tb_Auth> auths) {
+        this.auths = auths;
     }
 
-    public List<String> getAuthList() {
-        return authList;
+    public List<Tb_Group> getGroups() {
+        return groups;
     }
 
-    public void setAuthList(List<String> authList) {
-        this.authList = authList;
+    public void setGroups(List<Tb_Group> groups) {
+        this.groups = groups;
     }
 }
