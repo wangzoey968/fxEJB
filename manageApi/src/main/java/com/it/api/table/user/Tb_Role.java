@@ -30,6 +30,9 @@ public class Tb_Role implements Serializable {
     @Transient
     private List<Tb_Auth> auths;
 
+    @Transient
+    private List<Tb_Group> groups;
+
     @Override
     public String toString() {
         return "Tb_Role{" +
@@ -45,12 +48,13 @@ public class Tb_Role implements Serializable {
     public Tb_Role() {
     }
 
-    public Tb_Role(String rolename, String note, Long parent_id, List<Tb_User> users, List<Tb_Auth> auths) {
+    public Tb_Role(String rolename, String note, Long parent_id, List<Tb_User> users, List<Tb_Auth> auths, List<Tb_Group> groups) {
         this.rolename = rolename;
         this.note = note;
         this.parent_id = parent_id;
         this.users = users;
         this.auths = auths;
+        this.groups = groups;
     }
 
     public Long getId() {
@@ -99,5 +103,13 @@ public class Tb_Role implements Serializable {
 
     public void setAuths(List<Tb_Auth> auths) {
         this.auths = auths;
+    }
+
+    public List<Tb_Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Tb_Group> groups) {
+        this.groups = groups;
     }
 }

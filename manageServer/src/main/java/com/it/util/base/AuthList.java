@@ -1,4 +1,4 @@
-package com.it.web.user.service;
+package com.it.util.base;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +7,7 @@ public class AuthList {
 
     public static Set<String> auths = new HashSet<>();
 
-    public static void authAdd() {
+    static {
         //订单
         auths.add("显示订单菜单");
         auths.add("显示工作安排");

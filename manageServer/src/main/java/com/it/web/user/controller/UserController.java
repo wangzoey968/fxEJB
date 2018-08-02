@@ -6,11 +6,10 @@ import com.google.gson.JsonParser;
 import com.it.api.MenuData;
 import com.it.api.table.Tb_Computer;
 import com.it.api.table.user.Tb_User;
-import com.it.api.table.user.Tb_UserAuthExtend;
 import com.it.util.GsonUtil;
 import com.it.util.WebBack;
-import com.it.web.Menus;
-import com.it.web.user.service.AuthService;
+import com.it.util.base.Menus;
+import com.it.web.user.service.CoreService;
 import com.it.web.user.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import java.util.List;
 
 @Controller
 @Scope("prototype")
-@RequestMapping("/uac/user")
+@RequestMapping("/auth/user")
 public class UserController {
 
     @Autowired
@@ -36,14 +35,14 @@ public class UserController {
     /**
      * 用户登录
      *
-     * @param userName 用户名
-     * @param passWord 密码
+     * @param username 用户名
+     * @param password 密码
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    void userLogin(String userName, String passWord, HttpServletRequest request, HttpServletResponse response) {
+    void userLogin(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            String sid = AuthService.login(userName, DigestUtils.md5Hex(passWord), false);
+            String sid = CoreService.login(username, DigestUtils.md5Hex(password), false);
             request.getSession().setAttribute("userSid", sid);
             object.addProperty("result", true);
             object.addProperty("sid", sid);
@@ -65,7 +64,7 @@ public class UserController {
         JsonObject object = new JsonObject();
         try {
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
-            Tb_User tb_user = UserService.insertUser(AuthService.getUser(request.getSession()), user);
+            Tb_User tb_user = UserService.insertUser(CoreService.getUser(request.getSession()), user);
             tb_user.setPassword("******");
             tb_user.setSuperPassword("******");
             object.addProperty("result", true);
@@ -87,7 +86,7 @@ public class UserController {
     void updateUser(Tb_User user, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User tb_user = UserService.updateUser(AuthService.getUser(request.getSession()), user);
+            Tb_User tb_user = UserService.updateUser(CoreService.getUser(request.getSession()), user);
             tb_user.setPassword("******");
             tb_user.setSuperPassword("******");
             object.addProperty("result", true);
@@ -109,7 +108,7 @@ public class UserController {
     void listUsers(String name, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            List<Tb_User> users = UserService.listUsers(AuthService.getUser(request.getSession()), name);
+            List<Tb_User> users = UserService.listUsers(CoreService.getUser(request.getSession()), name);
             for (Tb_User u : users) {
                 u.setPassword("******");
                 u.setSuperPassword("******");
@@ -134,7 +133,7 @@ public class UserController {
     void isEnableUserLogin(Long userId, boolean isEnable, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User user = UserService.setUserEnable(AuthService.getUser(request.getSession()), userId, isEnable);
+            Tb_User user = UserService.setUserEnable(CoreService.getUser(request.getSession()), userId, isEnable);
             object.addProperty("result", true);
             object.add("row", parser.parse(gson.toJson(user)).getAsJsonObject());
         } catch (Exception e) {
@@ -147,72 +146,13 @@ public class UserController {
     }
 
     /**
-     * 添加或修改用户扩展权限
-     *
-     * @param userAuthExtend 用户扩展权限BEAN
-     */
-    @RequestMapping("/saveOrUpdateAuthExtend")
-    void addUserAuthExtend(Tb_UserAuthExtend userAuthExtend, HttpServletRequest request, HttpServletResponse response) {
-        JsonObject object = new JsonObject();
-        try {
-            Tb_UserAuthExtend authExtend = UserService.saveOrUpdateUserAuthExtend(AuthService.getUser(request.getSession()), userAuthExtend);
-            object.addProperty("result", true);
-            object.add("row", parser.parse(gson.toJson(authExtend)).getAsJsonObject());
-        } catch (Exception e) {
-            e.printStackTrace();
-            object.addProperty("result", false);
-            object.addProperty("message", e.getCause().getMessage());
-        }
-        WebBack.write(request, response, object);
-    }
-
-    /**
-     * 删除用户扩展权限
-     *
-     * @param userAuthExtend 用户扩展权限BEAN
-     */
-    @RequestMapping("/deleteAuthExtend")
-    void deleteUserAuthExtend(Tb_UserAuthExtend userAuthExtend, HttpServletRequest request, HttpServletResponse response) {
-        JsonObject object = new JsonObject();
-        try {
-            UserService.deleteUserAuthExtend(AuthService.getUser(request.getSession()), userAuthExtend);
-            object.addProperty("result", true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            object.addProperty("result", false);
-            object.addProperty("message", e.getCause().getMessage());
-        }
-        WebBack.write(request, response, object);
-    }
-
-    /**
-     * 查询用户扩展权限
-     *
-     * @param userId 用户自增长ID
-     */
-    @RequestMapping("/listAuthExtend")
-    void listUserAuthExtend(Long userId, HttpServletRequest request, HttpServletResponse response) {
-        JsonObject object = new JsonObject();
-        try {
-            List<Tb_UserAuthExtend> userAuthExtendList = UserService.listUserAuthExtends(AuthService.getUser(request.getSession()), userId);
-            object.addProperty("result", true);
-            object.add("rows", parser.parse(gson.toJson(userAuthExtendList)).getAsJsonArray());
-        } catch (Exception e) {
-            e.printStackTrace();
-            object.addProperty("result", false);
-            object.addProperty("message", e.getCause().getMessage());
-        }
-        WebBack.write(request, response, object);
-    }
-
-    /**
      * 获取菜单列表
      */
     @RequestMapping("/listMenus")
     void listMenus(HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User mySelf = AuthService.getUser(request.getSession());
+            Tb_User mySelf = CoreService.getUser(request.getSession());
             List<MenuData> ls = Menus.getMenus(mySelf);
             object.addProperty("result", true);
             object.addProperty("menus", gson.toJson(ls));
@@ -233,7 +173,7 @@ public class UserController {
     public void getUsername(HttpServletRequest request, HttpServletResponse response, Long userId) {
         JsonObject object = new JsonObject();
         try {
-            String username = AuthService.getUserName(userId);
+            String username = CoreService.getUserName(userId);
             object.addProperty("result", true);
             object.addProperty("row", username);
         } catch (Exception e) {
@@ -285,7 +225,7 @@ public class UserController {
     public void updateComputer(Tb_Computer computer, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_Computer c = UserService.updateComputer(AuthService.getUser(request.getSession()), computer);
+            Tb_Computer c = UserService.updateComputer(CoreService.getUser(request.getSession()), computer);
             object.addProperty("result", true);
             object.add("row", GsonUtil.gson.toJsonTree(c).getAsJsonObject());
         } catch (Exception e) {
@@ -304,7 +244,7 @@ public class UserController {
     public void deleteComputer(Long computerId, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            UserService.deleteComputer(AuthService.getUser(request.getSession()), computerId);
+            UserService.deleteComputer(CoreService.getUser(request.getSession()), computerId);
             object.addProperty("result", true);
             object.addProperty("row", "删除成功");
         } catch (Exception e) {

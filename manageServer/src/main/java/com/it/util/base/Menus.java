@@ -1,4 +1,4 @@
-package com.it.web;
+package com.it.util.base;
 
 import com.google.gson.reflect.TypeToken;
 import com.it.api.MenuData;
@@ -65,7 +65,7 @@ public class Menus {
     private static void generateMenu(List<MenuData> list, Tb_User user) {
         //判断list中是否含有某项权限,如果该用户没有此项权限,从list中移除
         for (MenuData md : list) {
-            if (!md.getAuth().isEmpty() && !user.getAuthList().contains(md.getAuth())) {
+            if (!md.getAuth().isEmpty() && !user.getAuths().contains(md.getAuth())) {
                 list.remove(md.getAuth());
             }
         }

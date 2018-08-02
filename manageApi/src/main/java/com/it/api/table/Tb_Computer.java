@@ -13,24 +13,24 @@ public class Tb_Computer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(nullable = false, length = 32)
-    String computerName;
+    private String computerName;
 
     //网卡MAC,修改时不允许改；
     @Column(nullable = false, length = 32, unique = true)
-    String macId;
+    private String macId;
 
     @Column(nullable = false)
-    Boolean reg = false;
+    private Boolean reg = false;
 
     //提交注册的人的ID，修改时不允许改；
     @Column(nullable = false)
-    Long regUserId;
+    private Long regUserId;
 
     @Column
-    String note;
+    private String note;
 
     public Tb_Computer() {
     }

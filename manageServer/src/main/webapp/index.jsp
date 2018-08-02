@@ -123,14 +123,14 @@
             if (re.test(str)) {
                 /*发送请求*/
                 $.ajax({
-                    url: _root + '/uac/user/login.do',
+                    url: _root + '/auth/user/login.do',
                     data: obj,//{"userName":userName,"passWord":passWord}
                     type: "POST",
                     dataType: _json,
                     success: function (data) {
                         if (data.result) {
                             $.configClientSid(data.sid);
-                            window.location.href = "mainFrame/mainFrame.html";
+                            window.location.href = "html/mainFrame/mainFrame.html";
                             if ($.loadLoginHistory() == null || $.loadLoginHistory() == undefined) {
                                 $.saveLoginHistory(obj.userName);
                             } else {
@@ -153,17 +153,17 @@
 
         $("#submit").click(function () {
             var obj = {};
-            obj.userName = trimStr($("#userName").val());
-            obj.passWord = trimStr($("#passWord").val());
+            obj.username = trimStr($("#userName").val());
+            obj.password = trimStr($("#passWord").val());
             switch (true) {
-                case obj.userName === "":
+                case obj.username === "":
                     _control.alert("请填写用户名称", "提示", null);
                     return;
-                case obj.passWord === "":
+                case obj.password === "":
                     _control.alert("请填写密码", "提示", null);
                     return;
             }
-            checkMobile(obj.userName, obj)
+            checkMobile(obj.username, obj)
         });
 
         //数字键盘
