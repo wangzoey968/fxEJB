@@ -37,19 +37,6 @@ public class Tb_Auth implements Serializable {
     @Transient
     private List<Tb_Group> groups;
 
-    @Override
-    public String toString() {
-        return "Tb_Auth{" +
-                "id=" + id +
-                ", authname='" + authname + '\'' +
-                ", note='" + note + '\'' +
-                ", parent_id=" + parent_id +
-                ", roles=" + roles +
-                ", users=" + users +
-                ", groups=" + groups +
-                '}';
-    }
-
     public Tb_Auth() {
     }
 
@@ -116,5 +103,18 @@ public class Tb_Auth implements Serializable {
 
     public void setGroups(List<Tb_Group> groups) {
         this.groups = groups;
+    }
+
+    @Override
+    public String toString() {
+        return "Tb_Auth{" +
+                "id=" + id +
+                ", authname='" + authname + '\'' +
+                ", note='" + note + '\'' +
+                ", parent_id=" + parent_id +
+                ", roles=" + roles +
+                ", users=" + users +
+                ", groups=" + groups +
+                '}';
     }
 }

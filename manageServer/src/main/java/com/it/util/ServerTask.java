@@ -55,7 +55,7 @@ public class ServerTask {
             public void run() {
                 new CleanTask().run();
             }
-        }, now.getHour(), TimeUnit.HOURS.toHours(60));
+        }, now.getMinute(), 1000 * 60L);
     }
 
     public static void destroy() {

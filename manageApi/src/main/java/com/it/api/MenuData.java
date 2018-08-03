@@ -83,4 +83,15 @@ public class MenuData implements Serializable {
     public void setSubMenu(List<MenuData> subMenu) {
         this.subMenu = subMenu;
     }
+
+    @Override
+    public String toString() {
+        return "MenuData{" +
+                "name='" + name + '\'' +
+                ", key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                ", auth='" + auth + '\'' +
+                ", subMenu=" + subMenu +
+                '}';
+    }
 }

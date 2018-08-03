@@ -22,7 +22,7 @@ public class CoreService {
 
     private static Long timeOut = 1000 * 60 * 60 * 12L;
 
-    static {
+    public static void init() {
 
         Session session = HibernateUtil.openSession();
 
@@ -69,10 +69,6 @@ public class CoreService {
             session.save(ur);
         }
 
-    }
-
-    public static void init() {
-        Session session = HibernateUtil.openSession();
         Long now = System.currentTimeMillis();
         CoreDao authDao = new CoreDao();
 
@@ -87,7 +83,7 @@ public class CoreService {
         }
 
         //创建Session过期检查任务；
-        ServerTask.schedulePool.scheduleWithFixedDelay(new Runnable() {
+        ServerTask.schedulePool.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 Long now = System.currentTimeMillis();
@@ -111,6 +107,7 @@ public class CoreService {
                 }
             }
         }, 60, 60, TimeUnit.SECONDS);
+
     }
 
     public static void destroy() {

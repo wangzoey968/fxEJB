@@ -42,14 +42,14 @@ public class UserController {
     void userLogin(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            String sid = CoreService.login(username, DigestUtils.md5Hex(password), false);
+            Long sid = CoreService.login(username, DigestUtils.md5Hex(password), false);
             request.getSession().setAttribute("userSid", sid);
             object.addProperty("result", true);
             object.addProperty("sid", sid);
         } catch (Exception e) {
             e.printStackTrace();
             object.addProperty("result", false);
-            object.addProperty("message", e.getCause().getMessage());
+            object.addProperty("message", e.getMessage());
         }
         WebBack.write(request, response, object);
     }
@@ -152,8 +152,8 @@ public class UserController {
     void listMenus(HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User mySelf = CoreService.getUser(request.getSession());
-            List<MenuData> ls = Menus.getMenus(mySelf);
+            Tb_User user = CoreService.getUser(request.getSession());
+            List<MenuData> ls = Menus.getMenus(user);
             object.addProperty("result", true);
             object.addProperty("menus", gson.toJson(ls));
         } catch (Exception e) {

@@ -130,7 +130,7 @@
                     success: function (data) {
                         if (data.result) {
                             $.configClientSid(data.sid);
-                            window.location.href = "html/mainFrame/mainFrame.html";
+                            window.location.href = "/html/mainFrame/mainFrame.html";
                             if ($.loadLoginHistory() == null || $.loadLoginHistory() == undefined) {
                                 $.saveLoginHistory(obj.userName);
                             } else {

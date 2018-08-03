@@ -8,6 +8,7 @@ public class CleanTask extends Task {
     @Override
     public void run() {
         // TODO 对数据库进行相关的操作
+        System.out.println("进行定时清扫");
     }
 
 }
