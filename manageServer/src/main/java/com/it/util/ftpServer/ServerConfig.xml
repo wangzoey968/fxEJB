@@ -2,10 +2,10 @@
 
 <config>
     <!--链接的文件服务器-->
-    <fileRoot>E:\FactorySys</fileRoot>
-    <cache>E:\FactorySys\cache</cache>
-    <ftpServer>ftp://vip.zhundianyinwu.com:21</ftpServer>
-    <ftpLoginName>factory</ftpLoginName>
-    <ftpPassword>factory_4006085466</ftpPassword>
+    <fileRoot>E:\xxx</fileRoot>
+    <cache>E:\xxx\yyy</cache>
+    <ftpServer>ftp://www.baidu.com:60</ftpServer>
+    <ftpLoginName>ftpLoginName</ftpLoginName>
+    <ftpPassword>ftpPassword</ftpPassword>
     <clientMustReg>false</clientMustReg>
 </config>
