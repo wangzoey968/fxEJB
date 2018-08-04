@@ -42,7 +42,11 @@ public class ConfigService {
     public static void init() {
         try {
             SAXReader reader = new SAXReader();
-            Document document = reader.read(new File("src/main/java/com/it/util/ftpServer/ServerConfig.xml"));
+
+            String path = System.getProperty("webModuleRootDir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml";
+            System.out.println(path);
+            
+            Document document = reader.read(new File(System.getProperty("webModuleRootDir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml"));
             //获取根节点元素对象
             Element root = document.getRootElement();
             List<Element> list = root.elements();

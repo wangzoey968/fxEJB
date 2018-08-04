@@ -142,7 +142,7 @@ public class LittleTest {
 
     @Test
     public void ss11(){
-
+        System.out.println(System.getProperty("webModuleRootDir")+"src/main/java/com/it/util/ftpServer/ConfigServer.xml");
     }
 
 }

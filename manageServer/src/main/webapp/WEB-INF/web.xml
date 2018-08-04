@@ -9,6 +9,15 @@
         <welcome-file>/index.html</welcome-file>
     </welcome-file-list>
 
+    <!--配置项目的根路径,可以使用system.getproperty("webModuleRootDir")获取-->
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>webModuleRootDir</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+    </listener>
+
     <!--配置spring的applicationContext-->
     <context-param>
         <param-name>contextConfigLocation</param-name>

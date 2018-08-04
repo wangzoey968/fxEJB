@@ -54,7 +54,7 @@ public class ReadXmlTest {
         Element serverElement = document.getRootElement().element("Server");
         String serverAddress = serverElement.attribute("host").getValue();
         Integer serverPort = Integer.valueOf(serverElement.attribute("port").getValue());
-        System.out.println(serverAddress + "" + serverPort);
+        System.out.println(serverAddress + ":" + serverPort);
     }
 
 }
