@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 用户日志
+ * 用户日志,包含登录,退出
  */
 @Entity
-@Table(name = "tb_usersession")
+@Table(name = "tb_userlog")
 public class Tb_UserLog implements Serializable {
 
     @Id
@@ -16,6 +16,9 @@ public class Tb_UserLog implements Serializable {
 
     @Column(nullable = false)
     private Long tb_user_id;
+
+    @Column
+    private String sessionId;
 
     @Column
     private String action;
@@ -56,6 +59,14 @@ public class Tb_UserLog implements Serializable {
 
     public void setTb_user_id(Long tb_user_id) {
         this.tb_user_id = tb_user_id;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getAction() {

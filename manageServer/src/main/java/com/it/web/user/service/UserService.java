@@ -14,7 +14,7 @@ public class UserService {
      * 插入用户
      */
     public static Tb_User insertUser(Tb_User mySelf, Tb_User newUser) throws Exception {
-        if (!mySelf.getAuths().contains("用户管理")) throw new Exception("您没有用户管理权限");
+        if (!mySelf.getAuthList().contains("用户管理")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         dao.insertUser(newUser);
         return newUser;
@@ -24,7 +24,7 @@ public class UserService {
      * 修改用户
      */
     public static Tb_User updateUser(Tb_User mySelf, Tb_User updateUser) throws Exception {
-        if (!mySelf.getAuths().contains("用户管理")) throw new Exception("您没有用户管理权限");
+        if (!mySelf.getAuthList().contains("用户管理")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         dao.updateUser(updateUser);
         return updateUser;
@@ -38,13 +38,12 @@ public class UserService {
         return dao.listUsers(name);
     }
 
-    ;
 
     /**
-     * 允许或禁止登录
+     * 设置为允许或禁止登录
      */
     public static Tb_User setUserEnable(Tb_User mySelf, Long userId, boolean isEnable) throws Exception {
-        if (!mySelf.getAuths().contains("用户管理")) throw new Exception("您没有用户管理权限");
+        if (!mySelf.getAuthList().contains("用户管理")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         return dao.isEnableUserLogin(userId, isEnable);
     }

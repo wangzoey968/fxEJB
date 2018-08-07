@@ -1,21 +1,12 @@
 package com.it.util.ftpServer;
 
-
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.springframework.core.io.FileSystemResource;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class ConfigService {
+/**
+ * 此类重要作用是连接到文件服务器ftpServer,设置文件的缓存路径cache
+ */
+public class FtpConfigService {
 
     public static String getCachePath() {
         return getCfg("cachePath");
@@ -46,8 +37,8 @@ public class ConfigService {
 
     public static void init() {
         try {
-            SAXReader reader = new SAXReader();
-            URI uri = ConfigService.class.getClass().getClassLoader().getResource("ConfigServer.xml").toURI();
+            /*SAXReader reader = new SAXReader();
+            URI uri = FtpConfigService.class.getClass().getClassLoader().getResource("ConfigServer.xml").toURI();
             //URL url = Class.class.getClass().getResource("ConfigServer.xml");
             //File file = Paths.get(System.getProperty("user.dir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml").toFile();
             Document document = reader.read(Paths.get(uri).toFile());
@@ -57,7 +48,13 @@ public class ConfigService {
             for (Element s : list) {
                 cfgMap.put(s.getName(), s.getText());
                 System.out.println(s.getName() + "/" + s.getText());
-            }
+            }*/
+            cfgMap.put("fileRoot","E:\\FactorySys");
+            cfgMap.put("cache","E:\\FactorySys\\cache");
+            cfgMap.put("ftpServer","ftp://vip.zhundianyinwu.com:21");
+            cfgMap.put("ftpLoginName","factory");
+            cfgMap.put("ftpPassword","factory_4006085466");
+            cfgMap.put("clientMustReg","false");
         } catch (Exception e) {
             e.printStackTrace();
         }

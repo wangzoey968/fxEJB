@@ -1,6 +1,6 @@
 package com.it.util;
 
-import com.it.util.ftpServer.ConfigService;
+import com.it.util.ftpServer.FtpConfigService;
 import com.it.util.httpClient.core.HttpClient;
 import com.it.web.user.service.CoreService;
 import org.apache.log4j.Logger;
@@ -21,7 +21,7 @@ public class ServerListener implements ServletContextListener {
         Logger log = Logger.getLogger(ServerListener.class);
         log.info("服务器启动");
         HttpClient.init();
-        ConfigService.init();
+        FtpConfigService.init();
         CoreService.init();
         ServerTask.init();
     }

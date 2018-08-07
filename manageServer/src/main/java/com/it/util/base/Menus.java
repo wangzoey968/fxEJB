@@ -55,11 +55,7 @@ public class Menus {
 
     private static void generateMenu(List<MenuData> list, Tb_User user) {
         //先提取出所有权限的名称;
-        List<Tb_Auth> metaAuth = user.getAuths();
-        List<String> auths = new ArrayList<>();
-        for (Tb_Auth auth : metaAuth) {
-            auths.add(auth.getAuthname());
-        }
+        List<String> auths = user.getAuthList();
         //判断list中是否含有某项权限,如果该用户没有此项权限,从list中移除;
         for (MenuData md : list) {
             if (!md.getAuth().isEmpty() && !auths.contains(md.getAuth())) {
