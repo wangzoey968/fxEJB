@@ -139,6 +139,8 @@ public class CoreService {
         log.setActionTime(System.currentTimeMillis());
         log.setTb_user_id(user.getId());
         session.save(log);
+        //存入map中
+        userMap.put(log.getSessionId(), log);
         return log.getSessionId();
     }
 
@@ -175,30 +177,32 @@ public class CoreService {
             us = userMap.get(sid);
             us.setActionTime(System.currentTimeMillis());
             Session session = HibernateUtil.openSession();
-            session.update(session);
+            session.update(us);
         }
         return us;
     }
 
     /**
-     * 获取User对象；
+     * 从session中获取UserLog对象,再获取整个user对象
      */
     public static Tb_User getUser(String sid) throws Exception {
-        Tb_UserLog us = getUserSession(sid);
+        Tb_UserLog ul = getUserSession(sid);
 
         Session session = HibernateUtil.openSession();
-        Tb_User user = (Tb_User) session.createQuery("from Tb_User where id=:uid").setParameter("uid", us.getTb_user_id()).uniqueResult();
 
-        user.setRoles(listUserRoles(user.getId()));
+        Tb_User user = (Tb_User) session.createQuery("select user from Tb_User user where user.id=:uid").setParameter("uid", ul.getTb_user_id()).uniqueResult();
+
+        //获取用户的所有角色
+        user.getRoles().addAll(listUserRoles(user.getId()));
+
+        //获取角色下的所有权限
         for (Tb_Role role : user.getRoles()) {
             List<Tb_Auth> auths = listRoleAuth(role.getId());
+            user.getAuths().addAll(auths);
         }
 
-        //CoreDao authDao = new CoreDao();
-        //Tb_User user = authDao.selectUserByUserId(us.getTb_user_id());
-        //user.setAuthList(authDao.listUserAuth(user));
-
-
+        //获取额外的权限
+        user.getAuths().addAll(listUserAuths(user.getId()));
         return user;
     }
 
@@ -207,7 +211,7 @@ public class CoreService {
      */
     public static List<Tb_Role> listUserRoles(Long userId) {
         Session session = HibernateUtil.openSession();
-        List<Tb_Role> roles = session.createQuery("from Tb_User_Role ur left join Tb_Role role on role.id=ur.tb_role_id where ur.tb_user_id=:uid").setParameter("uid", userId).list();
+        List<Tb_Role> roles = session.createQuery("select role from Tb_User_Role ur left join Tb_Role role on role.id=ur.tb_role_id where ur.tb_user_id=:uid").setParameter("uid", userId).list();
         return roles;
     }
 
@@ -236,6 +240,19 @@ public class CoreService {
         Session session = HibernateUtil.openSession();
         List<Tb_Auth> auths = session.createQuery("select auth from Tb_Auth_User au left join Tb_Auth auth on au.tb_auth_id=auth.id where au.tb_user_id=:uid").setParameter("uid", userId).list();
         return auths;
+    }
+
+    /**
+     * 获取用户下的权限
+     */
+    public static List<String> getUserAllAuths(Tb_User user) {
+        ArrayList<String> list = new ArrayList<>();
+        for (Tb_Auth auth : user.getAuths()) {
+            if (!list.contains(auth.getAuthname())) {
+                list.add(auth.getAuthname());
+            }
+        }
+        return list;
     }
 
     /**

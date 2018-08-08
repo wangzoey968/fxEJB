@@ -6,9 +6,6 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Created by qinglans on 15-8-29.
- */
 public class ProgressFilterOutputStream extends FilterOutputStream {
 
     private ProgressCallback progressCallback;

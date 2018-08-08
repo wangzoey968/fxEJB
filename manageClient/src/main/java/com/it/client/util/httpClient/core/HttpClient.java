@@ -20,22 +20,22 @@ public class HttpClient {
 
     private static ScheduledExecutorService schedule = Executors.newScheduledThreadPool(40);
 
-    static void Init() {
+    public static void init() {
         conManage.setMaxTotal(40);
         conManage.setDefaultMaxPerRoute(40);
         httpClient = HttpClients.custom().setConnectionManager(conManage).setDefaultCookieStore(cookieStore).build();
     }
 
-    static void Destroy() {
+    public static void destroy() {
         schedule.shutdown();
     }
 
 
-    static CloseableHttpClient getHttpClient() {
+    public static CloseableHttpClient getHttpClient() {
         return httpClient;
     }
 
-    static ScheduledExecutorService getSes() {
+    public static ScheduledExecutorService getSes() {
         return schedule;
     }
 

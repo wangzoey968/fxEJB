@@ -1,9 +1,13 @@
 package com.it.client.WebContainer;
 
+import com.google.gson.JsonObject;
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.util.CacheUsername;
 import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -14,6 +18,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
+import netscape.javascript.JSObject;
 
 import java.io.File;
 
@@ -55,15 +60,24 @@ public class WebContainer {
                 return webTab.webView.getEngine();
             }
         });
+        //为页面上的webcontainer赋值
+        webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+            @Override
+            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+                if (newValue== Worker.State.SUCCEEDED){
+                    ((JSObject)webView.getEngine().executeScript("window")).setMember("WebContainer",WebContainer.this);
+                }
+            }
+        });
     }
 
-    void Alert(String s) {
+    public void Alert(String s) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, s, ButtonType.OK);
         alert.initOwner(owner);
         alert.showAndWait();
     }
 
-    String selectFile()throws Exception {
+    public String selectFile() throws Exception {
         FileChooser fc = new FileChooser();
         File file = fc.showOpenDialog(MainFrame.class.newInstance());
         return file.getPath();
@@ -71,36 +85,40 @@ public class WebContainer {
 
     /**
      * Ext.js 设置客户端菜单；
+     *
      * @param json 客户端菜单的JSON
      */
-    void configMainFrameMenu(String json) {
+    public void configMainFrameMenu(String json) {
+        System.out.println(json + "this is json");
         try {
             MainFrame.class.newInstance().setMenu(json);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Ext.js 设置客户端SID
+     *
      * @param sid
      */
-    void configClientSid(String sid) {
+    public void configClientSid(String sid) {
         try {
             EJB.sidProperty.set(sid);
             EJB.userIdProperty.set(Long.parseLong(EJB.getUserService().getUserId(sid)));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * 根据用户ID，获取用户名称；
+     *
      * @param userId
      * @return
      */
-    String getUserName(Long userId) {
-       return CacheUsername.getUserName(userId);
+    public String getUserName(Long userId) {
+        return CacheUsername.getUserName(userId);
     }
 
 }

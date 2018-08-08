@@ -25,7 +25,9 @@ $.extend({
     ,
     //设置客户端菜单；
     configMainFrameMenu: function (str) {
+        console.log("ok",str);
         if (typeof WebContainer === "undefined") return;
+        console.log("1111111111111111111111111");
         WebContainer.configMainFrameMenu(str)
     },
     //打印批次单

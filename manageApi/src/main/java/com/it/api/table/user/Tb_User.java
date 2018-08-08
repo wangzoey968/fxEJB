@@ -33,13 +33,13 @@ public class Tb_User implements Serializable {
     private String email;
 
     @Transient
-    private List<Tb_Role> roles;
+    private List<Tb_Role> roles = new ArrayList<>();
 
     @Transient
-    private List<Tb_Auth> auths;
+    private List<Tb_Auth> auths = new ArrayList<>();
 
     @Transient
-    private List<Tb_Group> groups;
+    private List<Tb_Group> groups = new ArrayList<>();
 
     /**
      * 获取用户的权限名称,返回值是List<String>,方便在验证权限的时候进行校验;

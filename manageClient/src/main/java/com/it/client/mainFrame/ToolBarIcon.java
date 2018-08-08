@@ -99,7 +99,6 @@ public class ToolBarIcon {
             public void run() {
                 try {
                     MainFrame frame = new MainFrame();
-                    frame.setAlwaysOnTop(true);
                     frame.setIconified(false);
                     frame.show();
                 } catch (Exception e) {

@@ -44,7 +44,7 @@ public class MainFrame extends Stage {
         iconifiedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) MainFrame.this.close();
+                if (newValue) new MainFrame().close();
             }
         });
         this.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
@@ -121,15 +121,19 @@ public class MainFrame extends Stage {
     }
 
     public void loadMenu(MenuData data, Menu menu) {
+        System.out.println("loadmenu");
         for (MenuData menuData : data.getSubMenu()) {
             if (menuData.getKey().equals("MENU")) {
                 Menu subMenu = new Menu(menuData.getName());
                 loadMenu(menuData, subMenu);
                 menu.getItems().add(subMenu);
+                System.out.println("menu");
             } else if (menuData.getKey().equals("SEP")) {
                 menu.getItems().add(new SeparatorMenuItem());
+                System.out.println("sep");
             } else {
                 menu.getItems().add(new MainMenu(menuData));
+                System.out.println("other");
             }
         }
     }
