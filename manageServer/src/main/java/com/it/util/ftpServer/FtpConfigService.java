@@ -36,7 +36,7 @@ public class FtpConfigService {
 
     public static void init() {
         try {
-            /*cfgMap.put("fileRoot","E:\\ft");
+            /*cfgMap.put("fileRoot","E:\\ftSys");
             cfgMap.put("cache","E:\\ftSys\\cache");
             cfgMap.put("ftpServer","ftp://vip.ftn.com:10");
             cfgMap.put("ftpLoginName","ft");
