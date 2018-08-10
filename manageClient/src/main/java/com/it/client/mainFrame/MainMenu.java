@@ -35,7 +35,7 @@ public class MainMenu extends MenuItem {
                         try {
                             WebTab wt = new WebTab();
                             wt.webView.getEngine().load(ConfigUtil.getServerUrl() + menuData.getValue());
-                            MainFrame.class.newInstance().addTab(wt);
+                            MainFrame.getInstance().addTab(wt);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -46,21 +46,20 @@ public class MainMenu extends MenuItem {
                 setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        CallFun(menuData.getValue());
-                        System.out.println("调用函数");
+                        callFun(menuData.getValue());
                     }
                 });
                 break;
         }
     }
 
-    static void CallFun(String funName) {
+    private static void callFun(String funName) {
         switch (funName) {
             case "超管":
-                new MainFrame().addTab(new OrderTab());
+                MainFrame.getInstance().addTab(new OrderTab());
                 break;
             case "超管1":
-                new MainFrame().addTab(new OrderTab());
+                MainFrame.getInstance().addTab(new OrderTab());
                 break;
         }
     }

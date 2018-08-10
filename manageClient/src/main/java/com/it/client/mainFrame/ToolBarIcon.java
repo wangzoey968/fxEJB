@@ -20,7 +20,17 @@ public class ToolBarIcon {
     public SystemTray tray = SystemTray.getSystemTray();
     public TrayIcon trayIcon = null;
 
-    public ToolBarIcon() {
+    //单例
+    private static ToolBarIcon instance = new ToolBarIcon();
+
+    public static ToolBarIcon getInstance() {
+        if (instance == null) {
+            instance = new ToolBarIcon();
+        }
+        return instance;
+    }
+
+    private ToolBarIcon() {
         popupMenu.add(openItem);
         popupMenu.add(hideItem);
         popupMenu.add(quitItem);
@@ -31,7 +41,7 @@ public class ToolBarIcon {
                     @Override
                     public void run() {
                         try {
-                            MainFrame.class.newInstance().hide();
+                            MainFrame.getInstance().hide();
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -98,7 +108,7 @@ public class ToolBarIcon {
             @Override
             public void run() {
                 try {
-                    MainFrame frame = new MainFrame();
+                    MainFrame frame = MainFrame.getInstance();
                     frame.setIconified(false);
                     frame.show();
                 } catch (Exception e) {

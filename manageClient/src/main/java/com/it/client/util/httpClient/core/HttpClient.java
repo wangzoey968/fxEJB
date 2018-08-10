@@ -35,7 +35,7 @@ public class HttpClient {
         return httpClient;
     }
 
-    public static ScheduledExecutorService getSes() {
+    public static ScheduledExecutorService getSchedule() {
         return schedule;
     }
 

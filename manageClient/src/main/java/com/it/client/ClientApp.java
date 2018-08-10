@@ -1,6 +1,7 @@
 package com.it.client;
 
 import com.it.client.mainFrame.MainFrame;
+import com.it.client.mainFrame.ToolBarIcon;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.httpClient.core.HttpClient;
 import javafx.application.Application;
@@ -9,24 +10,13 @@ import javafx.stage.Stage;
 public class ClientApp extends Application {
 
     @Override
-    public void init() throws Exception {
-        super.init();
+    public void start(Stage primaryStage) {
         try {
             ConfigUtil.init();
             HttpClient.init();
+            MainFrame.getInstance().init();
+            MainFrame.getInstance().show();
             EJB.startup();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            MainFrame.init();
-            /*MainFrame mainFrame = new MainFrame();
-            mainFrame.show();*/
-            MainFrame.class.newInstance().show();
         } catch (Exception e) {
             e.printStackTrace();
         }

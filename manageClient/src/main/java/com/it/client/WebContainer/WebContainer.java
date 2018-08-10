@@ -30,17 +30,13 @@ public class WebContainer {
 
     public ReadOnlyStringProperty titleProperty;    //网页标题；
 
-    /**
-     * @param webView 需要添加附属功能的WebView对象；
-     * @param owner   弹框等功能依附的Owner;
-     */
     public WebContainer(WebView webView,Window owner) {
         this.webView = webView;
         this.owner = owner;
         setup();
     }
 
-    public void setup() {
+    private void setup() {
         this.titleProperty = webView.getEngine().titleProperty();
         webView.getEngine().setOnAlert(new EventHandler<WebEvent<String>>() {
             @Override
@@ -52,7 +48,7 @@ public class WebContainer {
             @Override
             public WebEngine call(PopupFeatures param) {
                 WebTab tab = new WebTab();
-                new MainFrame().addTab(tab);
+                MainFrame.getInstance().addTab(tab);
                 return tab.webView.getEngine();
             }
         });
@@ -79,7 +75,7 @@ public class WebContainer {
 
     public static String selectFile() throws Exception {
         FileChooser fc = new FileChooser();
-        File file = fc.showOpenDialog(MainFrame.class.newInstance());
+        File file = fc.showOpenDialog(MainFrame.getInstance());
         return file.getPath();
     }
 
@@ -89,7 +85,7 @@ public class WebContainer {
     public static void configMainFrameMenu(String json) {
         System.out.println(json + "json");
         try {
-            MainFrame.class.newInstance().setMenu(json);
+            MainFrame.getInstance().setMenu(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,6 +98,7 @@ public class WebContainer {
         try {
             EJB.sidProperty.set(sid);
             EJB.userIdProperty.set(Long.parseLong(EJB.getUserService().getUserId(sid)));
+            //todo username
         } catch (Exception e) {
             e.printStackTrace();
         }

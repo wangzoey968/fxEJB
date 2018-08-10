@@ -11,6 +11,10 @@ import java.nio.charset.Charset;
 
 public class FxmlUtil {
 
+    public static String regMac;
+
+    public static String regComputer;
+
     public static Node loadFXML(Object obj) {
         Parent parent = null;
         try {
@@ -31,7 +35,7 @@ public class FxmlUtil {
             if (str.startsWith("返工订单")) {
                 WebTab wt = new WebTab();
                 wt.webView.getEngine().load(ConfigUtil.getServerUrl() + "/manageServer/finance/listIncomeLog.do?orderId=" + str.substring("查看账单".length()));
-                MainFrame.class.newInstance().addTab(wt);
+                MainFrame.getInstance().addTab(wt);
             } else {
                 new Alert(Alert.AlertType.INFORMATION, str).showAndWait();
             }

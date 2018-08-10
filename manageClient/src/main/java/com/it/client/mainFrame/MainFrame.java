@@ -25,9 +25,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.util.List;
 
+/**
+ * 此类设计为单例,获取单例对象的时候直接调用getInstance()方法
+ */
 public class MainFrame extends Stage {
 
     public static boolean firstHidden = true;
@@ -39,14 +42,24 @@ public class MainFrame extends Stage {
     @FXML
     private TabPane tabPane;
 
-    public MainFrame() {
+    //单例
+    private static MainFrame instance = new MainFrame();
+
+    public static MainFrame getInstance() {
+        if (instance == null) {
+            instance = new MainFrame();
+        }
+        return instance;
+    }
+
+    private MainFrame() {
         this.getIcons().add(ImgUtil.IMG_ICON);
         this.setScene(new Scene((Parent) FxmlUtil.loadFXML(this)));
         titleProperty().bind(Bindings.format("%s:%s", EJB.factoryNameProperty, EJB.userNameProperty));
         iconifiedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) new MainFrame().close();
+                if (newValue) MainFrame.getInstance().close();
             }
         });
         this.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
@@ -68,7 +81,7 @@ public class MainFrame extends Stage {
             public void handle(WindowEvent event) {
                 try {
                     if (firstHidden) {
-                        ToolBarIcon.class.newInstance().trayIcon.displayMessage("你好", "我在这儿。", TrayIcon.MessageType.INFO);
+                        ToolBarIcon.getInstance().trayIcon.displayMessage("你好", "我在这儿。", TrayIcon.MessageType.INFO);
                         firstHidden = false;
                     }
                 } catch (Exception e) {
@@ -76,15 +89,20 @@ public class MainFrame extends Stage {
                 }
             }
         });
-        WebTab webTab = new WebTab();
-        webTab.setClosable(false);
-        addTab(webTab);
-        webTab.webView.getEngine().load(ConfigUtil.getServerUrl() + "/manageServer");
     }
 
-    public static void init() throws Exception {
-        Platform.setImplicitExit(false);
-        ToolBarIcon.class.newInstance().addIcon();
+    public void init() {
+        try {
+            WebTab webTab = new WebTab();
+            webTab.setClosable(false);
+            addTab(webTab);
+            webTab.webView.getEngine().load(ConfigUtil.getServerUrl() + "/manageServer");
+
+            Platform.setImplicitExit(false);
+            ToolBarIcon.getInstance().addIcon();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addTab(Tab tab) {
@@ -105,15 +123,15 @@ public class MainFrame extends Stage {
             tabPane.getTabs().remove(index);
         }
         if (tab.getOnClosed() != null) {
-            Event.fireEvent(tab, new javafx.event.Event(Tab.CLOSED_EVENT));
+            Event.fireEvent(tab, new Event(Tab.CLOSED_EVENT));
         }
     }
 
     public void setMenu(String json) {
-        System.out.println(json + "/11111111111");
         Gson gson = new Gson();
         List<MenuData> menus = gson.fromJson(json, new TypeToken<List<MenuData>>() {
         }.getType());
+        menuBar.getMenus().clear();
         for (MenuData menuData : menus) {
             Menu menu = new Menu(menuData.getName());
             loadMenu(menuData, menu);
@@ -121,20 +139,16 @@ public class MainFrame extends Stage {
         }
     }
 
-    public void loadMenu(MenuData data, Menu menu) {
-        System.out.println("loadmenu");
+    private void loadMenu(MenuData data, Menu menu) {
         for (MenuData menuData : data.getSubMenu()) {
             if (menuData.getKey().equals("MENU")) {
                 Menu subMenu = new Menu(menuData.getName());
                 loadMenu(menuData, subMenu);
                 menu.getItems().add(subMenu);
-                System.out.println("menu");
             } else if (menuData.getKey().equals("SEP")) {
                 menu.getItems().add(new SeparatorMenuItem());
-                System.out.println("sep");
             } else {
                 menu.getItems().add(new MainMenu(menuData));
-                System.out.println("other");
             }
         }
     }
