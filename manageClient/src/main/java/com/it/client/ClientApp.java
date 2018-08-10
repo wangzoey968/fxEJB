@@ -24,8 +24,9 @@ public class ClientApp extends Application {
     public void start(Stage primaryStage) {
         try {
             MainFrame.init();
-            MainFrame mainFrame = new MainFrame();
-            mainFrame.show();
+            /*MainFrame mainFrame = new MainFrame();
+            mainFrame.show();*/
+            MainFrame.class.newInstance().show();
         } catch (Exception e) {
             e.printStackTrace();
         }

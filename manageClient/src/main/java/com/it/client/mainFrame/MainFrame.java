@@ -5,39 +5,41 @@ import com.google.gson.reflect.TypeToken;
 import com.it.api.MenuData;
 import com.it.client.EJB;
 import com.it.client.WebContainer.WebTab;
-import com.it.client.util.FxmlUtil;
 import com.it.client.util.ConfigUtil;
+import com.it.client.util.FxmlUtil;
 import com.it.client.util.ImgUtil;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.awt.*;
+import java.awt.TrayIcon;
+import java.util.List;
 
 public class MainFrame extends Stage {
 
     public static boolean firstHidden = true;
 
-    public static List authList;    //权限列表；
+    public static List<String> authList;    //权限列表；
 
     @FXML
     private MenuBar menuBar;
     @FXML
     private TabPane tabPane;
 
-    public MainFrame(){
+    public MainFrame() {
         this.getIcons().add(ImgUtil.IMG_ICON);
         this.setScene(new Scene((Parent) FxmlUtil.loadFXML(this)));
         titleProperty().bind(Bindings.format("%s:%s", EJB.factoryNameProperty, EJB.userNameProperty));
@@ -92,26 +94,25 @@ public class MainFrame extends Stage {
     }
 
     private boolean canCloseTab(Tab tab) {
-        javafx.event.Event event = new javafx.event.Event(tab, tab, Tab.TAB_CLOSE_REQUEST_EVENT);
-        javafx.event.Event.fireEvent(tab, event);
+        Event event = new Event(tab, tab, Tab.TAB_CLOSE_REQUEST_EVENT);
+        Event.fireEvent(tab, event);
         return !event.isConsumed();
     }
 
     public void closeTab(Tab tab) {
-        //if (canCloseTab(tab) && tab.isClosable()) {
-            int index = tabPane.getTabs().indexOf(tab);
-            if (index != -1) {
-                tabPane.getTabs().remove(index);
-            }
-            if (tab.getOnClosed() != null) {
-                javafx.event.Event.fireEvent(tab, new javafx.event.Event(Tab.CLOSED_EVENT));
-            }
-        //}
+        int index = tabPane.getTabs().indexOf(tab);
+        if (index != -1) {
+            tabPane.getTabs().remove(index);
+        }
+        if (tab.getOnClosed() != null) {
+            Event.fireEvent(tab, new javafx.event.Event(Tab.CLOSED_EVENT));
+        }
     }
 
     public void setMenu(String json) {
+        System.out.println(json + "/11111111111");
         Gson gson = new Gson();
-        java.util.List<MenuData> menus = gson.fromJson(json, new TypeToken<java.util.List<MenuData>>() {
+        List<MenuData> menus = gson.fromJson(json, new TypeToken<List<MenuData>>() {
         }.getType());
         for (MenuData menuData : menus) {
             Menu menu = new Menu(menuData.getName());

@@ -48,35 +48,30 @@ public class Menus {
     }
 
     public static List<MenuData> getMenus(Tb_User user) {
-        System.out.println(menuJson + "menujson");
         List<MenuData> list = GsonUtil.gson.fromJson(menuJson, new TypeToken<List<MenuData>>() {
         }.getType());
-        //generateMenu(list, user);
-        return generateMenu(list, user);
+        generateMenu(list, user);
+        return list;
     }
 
-    private static List<MenuData> listData = new ArrayList<>();
-
-    private static List<MenuData> generateMenu(List<MenuData> list, Tb_User user) {
-        listData.addAll(list);
+    private static void generateMenu(List<MenuData> list, Tb_User user) {
+        //临时存放user没有的权限
+        ArrayList<MenuData> notAuth= new ArrayList<>();
         //先提取出所有权限的名称;
         List<String> auths = CoreService.getUserAllAuths(user);
-        System.out.println(auths.toString() + "auths.tostring");
         //判断list中是否含有某项权限,如果该用户没有此项权限,从list中移除;
         for (MenuData md : list) {
             if (!md.getAuth().isEmpty() && !auths.contains(md.getAuth())) {
-                System.out.println(md.toString() + "/auth");
-                listData.remove(md);
+                notAuth.add(md);
             }
         }
+        list.removeAll(notAuth);
         //递归,如果是menu那么就继续遍历,获取子菜单;
         for (MenuData md : list) {
             if (md.getKey().equals("MENU")) {
-                System.out.println(md.toString() + "/menu");
                 generateMenu(md.getSubMenu(), user);
             }
         }
-        return listData;
     }
 
 }

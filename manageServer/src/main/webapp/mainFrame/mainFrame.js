@@ -5,6 +5,7 @@ $(function () {
         type: 'POST',
         dataType: _json,
         success: function (data) {
+            console.log("data",data.menus);
             if (data.result) {
                 $.configMainFrameMenu(data.menus)
             } else {

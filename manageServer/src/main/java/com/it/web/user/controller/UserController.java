@@ -154,7 +154,6 @@ public class UserController {
         try {
             Tb_User user = CoreService.getUser(request.getSession());
             List<MenuData> ls = Menus.getMenus(user);
-            System.out.println(ls.toString() + "/listMenus");
             object.addProperty("result", true);
             object.addProperty("menus", gson.toJson(ls));
         } catch (Exception e) {
