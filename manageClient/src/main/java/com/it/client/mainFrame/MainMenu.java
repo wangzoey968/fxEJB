@@ -55,10 +55,10 @@ public class MainMenu extends MenuItem {
 
     private static void callFun(String funName) {
         switch (funName) {
-            case "超管":
+            case "打开订单":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
-            case "超管1":
+            case "打开财务":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
         }

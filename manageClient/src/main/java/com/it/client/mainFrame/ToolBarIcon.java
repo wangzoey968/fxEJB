@@ -13,9 +13,9 @@ import java.awt.event.MouseListener;
 public class ToolBarIcon {
 
     private PopupMenu popupMenu = new PopupMenu();
-    private MenuItem openItem = new MenuItem("Show main window");
-    private MenuItem hideItem = new MenuItem("Hide main window");
-    private MenuItem quitItem = new MenuItem("Quit FactoryClient");
+    private MenuItem openItem = new MenuItem("Show");
+    private MenuItem hideItem = new MenuItem("Hide");
+    private MenuItem quitItem = new MenuItem("Quit");
 
     public SystemTray tray = SystemTray.getSystemTray();
     public TrayIcon trayIcon = null;
@@ -103,7 +103,7 @@ public class ToolBarIcon {
         }
     }
 
-    public static void showMainFrame() {
+    public void showMainFrame() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

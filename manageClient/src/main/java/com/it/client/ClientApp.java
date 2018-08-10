@@ -1,6 +1,7 @@
 package com.it.client;
 
 import com.it.client.mainFrame.MainFrame;
+import com.it.client.mainFrame.RegComputer;
 import com.it.client.mainFrame.ToolBarIcon;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.httpClient.core.HttpClient;
@@ -14,9 +15,9 @@ public class ClientApp extends Application {
         try {
             ConfigUtil.init();
             HttpClient.init();
+            EJB.startup();
             MainFrame.getInstance().init();
             MainFrame.getInstance().show();
-            EJB.startup();
         } catch (Exception e) {
             e.printStackTrace();
         }

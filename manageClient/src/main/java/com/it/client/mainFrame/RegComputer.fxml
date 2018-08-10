@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label text="注册名称：" GridPane.rowIndex="1" />
+      <TextField fx:id="tfComputerName" promptText="这台电脑是哪里的？" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <ComboBox fx:id="cmbRegNI" prefWidth="300.0" GridPane.columnIndex="1" />
+      <Label text="注册网卡：" />
+      <Label text="手机号：" GridPane.rowIndex="2" />
+      <Label text="密码：" GridPane.rowIndex="3" />
+      <TextField fx:id="tfTel" promptText="登录手机号" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <PasswordField fx:id="pfPassword" promptText="登录密码" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</GridPane>
