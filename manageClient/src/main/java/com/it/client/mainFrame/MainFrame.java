@@ -3,13 +3,11 @@ package com.it.client.mainFrame;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.it.api.MenuData;
-import com.it.client.EJB;
 import com.it.client.WebContainer.WebTab;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.FxmlUtil;
 import com.it.client.util.ImgUtil;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -33,8 +31,6 @@ import java.util.List;
  */
 public class MainFrame extends Stage {
 
-    public static boolean firstHidden = true;
-
     public static List<String> authList;    //权限列表；
 
     @FXML
@@ -53,9 +49,9 @@ public class MainFrame extends Stage {
     }
 
     private MainFrame() {
+        this.setTitle("准点印刷");
         this.getIcons().add(ImgUtil.IMG_ICON);
         this.setScene(new Scene((Parent) FxmlUtil.loadFXML(this)));
-        titleProperty().bind(Bindings.format("%s:%s", EJB.factoryNameProperty, EJB.userNameProperty));
         iconifiedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -80,10 +76,7 @@ public class MainFrame extends Stage {
             @Override
             public void handle(WindowEvent event) {
                 try {
-                    if (firstHidden) {
-                        ToolBarIcon.getInstance().trayIcon.displayMessage("你好", "我在这儿。", TrayIcon.MessageType.INFO);
-                        firstHidden = false;
-                    }
+                    ToolBarIcon.getInstance().trayIcon.displayMessage("你好", "我在这儿。", TrayIcon.MessageType.INFO);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -148,7 +141,7 @@ public class MainFrame extends Stage {
             } else if (menuData.getKey().equals("SEP")) {
                 menu.getItems().add(new SeparatorMenuItem());
             } else {
-                menu.getItems().add(new MainMenu(menuData));
+                menu.getItems().add(new MenuHandler(menuData));
             }
         }
     }

@@ -2,7 +2,7 @@ package com.it.util;
 
 import com.it.util.ftpServer.FtpConfigService;
 import com.it.util.httpClient.core.HttpClient;
-import com.it.web.user.service.CoreService;
+import com.it.web.user.service.Core;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
@@ -22,7 +22,7 @@ public class ServerListener implements ServletContextListener {
         log.info("服务器启动");
         HttpClient.init();
         FtpConfigService.init();
-        CoreService.init();
+        Core.init();
         ServerTask.init();
     }
 
@@ -30,7 +30,7 @@ public class ServerListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         Logger log = Logger.getLogger(ServerListener.class);
         log.info("服务器停止");
-        CoreService.destroy();
+        Core.destroy();
         ServerTask.destroy();
         HttpClient.destroy();
     }

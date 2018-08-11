@@ -16,25 +16,48 @@ import java.util.concurrent.TimeUnit;
 
 public class EJB {
 
-    public static StringProperty sidProperty = new SimpleStringProperty(null);
+    /**
+     * 设置客户端session
+     */
+    private static StringProperty sessionId = new SimpleStringProperty(null);
 
-    public static String getSid() {
-        return sidProperty.get();
+    public static void setSessionId(String sessionId) {
+        EJB.sessionId.set(sessionId);
     }
 
-    public static LongProperty userIdProperty = new SimpleLongProperty();
+    public static String getSessionId() {
+        return sessionId.get();
+    }
+
+    /**
+     * 设置客户端userId
+     */
+    private static LongProperty userId = new SimpleLongProperty();
+
+    public static void setUserId(long userId) {
+        EJB.userId.set(userId);
+    }
 
     public static Long getUserId() {
-        return userIdProperty.get();
+        return userId.get();
     }
 
-    public static StringProperty factoryNameProperty = new SimpleStringProperty("Login");
-    public static StringProperty userNameProperty = new SimpleStringProperty("");
+    /**
+     * 设置客户端username
+     */
+    private static StringProperty username = new SimpleStringProperty("");
 
-    public static String getUserName() {
-        return userNameProperty.get();
+    public static void setUsername(String username) {
+        EJB.username.set(username);
     }
 
+    public static String getUsername() {
+        return username.get();
+    }
+
+    /**
+     * 向下为ejb的配置
+     */
     private static Context context = null;
     //1000 * 60 * 2L;
     private final static Long testTime =  1000 * 60 * 2L;      //测试时间

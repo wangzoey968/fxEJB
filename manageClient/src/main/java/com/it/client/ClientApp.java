@@ -3,6 +3,7 @@ package com.it.client;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.mainFrame.RegComputer;
 import com.it.client.mainFrame.ToolBarIcon;
+import com.it.client.util.CacheUsername;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.httpClient.core.HttpClient;
 import javafx.application.Application;

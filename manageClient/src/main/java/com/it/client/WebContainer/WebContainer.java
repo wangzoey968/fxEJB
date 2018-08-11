@@ -30,7 +30,7 @@ public class WebContainer {
 
     public ReadOnlyStringProperty titleProperty;    //网页标题；
 
-    public WebContainer(WebView webView,Window owner) {
+    public WebContainer(WebView webView, Window owner) {
         this.webView = webView;
         this.owner = owner;
         setup();
@@ -52,7 +52,7 @@ public class WebContainer {
                 return tab.webView.getEngine();
             }
         });
-        //为页面上的webcontainer赋值
+        //为页面上的webcontainer赋值,由ext.js中的webcontainer调用
         webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             @Override
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
@@ -63,17 +63,21 @@ public class WebContainer {
         });
     }
 
-    public static void sout(String s){
+    /**
+     * 下面的多个方法必须是非静态的,不然前端页面识别不出来
+     */
+
+    public void sout(String s) {
         System.out.println(s);
     }
 
-    public static void Alert(String s) {
+    public void Alert(String s) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, s, ButtonType.OK);
-        //alert.initOwner(owner);
+        alert.initOwner(owner);
         alert.showAndWait();
     }
 
-    public static String selectFile() throws Exception {
+    public String selectFile() throws Exception {
         FileChooser fc = new FileChooser();
         File file = fc.showOpenDialog(MainFrame.getInstance());
         return file.getPath();
@@ -82,8 +86,7 @@ public class WebContainer {
     /**
      * 设置客户端菜单；
      */
-    public static void configMainFrameMenu(String json) {
-        System.out.println(json + "json");
+    public void configMainFrameMenu(String json) {
         try {
             MainFrame.getInstance().setMenu(json);
         } catch (Exception e) {
@@ -94,36 +97,37 @@ public class WebContainer {
     /**
      * 设置客户端sessionId
      */
-    public static void configClientSid(String sid) {
+    public void configClientSid(String sid) {
         try {
-            EJB.sidProperty.set(sid);
-            EJB.userIdProperty.set(Long.parseLong(EJB.getUserService().getUserId(sid)));
-            //todo username
+            EJB.setSessionId(sid);
+            EJB.setUserId(EJB.getUserService().getUserIdBySession(sid));
+            EJB.setUsername(EJB.getUserService().getUsernameBySession(sid));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * 根据用户ID，获取用户名称；
+     * 根据用户ID，获取用户名；
      */
-    public static String getUserName(Long userId) {
-        return CacheUsername.getUserName(userId);
+    public String getUsername(Long userId) {
+        return CacheUsername.getUsername(userId);
     }
 
     /**
      * 获取登陆列表
      */
-    public static String loadLoginHistory() {
+    public String loadLoginHistory() {
         File file = Paths.get(System.getProperty("user.dir") + "/user.cfg").toFile();
         if (!file.exists()) return null;
         //return file.getText('UTF-8');
         return null;
     }
+
     /**
      * 保存登陆列表
      */
-    public static void saveLoginHistory(String list) {
+    public void saveLoginHistory(String list) {
         File file = Paths.get(System.getProperty("user.dir") + "/user.cfg").toFile();
         //file.setText(list, 'UTF-8');
     }
@@ -132,7 +136,7 @@ public class WebContainer {
      * 调用{@link FxmlUtil#showObject}
      * eg:objStr=订单号A01  任务号123
      */
-    public static void showObject(String objStr) {
+    public void showObject(String objStr) {
         FxmlUtil.showObject(objStr);
     }
 

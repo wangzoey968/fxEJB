@@ -8,19 +8,19 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 
-public class MainMenu extends MenuItem {
+public class MenuHandler extends MenuItem {
 
     private MenuData menuData;
 
-    public MainMenu() {
+    public MenuHandler() {
 
     }
 
-    public MainMenu(String text) {
+    public MenuHandler(String text) {
         super(text);
     }
 
-    public MainMenu(MenuData menuData) {
+    public MenuHandler(MenuData menuData) {
         super(menuData.getName());
         this.menuData = menuData;
         init();
@@ -55,10 +55,10 @@ public class MainMenu extends MenuItem {
 
     private static void callFun(String funName) {
         switch (funName) {
-            case "打开订单":
+            case "打开订单价格":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
-            case "打开财务":
+            case "打开现金流":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
         }

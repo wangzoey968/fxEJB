@@ -1,6 +1,8 @@
 package com.it.server;
 
 import com.it.api.UserServiceLocal;
+import com.it.api.table.user.Tb_User;
+import com.it.web.user.service.Core;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -16,18 +18,20 @@ import javax.ejb.TransactionManagementType;
 public class UserServiceRemote implements UserServiceLocal {
 
     @Override
-    public void test() throws Exception {
-        System.out.println("this is test of OrderServiceLocal");
+    public Long getUserIdBySession(String sessionId) throws Exception {
+        Tb_User user = Core.getUser(sessionId);
+        return user.getId();
     }
 
     @Override
-    public String getUserId(String uid) throws Exception {
-        return null;
+    public String getUsernameBySession(String sessionId) throws Exception {
+        Tb_User user = Core.getUser(sessionId);
+        return user.getUsername();
     }
 
     @Override
-    public String getUserNameByUserId(Long userId) throws Exception {
-        return null;
+    public String getUsernameByUserId(Long userId) throws Exception {
+        return Core.getUsername(userId);
     }
 
 }

@@ -5,10 +5,10 @@ package com.it.api;
  */
 public interface UserServiceLocal {
 
-    public void test() throws Exception;
+    public Long getUserIdBySession(String sessionId)throws Exception;
 
-    public String getUserId(String uid)throws Exception;
+    public String getUsernameBySession(String sessionId)throws Exception;
 
-    public String getUserNameByUserId(Long userId) throws Exception;
+    public String getUsernameByUserId(Long userId) throws Exception;
 
 }

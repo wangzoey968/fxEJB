@@ -8,8 +8,8 @@ import com.it.api.table.Tb_Computer;
 import com.it.api.table.user.Tb_User;
 import com.it.util.GsonUtil;
 import com.it.util.WebBack;
-import com.it.util.base.Menus;
-import com.it.web.user.service.CoreService;
+import com.it.util.base.MainMenus;
+import com.it.web.user.service.Core;
 import com.it.web.user.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class UserController {
     void userLogin(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            String sid = CoreService.login(username, DigestUtils.md5Hex(password), false);
+            String sid = Core.login(username, DigestUtils.md5Hex(password), false);
             request.getSession().setAttribute("userSid", sid);
             object.addProperty("result", true);
             object.addProperty("sid", sid);
@@ -64,7 +64,7 @@ public class UserController {
         JsonObject object = new JsonObject();
         try {
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
-            Tb_User tb_user = UserService.insertUser(CoreService.getUser(request.getSession()), user);
+            Tb_User tb_user = UserService.insertUser(Core.getUser(request.getSession()), user);
             tb_user.setPassword("******");
             tb_user.setSuperPassword("******");
             object.addProperty("result", true);
@@ -86,7 +86,7 @@ public class UserController {
     void updateUser(Tb_User user, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User tb_user = UserService.updateUser(CoreService.getUser(request.getSession()), user);
+            Tb_User tb_user = UserService.updateUser(Core.getUser(request.getSession()), user);
             tb_user.setPassword("******");
             tb_user.setSuperPassword("******");
             object.addProperty("result", true);
@@ -108,7 +108,7 @@ public class UserController {
     void listUsers(String name, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            List<Tb_User> users = UserService.listUsers(CoreService.getUser(request.getSession()), name);
+            List<Tb_User> users = UserService.listUsers(Core.getUser(request.getSession()), name);
             for (Tb_User u : users) {
                 u.setPassword("******");
                 u.setSuperPassword("******");
@@ -133,7 +133,7 @@ public class UserController {
     void isEnableUserLogin(Long userId, boolean isEnable, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User user = UserService.setUserEnable(CoreService.getUser(request.getSession()), userId, isEnable);
+            Tb_User user = UserService.setUserEnable(Core.getUser(request.getSession()), userId, isEnable);
             object.addProperty("result", true);
             object.add("row", parser.parse(gson.toJson(user)).getAsJsonObject());
         } catch (Exception e) {
@@ -152,8 +152,8 @@ public class UserController {
     void listMenus(HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_User user = CoreService.getUser(request.getSession());
-            List<MenuData> ls = Menus.getMenus(user);
+            Tb_User user = Core.getUser(request.getSession());
+            List<MenuData> ls = MainMenus.getMenus(user);
             object.addProperty("result", true);
             object.addProperty("menus", gson.toJson(ls));
         } catch (Exception e) {
@@ -173,7 +173,7 @@ public class UserController {
     public void getUsername(HttpServletRequest request, HttpServletResponse response, Long userId) {
         JsonObject object = new JsonObject();
         try {
-            String username = CoreService.getUserName(userId);
+            String username = Core.getUsername(userId);
             object.addProperty("result", true);
             object.addProperty("row", username);
         } catch (Exception e) {
@@ -225,7 +225,7 @@ public class UserController {
     public void updateComputer(Tb_Computer computer, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            Tb_Computer c = UserService.updateComputer(CoreService.getUser(request.getSession()), computer);
+            Tb_Computer c = UserService.updateComputer(Core.getUser(request.getSession()), computer);
             object.addProperty("result", true);
             object.add("row", GsonUtil.gson.toJsonTree(c).getAsJsonObject());
         } catch (Exception e) {
@@ -244,7 +244,7 @@ public class UserController {
     public void deleteComputer(Long computerId, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            UserService.deleteComputer(CoreService.getUser(request.getSession()), computerId);
+            UserService.deleteComputer(Core.getUser(request.getSession()), computerId);
             object.addProperty("result", true);
             object.addProperty("row", "删除成功");
         } catch (Exception e) {
