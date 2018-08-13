@@ -67,7 +67,7 @@ public class WebContainer {
      * 下面的多个方法必须是非静态的,不然前端页面识别不出来
      */
 
-    public void sout(String s) {
+    public void print(String s) {
         System.out.println(s);
     }
 

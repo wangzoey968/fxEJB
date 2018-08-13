@@ -1,7 +1,7 @@
 $.extend({
-    sout: function (str) {
+    print: function (str) {
         if (typeof WebContainer === "undefined") return;
-        WebContainer.sout(str);
+        WebContainer.print(str);
     },
     selectFile: function (callback) {
         if (typeof WebContainer === "undefined") return;
@@ -16,15 +16,13 @@ $.extend({
         WebContainer.configClientSid(str)
     },
     //根据用户ID，获取用户名称；
-    getUserName: function (userId) {
+    getUsername: function (userId) {
         if (typeof WebContainer === "undefined") return;
-        return WebContainer.getUserName(userId)
+        return WebContainer.getUsername(userId)
     },
     //设置客户端菜单；
     configMainFrameMenu: function (str) {
-        console.log("webcontainer",typeof WebContainer === "undefined");
         if (typeof WebContainer === "undefined") return;
-        console.log("1111111111111111111111111");
         WebContainer.configMainFrameMenu(str)
     },
     // 获取登陆列表

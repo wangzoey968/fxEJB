@@ -15,8 +15,7 @@ public class MainMenus {
 
     static {
         //财务
-        List<MenuData> subFinance = new ArrayList<MenuData>();
-        subFinance.clear();
+        List<MenuData> subFinance = new ArrayList<>();
         subFinance.add(new MenuData("订单价格", "FUN", "打开订单价格", "超管", null));
         subFinance.add(new MenuData("现金流", "FUN", "打开现金流", "超管", null));
         subFinance.add(new MenuData("应付款", "FUN", "打开应付款", "显示应付款", null));
@@ -24,20 +23,26 @@ public class MainMenus {
         menuDatas.add(finance);
 
         //统计
-        List<MenuData> subStatistic = new ArrayList<MenuData>();
-        subStatistic.clear();
-        subStatistic.add(new MenuData("加工统计", "URL", "/manageServer/statistics/statistics.html", "打开加工统计", null));
+        List<MenuData> subStatistic = new ArrayList<>();
+        subStatistic.add(new MenuData("加工统计", "URL", "/manageServer/statistics/statistics.html", "超管", null));
         subStatistic.add(new MenuData("利用率", "URL", "/manageServer/statistics/staPaperUse.html", "打开利用率", null));
         MenuData statistic = new MenuData("统计", "MENU", "", "超管", subStatistic);
         menuDatas.add(statistic);
 
         //事故单配置
-        List<MenuData> subAccidentSet = new ArrayList<MenuData>();
-        subAccidentSet.clear();
+        List<MenuData> subAccidentSet = new ArrayList<>();
         subAccidentSet.add(new MenuData("部门设置", "FUN", "打开部门设置", "事故设置", null));
         subAccidentSet.add(new MenuData("事故类型设置", "FUN", "打开事故类型设置", "超管", null));
         MenuData accidentSet = new MenuData("损失设置", "MENU", "", "事故设置", subAccidentSet);
         menuDatas.add(accidentSet);
+
+        //用户设置
+        List<MenuData> subUserSet=new ArrayList<>();
+        subUserSet.add(new MenuData("用户设置","FUN","打开用户设置","超管",null));
+        subUserSet.add(new MenuData("角色设置","FUN","打开角色设置","超管",null));
+        subUserSet.add(new MenuData("权限设置","FUN","打开权限设置","超管",null));
+        MenuData userSet=new MenuData("用户设置","MENU","","超管",subUserSet);
+        menuDatas.add(userSet);
 
     }
 
@@ -56,23 +61,25 @@ public class MainMenus {
     }
 
     private static void generateMenu(List<MenuData> list, Tb_User user) {
-        //临时存放user没有的权限
-        ArrayList<MenuData> notAuth = new ArrayList<>();
         //先提取出所有权限的名称;
         List<String> auths = Core.getUserAllAuths(user);
-        //判断list中是否含有某项权限,如果该用户没有此项权限,从list中移除;
-        for (MenuData md : list) {
-            if (!md.getAuth().isEmpty() && !auths.contains(md.getAuth()) && !md.getAuth().equals("MENU")) {
-                notAuth.add(md);
+
+        ArrayList<MenuData> newMenu = new ArrayList<>();
+        newMenu.addAll(list);
+        for (MenuData menuData : list) {
+            if (!menuData.getAuth().isEmpty() && !auths.contains(menuData.getAuth())) {
+                newMenu.remove(menuData);
             }
         }
-        list.removeAll(notAuth);
+
         //递归,如果是menu那么就继续遍历,获取子菜单;
         for (MenuData md : list) {
             if (md.getKey().equals("MENU")) {
                 generateMenu(md.getSubMenu(), user);
             }
         }
+        list.clear();
+        list.addAll(newMenu);
     }
 
 }

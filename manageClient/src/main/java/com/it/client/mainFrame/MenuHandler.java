@@ -55,12 +55,17 @@ public class MenuHandler extends MenuItem {
 
     private static void callFun(String funName) {
         switch (funName) {
+            //订单
             case "打开订单价格":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
             case "打开现金流":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
+            //财务
+            // todo
+            //用户,角色,权限管理
+
         }
     }
 
