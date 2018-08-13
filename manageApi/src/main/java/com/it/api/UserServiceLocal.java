@@ -9,12 +9,12 @@ import java.util.List;
  */
 public interface UserServiceLocal {
 
-    public Long getUserIdBySession(String sessionId)throws Exception;
+    public Long getUserIdBySession(String sessionId) throws Exception;
 
-    public String getUsernameBySession(String sessionId)throws Exception;
+    public String getUsernameBySession(String sessionId) throws Exception;
 
     public String getUsernameByUserId(Long userId) throws Exception;
 
-    public List<Tb_User> listUser(String sid,String key)throws Exception;
+    public List<Tb_User> listUser(String sessionId, String key) throws Exception;
 
 }

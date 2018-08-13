@@ -123,13 +123,13 @@
             if (re.test(str)) {
                 /*发送请求*/
                 $.ajax({
-                    url: _root + '/auth/user/login.do',
+                    url: _root + '/core/user/login.do',
                     data: obj,//{"userName":userName,"passWord":passWord}
                     type: "POST",
                     dataType: _json,
                     success: function (data) {
                         if (data.result) {
-                            $.configClientSid(data.sid);
+                            $.configClientSid(data.sessionId);
                             window.location.href = "mainFrame/mainFrame.html";
                             if ($.loadLoginHistory() == null || $.loadLoginHistory() == undefined) {
                                 $.saveLoginHistory(obj.userName);

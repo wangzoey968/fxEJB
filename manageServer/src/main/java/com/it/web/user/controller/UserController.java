@@ -24,7 +24,7 @@ import java.util.List;
 
 @Controller
 @Scope("prototype")
-@RequestMapping("/auth/user")
+@RequestMapping("/core/user")
 public class UserController {
 
     @Autowired
@@ -42,10 +42,10 @@ public class UserController {
     void userLogin(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            String sid = Core.login(username, DigestUtils.md5Hex(password), false);
-            request.getSession().setAttribute("userSid", sid);
+            String sessionId = Core.login(username, DigestUtils.md5Hex(password), false);
+            request.getSession().setAttribute("userSessionId", sessionId);
             object.addProperty("result", true);
-            object.addProperty("sid", sid);
+            object.addProperty("sessionId", sessionId);
         } catch (Exception e) {
             e.printStackTrace();
             object.addProperty("result", false);
@@ -102,13 +102,13 @@ public class UserController {
     /**
      * 查询用户
      *
-     * @param name 查询关键字
+     * @param key 查询关键字
      */
     @RequestMapping("/listUser")
-    void listUsers(String name, HttpServletRequest request, HttpServletResponse response) {
+    void listUsers(String key, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            List<Tb_User> users = UserService.listUsers(Core.getUser(request.getSession()), name);
+            List<Tb_User> users = UserService.listUser(Core.getUser(request.getSession()), key);
             for (Tb_User u : users) {
                 u.setPassword("******");
                 u.setSuperPassword("******");

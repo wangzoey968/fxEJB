@@ -41,17 +41,6 @@ public class Tb_User implements Serializable {
     @Transient
     private List<Tb_Group> groups = new ArrayList<>();
 
-    /**
-     * 获取用户的权限名称,返回值是List<String>,方便在验证权限的时候进行校验;
-     */
-    public List<String> getAuthList() {
-        List<String> authList = new ArrayList<>();
-        for (Tb_Auth auth : auths) {
-            authList.add(auth.getAuthname());
-        }
-        return authList;
-    }
-
     @Override
     public String toString() {
         return "Tb_User{" +

@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
 import javax.persistence.Table;
@@ -40,8 +42,56 @@ public class UserTab extends Tab {
                     @Override
                     protected void updateItem(Long item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (!empty && item != null) {
-                            setText(item.toString());
+                        Tb_User user = (Tb_User) this.getTableRow().getItem();
+                        if (!empty && user != null) {
+                            setText(user.getId().toString());
+                        }
+                    }
+                };
+            }
+        });
+        tcUsername.setCellFactory(new Callback<TableColumn<Tb_User, String>, TableCell<Tb_User, String>>() {
+            @Override
+            public TableCell<Tb_User, String> call(TableColumn<Tb_User, String> param) {
+                return new TableCell<Tb_User,String>(){
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                    }
+                };
+            }
+        });
+        tcLoginname.setCellFactory(new Callback<TableColumn<Tb_User, String>, TableCell<Tb_User, String>>() {
+            @Override
+            public TableCell<Tb_User, String> call(TableColumn<Tb_User, String> param) {
+                return new TableCell<Tb_User, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        Tb_User user = (Tb_User) this.getTableRow().getItem();
+                        if (!empty && user != null) {
+                            setText(user.getLoginname());
+                        }
+                    }
+                };
+            }
+        });
+        tcEnable.setCellFactory(new Callback<TableColumn<Tb_User, Boolean>, TableCell<Tb_User, Boolean>>() {
+            @Override
+            public TableCell<Tb_User, Boolean> call(TableColumn<Tb_User, Boolean> param) {
+                return new TableCell<Tb_User, Boolean>() {
+                    @Override
+                    protected void updateItem(Boolean item, boolean empty) {
+                        super.updateItem(item, empty);
+                        Tb_User user = (Tb_User) getTableRow().getItem();
+                        if (!empty && user != null) {
+                            if (user.getEnable()) {
+                                this.setText("可用");
+                                this.setTextFill(Color.GREEN);
+                            } else {
+                                this.setText("不可以");
+                                this.setTextFill(Color.RED);
+                            }
                         }
                     }
                 };
@@ -58,6 +108,7 @@ public class UserTab extends Tab {
 
     private void doSearch() {
         try {
+            tvUser.getItems().clear();
             List<Tb_User> users = EJB.getUserService().listUser(EJB.getSessionId(), tfKey.getText());
             tvUser.getItems().addAll(users);
         } catch (Exception e) {

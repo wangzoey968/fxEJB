@@ -97,11 +97,11 @@ public class WebContainer {
     /**
      * 设置客户端sessionId
      */
-    public void configClientSid(String sid) {
+    public void configClientSid(String sessionId) {
         try {
-            EJB.setSessionId(sid);
-            EJB.setUserId(EJB.getUserService().getUserIdBySession(sid));
-            EJB.setUsername(EJB.getUserService().getUsernameBySession(sid));
+            EJB.setSessionId(sessionId);
+            EJB.setUserId(EJB.getUserService().getUserIdBySession(sessionId));
+            EJB.setUsername(EJB.getUserService().getUsernameBySession(sessionId));
         } catch (Exception e) {
             e.printStackTrace();
         }

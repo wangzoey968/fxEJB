@@ -157,18 +157,18 @@ public class Core {
     /**
      * 用户注销；
      */
-    public static void logout(String sid) {
+    public static void logout(String sessionId) {
         try {
-            if (userMap.containsKey(sid)) {
+            if (userMap.containsKey(sessionId)) {
                 //从userMap中移除登录日志
-                Tb_UserLog ul = userMap.get(sid);
-                userMap.remove(sid);
+                Tb_UserLog ul = userMap.get(sessionId);
+                userMap.remove(sessionId);
                 Session session = HibernateUtil.openSession();
-                session.refresh(ul);
+                //session.refresh(ul);
                 //保存退出日志
                 Tb_UserLog log = new Tb_UserLog();
                 log.setTb_user_id(ul.getTb_user_id());
-                log.setSessionId(sid);
+                log.setSessionId(sessionId);
                 log.setAction(CommonConstant.LOGOUT);
                 log.setActionTime(System.currentTimeMillis());
                 session.save(log);
@@ -179,31 +179,24 @@ public class Core {
     }
 
     /**
-     * 获取UserSession对象；
+     * 从request的session中获取User对象,为网页使用
      */
-    public static Tb_UserLog getUserSession(String sid) {
-        Tb_UserLog ul = null;
+    public static Tb_User getUser(HttpSession session) {
+        Tb_User user = null;
         try {
-            if (userMap.containsKey(sid)) {
-                Session session = HibernateUtil.openSession();
-                ul = userMap.get(sid);
-                ul.setActionTime(System.currentTimeMillis());
-                session.update(ul);
-            } else {
-                throw new Exception("请先登录");
-            }
+            user = getUser(session.getAttribute("userSessionId").toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ul;
+        return user;
     }
 
     /**
-     * 从session中获取UserLog对象,再获取整个user对象
+     * 设置的map中获取UserLog对象,再获取整个user对象,为客户端使用
      */
-    public static Tb_User getUser(String sid) {
+    public static Tb_User getUser(String sessionId) {
         Session session = HibernateUtil.openSession();
-        Tb_UserLog ul = getUserSession(sid);
+        Tb_UserLog ul = getUserLog(sessionId);
         Tb_User user = (Tb_User) session.createQuery("select user from Tb_User user where user.id=:uid").setParameter("uid", ul.getTb_user_id()).uniqueResult();
         //获取用户的所有角色
         user.getRoles().addAll(listUserRoles(user.getId()));
@@ -215,6 +208,26 @@ public class Core {
         //获取额外的权限
         user.getAuths().addAll(listUserAuths(user.getId()));
         return user;
+    }
+
+    /**
+     * 获取UserLog对象；
+     */
+    public static Tb_UserLog getUserLog(String sessionId) {
+        Tb_UserLog ul = null;
+        try {
+            if (userMap.containsKey(sessionId)) {
+                Session session = HibernateUtil.openSession();
+                ul = userMap.get(sessionId);
+                ul.setActionTime(System.currentTimeMillis());
+                session.update(ul);
+            } else {
+                throw new Exception("请先登录");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ul;
     }
 
     /**
@@ -264,26 +277,6 @@ public class Core {
             }
         }
         return list;
-    }
-
-    /**
-     * 从session中获取UserLog对象；
-     */
-    public static Tb_UserLog getUserLog(HttpSession session) {
-        return getUserSession(session.getAttribute("userSid").toString());
-    }
-
-    /**
-     * 从session中获取User对象；
-     */
-    public static Tb_User getUser(HttpSession session) {
-        Tb_User user = null;
-        try {
-            user = getUser(session.getAttribute("userSid").toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
     }
 
     /**

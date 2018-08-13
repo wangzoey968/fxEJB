@@ -7,7 +7,7 @@ import org.hibernate.Session;
 
 import java.util.List;
 
-public class UserDao{
+public class UserDao {
 
     /**
      * 插入用户
@@ -39,10 +39,10 @@ public class UserDao{
     /**
      * 查询用户
      */
-    public List<Tb_User> listUsers(String name) {
+    public List<Tb_User> listUser(String key) {
         Session session = HibernateUtil.openSession();
-        List<Tb_User> list = session.createQuery("from Tb_User where (loginname like :name or username like :name)")
-                .setParameter("name", name == null ? "%%" : "%" + name + "%")
+        List<Tb_User> list = session.createQuery("from Tb_User where (loginname like :k or username like :k)")
+                .setParameter("k", key == null ? "%%" : "%" + key + "%")
                 .list();
         return list;
     }

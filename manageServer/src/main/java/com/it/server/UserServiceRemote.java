@@ -37,7 +37,7 @@ public class UserServiceRemote implements UserServiceLocal {
     }
 
     @Override
-    public List<Tb_User> listUser(String sid, String key) throws Exception {
-        return UserService.listUsers(Core.getUser(sid), key);
+    public List<Tb_User> listUser(String sessionId, String key) throws Exception {
+        return UserService.listUser(Core.getUser(sessionId), key);
     }
 }

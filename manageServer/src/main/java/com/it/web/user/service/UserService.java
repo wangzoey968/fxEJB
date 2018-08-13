@@ -33,9 +33,11 @@ public class UserService {
     /**
      * 查询用户
      */
-    public static List<Tb_User> listUsers(Tb_User user, String name) {
+    public static List<Tb_User> listUser(Tb_User user, String key) {
+        System.out.println((key == null) + "111111111111111111");
+        System.out.println((key.equals("")) + "111111111111111111");
         UserDao dao = new UserDao();
-        return dao.listUsers(name);
+        return dao.listUser(key);
     }
 
 

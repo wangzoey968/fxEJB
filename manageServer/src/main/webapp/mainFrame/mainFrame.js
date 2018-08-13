@@ -1,7 +1,7 @@
 $(function () {
 
     $.ajax({
-        url: _root + '/auth/user/listMenus.do',
+        url: _root + '/core/user/listMenus.do',
         type: 'POST',
         dataType: _json,
         success: function (data) {
