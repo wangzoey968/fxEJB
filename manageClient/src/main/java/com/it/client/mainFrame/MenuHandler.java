@@ -3,6 +3,9 @@ package com.it.client.mainFrame;
 import com.it.api.MenuData;
 import com.it.client.WebContainer.WebTab;
 import com.it.client.order.OrderTab;
+import com.it.client.user.AuthTab;
+import com.it.client.user.RoleTab;
+import com.it.client.user.UserTab;
 import com.it.client.util.ConfigUtil;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -62,10 +65,17 @@ public class MenuHandler extends MenuItem {
             case "打开现金流":
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
-            //财务
-            // todo
-            //用户,角色,权限管理
+            //财务 todo
 
+            //用户,角色,权限管理
+            case "打开用户设置":
+                MainFrame.getInstance().addTab(new UserTab());
+                break;
+            case "打开角色设置":
+                MainFrame.getInstance().addTab(new RoleTab());
+                break;
+            case "打开权限设置":
+                MainFrame.getInstance().addTab(new AuthTab());
         }
     }
 

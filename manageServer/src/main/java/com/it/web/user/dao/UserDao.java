@@ -1,17 +1,19 @@
 package com.it.web.user.dao;
 
 import com.it.api.table.user.Tb_User;
-import com.it.util.DaoBase;
+import com.it.util.HibernateUtil;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 
 import java.util.List;
 
-public class UserDao extends DaoBase {
+public class UserDao{
 
     /**
      * 插入用户
      */
     public Tb_User insertUser(Tb_User user) {
+        Session session = HibernateUtil.openSession();
         session.save(user);
         return user;
     }
@@ -20,6 +22,7 @@ public class UserDao extends DaoBase {
      * 修改用户
      */
     public Tb_User updateUser(Tb_User user) {
+        Session session = HibernateUtil.openSession();
         Tb_User u = (Tb_User) session.createQuery("from Tb_User where id=:id").setParameter("id", user.getId()).uniqueResult();
         u.setLoginname(user.getLoginname());
         u.setEnable(user.getEnable());
@@ -37,8 +40,9 @@ public class UserDao extends DaoBase {
      * 查询用户
      */
     public List<Tb_User> listUsers(String name) {
+        Session session = HibernateUtil.openSession();
         List<Tb_User> list = session.createQuery("from Tb_User where (loginname like :name or username like :name)")
-                .setParameter("name", "%" + name + "%")
+                .setParameter("name", name == null ? "%%" : "%" + name + "%")
                 .list();
         return list;
     }
@@ -47,6 +51,7 @@ public class UserDao extends DaoBase {
      * 允许或禁止登录
      */
     public Tb_User isEnableUserLogin(Long userId, boolean isEnable) {
+        Session session = HibernateUtil.openSession();
         Tb_User user = new Tb_User();
         user.setId(userId);
         session.refresh(user, LockMode.UPGRADE_NOWAIT);

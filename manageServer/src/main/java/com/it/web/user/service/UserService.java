@@ -13,8 +13,8 @@ public class UserService {
     /**
      * 插入用户
      */
-    public static Tb_User insertUser(Tb_User mySelf, Tb_User newUser) throws Exception {
-        if (!mySelf.getAuthList().contains("用户管理")) throw new Exception("您没有用户管理权限");
+    public static Tb_User insertUser(Tb_User user, Tb_User newUser) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("用户管理")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         dao.insertUser(newUser);
         return newUser;
@@ -23,8 +23,8 @@ public class UserService {
     /**
      * 修改用户
      */
-    public static Tb_User updateUser(Tb_User mySelf, Tb_User updateUser) throws Exception {
-        if (!mySelf.getAuthList().contains("用户管理")) throw new Exception("您没有用户管理权限");
+    public static Tb_User updateUser(Tb_User user, Tb_User updateUser) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("用户管理")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         dao.updateUser(updateUser);
         return updateUser;
@@ -33,7 +33,7 @@ public class UserService {
     /**
      * 查询用户
      */
-    public static List<Tb_User> listUsers(Tb_User mySelf, String name) {
+    public static List<Tb_User> listUsers(Tb_User user, String name) {
         UserDao dao = new UserDao();
         return dao.listUsers(name);
     }
@@ -42,8 +42,8 @@ public class UserService {
     /**
      * 设置为允许或禁止登录
      */
-    public static Tb_User setUserEnable(Tb_User mySelf, Long userId, boolean isEnable) throws Exception {
-        if (!mySelf.getAuthList().contains("用户管理")) throw new Exception("您没有用户管理权限");
+    public static Tb_User setUserEnable(Tb_User user, Long userId, boolean isEnable) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("用户管理")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         return dao.isEnableUserLogin(userId, isEnable);
     }
@@ -77,16 +77,16 @@ public class UserService {
         session.save(cmp);
     }
 
-    public static Tb_Computer updateComputer(Tb_User mySelf, Tb_Computer comp) throws Exception {
-        if (mySelf.getUsername().equals("管理员")) throw new Exception("您不是管理员");
+    public static Tb_Computer updateComputer(Tb_User user, Tb_Computer comp) throws Exception {
+        if (user.getUsername().equals("管理员")) throw new Exception("您不是管理员");
         Session session = HibernateUtil.openSession();
         Tb_Computer computer = new Tb_Computer(comp.getComputerName(), comp.getMacId(), comp.getReg(), comp.getRegUserId(), comp.getNote());
         session.update(computer);
         return computer;
     }
 
-    public static void deleteComputer(Tb_User mySelf, Long computerId) throws Exception {
-        if (mySelf.getUsername().equals("管理员")) throw new Exception("您不是管理员");
+    public static void deleteComputer(Tb_User user, Long computerId) throws Exception {
+        if (user.getUsername().equals("管理员")) throw new Exception("您不是管理员");
         Session session = HibernateUtil.openSession();
         Tb_Computer computer = (Tb_Computer) session.createQuery("from Tb_Computer where id=:id").setParameter("id", computerId).uniqueResult();
         if (computer == null) throw new Exception("已删除,请刷新");

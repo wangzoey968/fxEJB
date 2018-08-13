@@ -3,11 +3,13 @@ package com.it.server;
 import com.it.api.UserServiceLocal;
 import com.it.api.table.user.Tb_User;
 import com.it.web.user.service.Core;
+import com.it.web.user.service.UserService;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import java.util.List;
 
 /**
  * Created by wangzy on 2018/6/7.
@@ -34,4 +36,8 @@ public class UserServiceRemote implements UserServiceLocal {
         return Core.getUsername(userId);
     }
 
+    @Override
+    public List<Tb_User> listUser(String sid, String key) throws Exception {
+        return UserService.listUsers(Core.getUser(sid), key);
+    }
 }
