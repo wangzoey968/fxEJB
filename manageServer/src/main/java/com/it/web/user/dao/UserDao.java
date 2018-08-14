@@ -4,6 +4,9 @@ import com.it.api.table.user.Tb_User;
 import com.it.util.HibernateUtil;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+import org.hibernate.query.Query;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -23,17 +26,30 @@ public class UserDao {
      */
     public Tb_User updateUser(Tb_User user) {
         Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        System.out.println(user.toString());
         Tb_User u = (Tb_User) session.createQuery("from Tb_User where id=:id").setParameter("id", user.getId()).uniqueResult();
         u.setLoginname(user.getLoginname());
         u.setEnable(user.getEnable());
         u.setPassword(user.getPassword());
         u.setSuperPassword(user.getSuperPassword());
-        //u.setRole(user.getRole());
         u.setUsername(user.getUsername());
         session.update(u);
+        session.getTransaction().commit();
         u.setPassword("******");
         u.setSuperPassword("******");
         return u;
+    }
+
+    /**
+     * 删除用户
+     */
+    public void deleteUser(Long userId) {
+        Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        Tb_User user = (Tb_User) session.createQuery("from Tb_User where id=:id").setParameter("id", userId).uniqueResult();
+        session.delete(user);
+        session.getTransaction().commit();
     }
 
     /**

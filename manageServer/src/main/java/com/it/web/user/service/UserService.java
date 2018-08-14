@@ -5,6 +5,7 @@ import com.it.api.table.user.Tb_User;
 import com.it.util.HibernateUtil;
 import com.it.web.user.dao.UserDao;
 import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class UserService {
      * 插入用户
      */
     public static Tb_User insertUser(Tb_User user, Tb_User newUser) throws Exception {
-        if (!Core.getUserAllAuths(user).contains("用户管理")) throw new Exception("您没有用户管理权限");
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         dao.insertUser(newUser);
         return newUser;
@@ -24,18 +25,26 @@ public class UserService {
      * 修改用户
      */
     public static Tb_User updateUser(Tb_User user, Tb_User updateUser) throws Exception {
-        if (!Core.getUserAllAuths(user).contains("用户管理")) throw new Exception("您没有用户管理权限");
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您没有用户管理权限");
         UserDao dao = new UserDao();
         dao.updateUser(updateUser);
         return updateUser;
     }
 
     /**
+     * 删除用户
+     */
+    public static void deleteUser(Tb_User user, Long userId) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您没有用户管理权限");
+        UserDao dao = new UserDao();
+        dao.deleteUser(userId);
+    }
+
+    /**
      * 查询用户
      */
-    public static List<Tb_User> listUser(Tb_User user, String key) {
-        System.out.println((key == null) + "111111111111111111");
-        System.out.println((key.equals("")) + "111111111111111111");
+    public static List<Tb_User> listUser(Tb_User user, String key) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您没有管理权限");
         UserDao dao = new UserDao();
         return dao.listUser(key);
     }

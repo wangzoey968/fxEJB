@@ -10,6 +10,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.nio.file.Paths;
 
+/**
+ * 正常使用时,先获取session,然后如果是对表进行增删改,就先开始事务,操作完毕后提交事务
+ * 如果只是查询,不用开启事务,也不用提交事务;
+ *
+ * 如果使用sessionFactory进行测试,先进行initSessionFactory,再获取session,然后操作
+ */
 public class HibernateUtil {
 
     private static SessionFactory sessionFactory = null;

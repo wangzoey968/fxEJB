@@ -40,4 +40,20 @@ public class UserServiceRemote implements UserServiceLocal {
     public List<Tb_User> listUser(String sessionId, String key) throws Exception {
         return UserService.listUser(Core.getUser(sessionId), key);
     }
+
+    @Override
+    public Tb_User addUser(String sessionId, Tb_User user) throws Exception {
+        return UserService.insertUser(Core.getUser(sessionId), user);
+    }
+
+    @Override
+    public Tb_User updateUser(String sessionId, Tb_User user) throws Exception {
+        return UserService.updateUser(Core.getUser(sessionId), user);
+    }
+
+    @Override
+    public void deleteUser(String sessionId, Long userId) throws Exception {
+        UserService.deleteUser(Core.getUser(sessionId), userId);
+    }
+
 }
