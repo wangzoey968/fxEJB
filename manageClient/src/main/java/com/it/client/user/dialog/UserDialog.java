@@ -35,15 +35,17 @@ public class UserDialog extends Dialog {
         this.initOwner(MainFrame.getInstance());
         this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         final Tb_User[] user = new Tb_User[1];
-        this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, filter -> {
+        this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, event -> {
             try {
+                event.consume();
                 user[0] = EJB.getUserService().addUser(EJB.getSessionId(), setObjectValue());
+                this.close();
             } catch (Exception e) {
                 FxmlUtil.showException(e, MainFrame.getInstance());
                 e.printStackTrace();
             }
         });
-        showAndWait();
+        this.showAndWait();
         return user[0];
     }
 
@@ -55,19 +57,18 @@ public class UserDialog extends Dialog {
         this.initOwner(MainFrame.getInstance());
         this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         setTextValue(user);
-        //todo,更新时获取的值不正确
         final Tb_User[] ret = new Tb_User[1];
         this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, event -> {
             try {
-                ret[0] = setObjectValue();
-                ret[0].setId(user.getId());
-                EJB.getUserService().updateUser(EJB.getSessionId(), ret[0]);
+                event.consume();
+                ret[0] = EJB.getUserService().updateUser(EJB.getSessionId(), setUpdateValue(user));
+                this.close();
             } catch (Exception e) {
                 FxmlUtil.showException(e, MainFrame.getInstance());
                 e.printStackTrace();
             }
         });
-        showAndWait();
+        this.showAndWait();
         return ret[0];
     }
 
@@ -83,6 +84,19 @@ public class UserDialog extends Dialog {
         user.setEnable(rbEnable.isSelected());
         user.setEmail(tfEmail.getText());
         return user;
+    }
+
+    /**
+     * 修改的时候为对象赋值
+     */
+    private Tb_User setUpdateValue(Tb_User b) {
+        b.setLoginname(tfLoginname.getText());
+        b.setUsername(tfUsername.getText());
+        b.setPassword(DigestUtils.md5Hex(tfPassword.getText()));
+        b.setPassword(DigestUtils.md5Hex(tfSuperPassword.getText()));
+        b.setEnable(rbEnable.isSelected());
+        b.setEmail(tfEmail.getText());
+        return b;
     }
 
     /**

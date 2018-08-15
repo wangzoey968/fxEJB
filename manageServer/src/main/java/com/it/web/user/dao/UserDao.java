@@ -27,13 +27,13 @@ public class UserDao {
     public Tb_User updateUser(Tb_User user) {
         Session session = HibernateUtil.openSession();
         session.getTransaction().begin();
-        System.out.println(user.toString());
         Tb_User u = (Tb_User) session.createQuery("from Tb_User where id=:id").setParameter("id", user.getId()).uniqueResult();
         u.setLoginname(user.getLoginname());
-        u.setEnable(user.getEnable());
+        u.setUsername(user.getUsername());
         u.setPassword(user.getPassword());
         u.setSuperPassword(user.getSuperPassword());
-        u.setUsername(user.getUsername());
+        u.setEnable(user.getEnable());
+        u.setEmail(user.getEmail());
         session.update(u);
         session.getTransaction().commit();
         u.setPassword("******");

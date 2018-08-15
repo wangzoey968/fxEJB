@@ -64,16 +64,20 @@ public class UserTab extends Tab {
         });
         addItem.setOnAction(oa -> {
             Tb_User user = new UserDialog().addUser();
-            tvUser.getItems().add(0, user);
-            tvUser.getSelectionModel().select(0);
-            tvUser.refresh();
+            if (user != null) {
+                tvUser.getItems().add(0, user);
+                tvUser.getSelectionModel().select(0);
+                tvUser.refresh();
+            }
         });
         updateItem.setOnAction(oa -> {
             Tb_User item = tvUser.getSelectionModel().getSelectedItem();
             Tb_User user = new UserDialog().updateUser(item);
-            tvUser.getItems().set(tvUser.getItems().indexOf(item), user);
-            tvUser.getSelectionModel().select(user);
-            tvUser.refresh();
+            if (user != null) {
+                tvUser.getItems().set(tvUser.getItems().indexOf(item), user);
+                tvUser.getSelectionModel().select(user);
+                tvUser.refresh();
+            }
         });
         deleteItem.setOnAction(oa -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确认删除");
