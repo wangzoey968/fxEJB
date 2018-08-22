@@ -47,7 +47,11 @@ public class FxmlUtil {
         }
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.initOwner(MainFrame.getInstance());
+        if (stage != null) {
+            alert.initOwner(stage);
+        } else {
+            alert.initOwner(MainFrame.getInstance());
+        }
         alert.setTitle("错误");
         alert.setResizable(false);
         alert.setContentText(e.getMessage());
