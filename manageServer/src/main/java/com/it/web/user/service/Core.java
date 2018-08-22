@@ -1,5 +1,6 @@
 package com.it.web.user.service;
 
+import com.it.api.table.customer.Tb_Customer;
 import com.it.api.table.customer.Tb_CustomerLog;
 import com.it.api.table.user.*;
 import com.it.util.HibernateUtil;
@@ -15,11 +16,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Core {
 
-    //其中map中的key是uuid生成的string类的sessionId
-    public static Map<String, Tb_UserLog> userMap = new ConcurrentHashMap<>();
+    //设置用户缓存,其中的key为sessionId
+    public static Map<String, Tb_User> userMap = new ConcurrentHashMap<>();
+
+    //设置客户缓存.其中key为sessionId
+    public static Map<String, Tb_Customer> customerMap = new ConcurrentHashMap<>();
 
     //其中map中的key是uuid生成的string类的sessionId
-    public static Map<String, Tb_CustomerLog> customerMap = new ConcurrentHashMap<>();
+    public static Map<String, Tb_UserLog> userLogMap = new ConcurrentHashMap<>();
+
+    //其中map中的key是uuid生成的string类的sessionId
+    public static Map<String, Tb_CustomerLog> customerLogMap = new ConcurrentHashMap<>();
 
     //用户ID，用户名 缓存
     private static Map<Long, String> usernameCache = new HashMap<>();
@@ -49,13 +56,13 @@ public class Core {
             session.save(user);
         }
 
-        Tb_Auth_User au = (Tb_Auth_User) session.createQuery("from Tb_Auth_User where tb_auth_id=:aid and tb_user_id=:uid")
+        /*Tb_User_Auth au = (Tb_User_Auth) session.createQuery("from Tb_User_Auth where tb_auth_id=:aid and tb_user_id=:uid")
                 .setParameter("aid", auth.getId())
                 .setParameter("uid", user.getId()).uniqueResult();
         if (au == null) {
-            au = new Tb_Auth_User(auth.getId(), user.getId());
+            au = new Tb_User_Auth(auth.getId(), user.getId(), true);
             session.save(au);
-        }
+        }*/
 
         Tb_Role_Auth ra = (Tb_Role_Auth) session.createQuery("from Tb_Role_Auth where tb_role_id=:rid and tb_auth_id=:aid")
                 .setParameter("rid", role.getId())
@@ -76,14 +83,14 @@ public class Core {
         Long now = System.currentTimeMillis();
 
         //加载用户Session
-        List<Tb_UserLog> list = session.createQuery("from Tb_UserLog ").list();
+        List<Tb_UserLog> list = session.createQuery("from Tb_UserLog where action like '%登录%'").list();
 
         for (Tb_UserLog s : list) {
             if (now - s.getActionTime() < timeOut) {
-                userMap.put(s.getSessionId(), s);
-            } else {
+                userLogMap.put(s.getSessionId(), s);
+            } /*else {
                 session.delete(s);
-            }
+            }*/
         }
 
         //创建Session过期检查任务；
@@ -91,7 +98,7 @@ public class Core {
             @Override
             public void run() {
                 Long now = System.currentTimeMillis();
-                for (Map.Entry<String, Tb_UserLog> entry : userMap.entrySet()) {
+                for (Map.Entry<String, Tb_UserLog> entry : userLogMap.entrySet()) {
                     if (now - entry.getValue().getActionTime() > timeOut) {
                         try {
                             logout(entry.getKey());
@@ -100,7 +107,7 @@ public class Core {
                         }
                     }
                 }
-                for (Map.Entry<String, Tb_CustomerLog> entry : customerMap.entrySet()) {
+                for (Map.Entry<String, Tb_CustomerLog> entry : customerLogMap.entrySet()) {
                     if (now - entry.getValue().getActionTime() > timeOut) {
                         try {
                             logout(entry.getKey());
@@ -116,30 +123,30 @@ public class Core {
     }
 
     public static void destroy() {
-        Session session = HibernateUtil.openSession();
-        for (Map.Entry<String, Tb_UserLog> entry : userMap.entrySet()) {
-            session.saveOrUpdate(entry.getValue());
-        }
-        for (Map.Entry<String, Tb_CustomerLog> entry : customerMap.entrySet()) {
-            session.saveOrUpdate(entry.getValue());
-        }
+        userMap.clear();
+        customerMap.clear();
+        userLogMap.clear();
+        customerLogMap.clear();
     }
 
     /**
      * 登录
-     * 如果是钉钉登录，无需验证密码；
      * 返回登录的sessionId
      */
-    public static String login(String loginname, String password, Boolean ddLogin) {
+    public static String login(String loginname, String password) {
         Tb_UserLog log = null;
         try {
             Session session = HibernateUtil.openSession();
             Tb_User user = (Tb_User) session.createQuery("from Tb_User where loginname=:ln").setParameter("ln", loginname).uniqueResult();
             if (user == null) throw new Exception("无此用户");
             if (!user.getEnable()) throw new Exception("此用户已停用");
-            if (!ddLogin) {
-                if (!user.getPassword().equals(password)) throw new Exception("密码错误");
+            if (!password.equals(user.getPassword())) throw new Exception("密码错误");
+            user.getRoles().addAll(listUserRole(user.getId()));
+            for (Tb_Role role : user.getRoles()) {
+                role.getAuths().addAll(listRoleAuth(role.getId()));
             }
+            user.getAuths().addAll(listUserAuth(user.getId()));
+
             log = new Tb_UserLog();
             log.setSessionId(UUID.randomUUID().toString());
             log.setAction(CommonConstant.LOGIN);
@@ -147,7 +154,8 @@ public class Core {
             log.setTb_user_id(user.getId());
             session.save(log);
             //存入map中
-            userMap.put(log.getSessionId(), log);
+            userMap.put(log.getSessionId(), user);
+            userLogMap.put(log.getSessionId(), log);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -159,10 +167,10 @@ public class Core {
      */
     public static void logout(String sessionId) {
         try {
-            if (userMap.containsKey(sessionId)) {
+            if (userLogMap.containsKey(sessionId)) {
                 //从userMap中移除登录日志
-                Tb_UserLog ul = userMap.get(sessionId);
-                userMap.remove(sessionId);
+                Tb_UserLog ul = userLogMap.get(sessionId);
+                userLogMap.remove(sessionId);
                 Session session = HibernateUtil.openSession();
                 //session.refresh(ul);
                 //保存退出日志
@@ -173,6 +181,7 @@ public class Core {
                 log.setActionTime(System.currentTimeMillis());
                 session.save(log);
             }
+            userMap.remove(sessionId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,7 +193,11 @@ public class Core {
     public static Tb_User getUser(HttpSession session) {
         Tb_User user = null;
         try {
-            user = getUser(session.getAttribute("userSessionId").toString());
+            String sessionId = session.getAttribute("userSessionId").toString();
+            if (!userMap.containsKey(sessionId)) {
+                userMap.put(sessionId, getUser(sessionId));
+            }
+            user = userMap.get(sessionId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -199,14 +212,14 @@ public class Core {
         Tb_UserLog ul = getUserLog(sessionId);
         Tb_User user = (Tb_User) session.createQuery("select user from Tb_User user where user.id=:uid").setParameter("uid", ul.getTb_user_id()).uniqueResult();
         //获取用户的所有角色
-        user.getRoles().addAll(listUserRoles(user.getId()));
+        user.getRoles().addAll(listUserRole(user.getId()));
         //获取角色下的所有权限
         for (Tb_Role role : user.getRoles()) {
             List<Tb_Auth> auths = listRoleAuth(role.getId());
-            user.getAuths().addAll(auths);
+            role.getAuths().addAll(auths);
         }
         //获取额外的权限
-        user.getAuths().addAll(listUserAuths(user.getId()));
+        user.getAuths().addAll(listUserAuth(user.getId()));
         return user;
     }
 
@@ -216,9 +229,9 @@ public class Core {
     public static Tb_UserLog getUserLog(String sessionId) {
         Tb_UserLog ul = null;
         try {
-            if (userMap.containsKey(sessionId)) {
+            if (userLogMap.containsKey(sessionId)) {
                 Session session = HibernateUtil.openSession();
-                ul = userMap.get(sessionId);
+                ul = userLogMap.get(sessionId);
                 ul.setActionTime(System.currentTimeMillis());
                 session.update(ul);
             } else {
@@ -233,7 +246,7 @@ public class Core {
     /**
      * 获取用户的所有角色
      */
-    public static List<Tb_Role> listUserRoles(Long userId) {
+    public static List<Tb_Role> listUserRole(Long userId) {
         Session session = HibernateUtil.openSession();
         List<Tb_Role> roles = session.createQuery("select role from Tb_User_Role ur left join Tb_Role role on role.id=ur.tb_role_id where ur.tb_user_id=:uid").setParameter("uid", userId).list();
         return roles;
@@ -249,33 +262,38 @@ public class Core {
     }
 
     /**
-     * 获取拥有的角色下的权限
-     */
-    public static List<Tb_Auth> listRoleAuths(List<Long> roleIds) {
-        Session session = HibernateUtil.openSession();
-        List<Tb_Auth> auths = session.createQuery("select auth from Tb_Role_Auth ra left join Tb_Auth auth on ra.tb_auth_id=auth.id where ra.tb_role_id in (:ids)").setParameter("ids", roleIds).list();
-        return auths;
-    }
-
-    /**
      * 获取额外的权限
      */
-    public static List<Tb_Auth> listUserAuths(Long userId) {
+    public static List<Tb_Auth> listUserAuth(Long userId) {
         Session session = HibernateUtil.openSession();
-        List<Tb_Auth> auths = session.createQuery("select auth from Tb_Auth_User au left join Tb_Auth auth on au.tb_auth_id=auth.id where au.tb_user_id=:uid").setParameter("uid", userId).list();
+        List<Tb_Auth> auths = session.createQuery("select auth from Tb_User_Auth au left join Tb_Auth auth on au.tb_auth_id=auth.id where au.tb_user_id=:uid").setParameter("uid", userId).list();
         return auths;
     }
 
     /**
-     * 获取用户下的权限
+     * 获取用户下的全部权限
      */
     public static List<String> getUserAllAuths(Tb_User user) {
         ArrayList<String> list = new ArrayList<>();
-        for (Tb_Auth auth : user.getAuths()) {
-            if (!list.contains(auth.getAuthname())) {
-                list.add(auth.getAuthname());
+        for (Tb_Role role : user.getRoles()) {
+            for (Tb_Auth auth : role.getAuths()) {
+                if (!list.contains(auth.getAuthname())) {
+                    list.add(auth.getAuthname());
+                }
             }
         }
+        Session session = HibernateUtil.openSession();
+        for (Tb_Auth auth : user.getAuths()) {
+            Tb_User_Auth au = (Tb_User_Auth) session.createQuery("from Tb_User_Auth where tb_auth_id=:aid and tb_user_id=:uid").setParameter("aid", auth.getId()).setParameter("uid", user.getId()).uniqueResult();
+            if (au != null) {
+                if (list.contains(auth.getAuthname()) && !au.getExtend()) {
+                    list.remove(auth.getAuthname());
+                } else if (!list.contains(auth.getAuthname()) && au.getExtend()) {
+                    list.add(auth.getAuthname());
+                }
+            }
+        }
+        System.out.println(list.toString() + "return list");
         return list;
     }
 
@@ -285,8 +303,6 @@ public class Core {
     public static String getUsername(Long userId) {
         if (userId == null) {
             return null;
-        } else if (userId == 0) {
-            return "系统";
         } else if (usernameCache.containsKey(userId)) {
             return usernameCache.get(userId);
         } else {

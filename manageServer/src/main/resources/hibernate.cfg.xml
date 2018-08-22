@@ -13,7 +13,7 @@
         <mapping class="com.it.api.table.user.Tb_Role"/>
         <mapping class="com.it.api.table.user.Tb_Role_Auth"/>
         <mapping class="com.it.api.table.user.Tb_Auth"/>
-        <mapping class="com.it.api.table.user.Tb_Auth_User"/>
+        <mapping class="com.it.api.table.user.Tb_User_Auth"/>
 
     </session-factory>
 </hibernate-configuration>

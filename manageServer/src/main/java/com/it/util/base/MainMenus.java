@@ -63,7 +63,7 @@ public class MainMenus {
     private static void generateMenu(List<MenuData> list, Tb_User user) {
         //先提取出所有权限的名称;
         List<String> auths = Core.getUserAllAuths(user);
-
+        System.out.println(auths.toString()+"/auths");
         ArrayList<MenuData> newMenu = new ArrayList<>();
         newMenu.addAll(list);
         for (MenuData menuData : list) {

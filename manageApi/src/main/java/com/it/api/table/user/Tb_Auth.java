@@ -5,6 +5,7 @@ import com.it.api.table.user.Tb_Role_Auth;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,13 +30,13 @@ public class Tb_Auth implements Serializable {
     private Long parent_id;
 
     @Transient
-    private List<Tb_Role> roles;
+    private List<Tb_Role> roles = new ArrayList<>();
 
     @Transient
-    private List<Tb_User> users;
+    private List<Tb_User> users = new ArrayList<>();
 
     @Transient
-    private List<Tb_Group> groups;
+    private List<Tb_Group> groups = new ArrayList<>();
 
     public Tb_Auth() {
     }
@@ -47,6 +48,19 @@ public class Tb_Auth implements Serializable {
         this.roles = roles;
         this.users = users;
         this.groups = groups;
+    }
+
+    @Override
+    public String toString() {
+        return "Tb_Auth{" +
+                "id=" + id +
+                ", authname='" + authname + '\'' +
+                ", note='" + note + '\'' +
+                ", parent_id=" + parent_id +
+                ", roles=" + roles +
+                ", users=" + users +
+                ", groups=" + groups +
+                '}';
     }
 
     public Long getId() {
@@ -103,18 +117,5 @@ public class Tb_Auth implements Serializable {
 
     public void setGroups(List<Tb_Group> groups) {
         this.groups = groups;
-    }
-
-    @Override
-    public String toString() {
-        return "Tb_Auth{" +
-                "id=" + id +
-                ", authname='" + authname + '\'' +
-                ", note='" + note + '\'' +
-                ", parent_id=" + parent_id +
-                ", roles=" + roles +
-                ", users=" + users +
-                ", groups=" + groups +
-                '}';
     }
 }

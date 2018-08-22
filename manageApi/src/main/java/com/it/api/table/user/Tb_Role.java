@@ -2,6 +2,7 @@ package com.it.api.table.user;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,13 +26,13 @@ public class Tb_Role implements Serializable {
     private Long parent_id;
 
     @Transient
-    private List<Tb_User> users;
+    private List<Tb_User> users = new ArrayList<>();
 
     @Transient
-    private List<Tb_Auth> auths;
+    private List<Tb_Auth> auths = new ArrayList<>();
 
     @Transient
-    private List<Tb_Group> groups;
+    private List<Tb_Group> groups = new ArrayList<>();
 
     @Override
     public String toString() {

@@ -28,7 +28,7 @@ public class WebContainer {
     private WebView webView;
     private Window owner;
 
-    public ReadOnlyStringProperty titleProperty;    //网页标题；
+    public ReadOnlyStringProperty titleProperty;
 
     public WebContainer(WebView webView, Window owner) {
         this.webView = webView;
@@ -100,8 +100,8 @@ public class WebContainer {
     public void configClientSid(String sessionId) {
         try {
             EJB.setSessionId(sessionId);
-            EJB.setUserId(EJB.getUserService().getUserIdBySession(sessionId));
-            EJB.setUsername(EJB.getUserService().getUsernameBySession(sessionId));
+            EJB.setUserId(EJB.getCoreService().getUserIdBySession(sessionId));
+            EJB.setUsername(EJB.getCoreService().getUsernameBySession(sessionId));
         } catch (Exception e) {
             e.printStackTrace();
         }

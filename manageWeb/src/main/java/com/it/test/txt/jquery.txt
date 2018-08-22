@@ -29,7 +29,7 @@ window.operateEvents = {
 	});
 
 	//删除表格的某行
-	$('#table-yinShuaFullContr').bootstrapTable('remove',{field:"cuttingName",values:[kdeleteRow.cuttingName]});
+	$('#table-yinShuaFullContr').bootstrapTable('remove',{field:"cuttingName",values:[deleteRow.cuttingName]});
 	
 	$('#btn-Ok2').click(function () {
 		var obj = {};
@@ -74,11 +74,6 @@ window.operateEvents = {
         data : {mydata:jsonArrayFinal},
         //或{'mydata':jsonArrayFinal}
 
-        /*
-         要么使用 \ 对json进行手动转译，要么使用JSON.stringify(jsonStr) 将其转换为字符串类型；
-         如果不进行转译，使用【2】中的后台接收方法，那么不会报异常，但是获取不到数据。
-         data : {mydata:jsonStr},//报空指针异常，传不过去
-         */
         contentType:"application/x-www-form-urlencoded",//默认值
         success: function(data){
             alert(data);

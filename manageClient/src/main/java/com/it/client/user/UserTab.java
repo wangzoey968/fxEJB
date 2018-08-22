@@ -3,18 +3,16 @@ package com.it.client.user;
 import com.it.api.table.user.Tb_User;
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
-import com.it.client.user.dialog.UserDialog;
+import com.it.client.user.dialog.UserInfoDialog;
+import com.it.client.user.dialog.editor.UserEditorDialog;
 import com.it.client.util.FxmlUtil;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
-import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -48,38 +46,42 @@ public class UserTab extends Tab {
             @Override
             public TableRow<Tb_User> call(TableView<Tb_User> param) {
                 TableRow<Tb_User> row = new TableRow<>();
-                row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-                    @Override
-                    public void handle(ContextMenuEvent event) {
-                        menu.getItems().clear();
-                        menu.getItems().add(addItem);
-                        if (row.getItem() != null) {
-                            menu.getItems().addAll(updateItem, deleteItem);
-                        }
-                        row.setContextMenu(menu);
+                row.setOnContextMenuRequested(req -> {
+                    menu.getItems().clear();
+                    menu.getItems().add(addItem);
+                    if (row.getItem() != null) {
+                        menu.getItems().addAll(updateItem, deleteItem);
+                    }
+                    row.setContextMenu(menu);
+                    menu.show(row, req.getScreenX(), req.getScreenY());
+                });
+                row.setOnMouseClicked(click -> {
+                    if (click.getButton() == MouseButton.PRIMARY && click.getClickCount() == 2) {
+                        Tb_User user = tvUser.getSelectionModel().getSelectedItem();
+                        new UserInfoDialog().setUserId(user.getId()).showUserRole();
                     }
                 });
                 return row;
             }
         });
-        addItem.setOnAction(oa -> {
-            Tb_User user = new UserDialog().addUser();
+        addItem.setOnAction(action -> {
+            Tb_User user = new UserEditorDialog().addUser();
             if (user != null) {
                 tvUser.getItems().add(0, user);
                 tvUser.getSelectionModel().select(0);
                 tvUser.refresh();
             }
         });
-        updateItem.setOnAction(oa -> {
+        updateItem.setOnAction(action -> {
             Tb_User item = tvUser.getSelectionModel().getSelectedItem();
-            Tb_User user = new UserDialog().updateUser(item);
+            Tb_User user = new UserEditorDialog().updateUser(item);
             if (user != null) {
                 tvUser.getItems().set(tvUser.getItems().indexOf(item), user);
                 tvUser.getSelectionModel().select(user);
                 tvUser.refresh();
             }
         });
-        deleteItem.setOnAction(oa -> {
+        deleteItem.setOnAction(action -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确认删除");
             alert.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, filter -> {
                 try {
@@ -175,11 +177,8 @@ public class UserTab extends Tab {
                 };
             }
         });
-        btnSearch.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                doSearch();
-            }
+        btnSearch.setOnAction(action -> {
+            doSearch();
         });
         doSearch();
     }

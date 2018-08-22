@@ -9,10 +9,13 @@ public class Tb_CustomerLog implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    private Long id;
 
     @Column
     private Long tb_customer_id;
+
+    @Column
+    private String sessionId;
 
     @Column
     private String action;

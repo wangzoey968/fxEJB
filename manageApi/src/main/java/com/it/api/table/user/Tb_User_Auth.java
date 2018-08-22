@@ -8,8 +8,8 @@ import java.io.Serializable;
  * 权限表和用户表的中间表n:n
  */
 @Entity
-@Table(name = "tb_auth_user", uniqueConstraints = {@UniqueConstraint(columnNames = {"tb_auth_id", "tb_user_id"})})
-public class Tb_Auth_User implements Serializable {
+@Table(name = "tb_user_auth", uniqueConstraints = {@UniqueConstraint(columnNames = {"tb_auth_id", "tb_user_id"})})
+public class Tb_User_Auth implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,21 +27,31 @@ public class Tb_Auth_User implements Serializable {
     @Column(nullable = false)
     private Long tb_user_id;
 
+    /**
+     * 进行权限扩展或限制的时候使用
+     * 如果想为用户分配多余的非角色权限,就生成一条记录,extend为true;
+     * 如果想禁用用户的某角色下的某项权限,就生成一条记录,extend为false;
+     */
+    @Column
+    private Boolean extend = true;
+
     @Override
     public String toString() {
-        return "Tb_Auth_User{" +
+        return "Tb_User_Auth{" +
                 "id=" + id +
                 ", tb_auth_id=" + tb_auth_id +
                 ", tb_user_id=" + tb_user_id +
+                ", extend=" + extend +
                 '}';
     }
 
-    public Tb_Auth_User() {
+    public Tb_User_Auth() {
     }
 
-    public Tb_Auth_User(Long tb_auth_id, Long tb_user_id) {
+    public Tb_User_Auth(Long tb_auth_id, Long tb_user_id, Boolean extend) {
         this.tb_auth_id = tb_auth_id;
         this.tb_user_id = tb_user_id;
+        this.extend = extend;
     }
 
     public Long getId() {
@@ -66,5 +76,13 @@ public class Tb_Auth_User implements Serializable {
 
     public void setTb_user_id(Long tb_user_id) {
         this.tb_user_id = tb_user_id;
+    }
+
+    public Boolean getExtend() {
+        return extend;
+    }
+
+    public void setExtend(Boolean extend) {
+        this.extend = extend;
     }
 }

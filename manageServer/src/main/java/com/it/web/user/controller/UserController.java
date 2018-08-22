@@ -42,7 +42,7 @@ public class UserController {
     void userLogin(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         JsonObject object = new JsonObject();
         try {
-            String sessionId = Core.login(username, DigestUtils.md5Hex(password), false);
+            String sessionId = Core.login(username, DigestUtils.md5Hex(password));
             request.getSession().setAttribute("userSessionId", sessionId);
             object.addProperty("result", true);
             object.addProperty("sessionId", sessionId);

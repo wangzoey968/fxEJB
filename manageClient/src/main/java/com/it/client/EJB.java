@@ -1,5 +1,6 @@
 package com.it.client;
 
+import com.it.api.CoreServiceLocal;
 import com.it.api.OrderServiceLocal;
 import com.it.api.UserServiceLocal;
 import com.it.client.util.ConfigUtil;
@@ -60,9 +61,10 @@ public class EJB {
      */
     private static Context context = null;
     //1000 * 60 * 2L;
-    private final static Long testTime =  1000 * 60 * 2L;      //测试时间
+    private final static Long testTime = 1000 * 60 * 2L;      //测试时间
 
     static {
+        System.out.println("----------------init ejb container----------------");
         try {
             final Hashtable jndiProp = new Hashtable();
             jndiProp.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
@@ -104,8 +106,22 @@ public class EJB {
         return userService;
     }
 
+    private static CoreServiceLocal coreService = null;
+    private static Long coreServiceTime = 0L;
+
+    public static CoreServiceLocal getCoreService() {
+        coreServiceTime = System.currentTimeMillis();
+        try {
+            coreService = (CoreServiceLocal) context.lookup("java:manageServer//CoreServiceRemote!com.it.api.CoreServiceLocal");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return coreService;
+    }
+
     public static void startup() {
-        getUserService();
+        getCoreService();
+        //getUserService();
         TaskUtil.taskPool.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {

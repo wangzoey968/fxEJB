@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" prefWidth="200.0">
+         <children>
+            <Button fx:id="btnCreateRole" mnemonicParsing="false" text="创建新角色" />
+            <HBox prefHeight="35.0" prefWidth="200.0" />
+            <Button fx:id="btnCreateAuth" mnemonicParsing="false" text="创建新权限" />
+         </children>
+      </HBox>
+      <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <items>
+            <TableView fx:id="tvRole">
+              <columns>
+                  <TableColumn fx:id="tcRoleCheck" prefWidth="50.0" text="选择" />
+                <TableColumn fx:id="tcRolename" prefWidth="75.0" text="角色名称" />
+                <TableColumn fx:id="tcRoleNote" prefWidth="75.0" text="备注" />
+              </columns>
+            </TableView>
+            <TableView fx:id="tvAuth">
+              <columns>
+                  <TableColumn fx:id="tcAuthCheck" prefWidth="50.0" text="选择" />
+                <TableColumn fx:id="tcAuthname" prefWidth="75.0" text="权限名称" />
+                  <TableColumn fx:id="tcInclude" prefWidth="75.0" text="包含" />
+                <TableColumn fx:id="tcAuthNote" prefWidth="75.0" text="备注" />
+              </columns>
+            </TableView>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

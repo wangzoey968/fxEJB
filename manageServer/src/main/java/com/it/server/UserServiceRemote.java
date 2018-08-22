@@ -1,6 +1,8 @@
 package com.it.server;
 
 import com.it.api.UserServiceLocal;
+import com.it.api.table.user.Tb_Auth;
+import com.it.api.table.user.Tb_Role;
 import com.it.api.table.user.Tb_User;
 import com.it.web.user.service.Core;
 import com.it.web.user.service.UserService;
@@ -32,7 +34,7 @@ public class UserServiceRemote implements UserServiceLocal {
     }
 
     @Override
-    public String getUsernameByUserId(Long userId) throws Exception {
+    public String getUsernameById(Long userId) throws Exception {
         return Core.getUsername(userId);
     }
 
@@ -56,4 +58,60 @@ public class UserServiceRemote implements UserServiceLocal {
         UserService.deleteUser(Core.getUser(sessionId), userId);
     }
 
+    @Override
+    public List<Tb_Role> listUserRole(String sessionId, Long userId) throws Exception {
+        return UserService.listUserRole(Core.getUser(sessionId), userId);
+    }
+
+    @Override
+    public Tb_Role addRole(String sessionId, Tb_Role role) throws Exception {
+        return UserService.addRole(Core.getUser(sessionId), role);
+    }
+
+    @Override
+    public Tb_Role updateRole(String sessionId, Tb_Role role) throws Exception {
+        return UserService.updateRole(Core.getUser(sessionId), role);
+    }
+
+    @Override
+    public void deleteRole(String sessionId, Long roleId) throws Exception {
+        UserService.deleteRole(Core.getUser(sessionId), roleId);
+    }
+
+    @Override
+    public List<Tb_Role> listAllRole(String sessionId) throws Exception {
+        return UserService.listAllRole(Core.getUser(sessionId));
+    }
+
+    //auth操作
+    @Override
+    public List<Tb_Auth> listUserAuth(String sessionId, Long userId) throws Exception {
+        return UserService.listAuth(Core.getUser(sessionId), userId);
+    }
+
+    @Override
+    public Tb_Auth addAuth(String sessionId, Tb_Auth auth) throws Exception {
+        return UserService.addAuth(Core.getUser(sessionId), auth);
+    }
+
+    @Override
+    public Tb_Auth updateAuth(String sessionId, Tb_Auth auth) throws Exception {
+        return UserService.updateAuth(Core.getUser(sessionId), auth);
+    }
+
+    @Override
+    public void deleteAuth(String sessionId, Long authId) throws Exception {
+        UserService.deleteAuth(Core.getUser(sessionId), authId);
+    }
+
+    @Override
+    public List<Tb_Auth> listRoleAuth(String sessionId, Long roleId) throws Exception {
+        return UserService.listRoleAuth(Core.getUser(sessionId), roleId);
+    }
+
+    //为用户分配角色
+    @Override
+    public void assignRole(String sessionId, Boolean isAppend, Long userId, Long roleId) throws Exception {
+        UserService.assignRole(Core.getUser(sessionId), isAppend, userId, roleId);
+    }
 }

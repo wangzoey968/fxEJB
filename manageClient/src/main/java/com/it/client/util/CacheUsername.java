@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 当需要显示userid的用户名时,可以直接从此类获取
+ * 当需要显示userId的用户名时,可以直接从此类获取
  */
 public class CacheUsername {
 
@@ -15,7 +15,7 @@ public class CacheUsername {
     public static String getUsername(Long userId) {
         try {
             if (!usernameCache.containsKey(userId)) {
-                usernameCache.put(userId, EJB.getUserService().getUsernameByUserId(userId));
+                usernameCache.put(userId, EJB.getCoreService().getUsernameById(userId));
             }
         } catch (Exception e) {
             e.printStackTrace();

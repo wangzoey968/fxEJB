@@ -35,6 +35,9 @@ public class Tb_User implements Serializable {
     @Transient
     private List<Tb_Role> roles = new ArrayList<>();
 
+    /**
+     * auths是仅为了权限扩展/限制的临时存放;
+     */
     @Transient
     private List<Tb_Auth> auths = new ArrayList<>();
 
