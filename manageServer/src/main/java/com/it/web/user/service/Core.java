@@ -44,15 +44,15 @@ public class Core {
         Tb_User user = (Tb_User) session.createQuery("from Tb_User where username='超管'").uniqueResult();
 
         if (auth == null) {
-            auth = new Tb_Auth("超管", "", 0L, null, null, null);
+            auth = new Tb_Auth("超管", "", 0L);
             session.save(auth);
         }
         if (role == null) {
-            role = new Tb_Role("超管", "", 0L, null, null, null);
+            role = new Tb_Role("超管", "", 0L);
             session.save(role);
         }
         if (user == null) {
-            user = new Tb_User("18012345678", "超管", DigestUtils.md5Hex("123"), DigestUtils.md5Hex("123"), true, null, null, null, null);
+            user = new Tb_User("18012345678", "超管", DigestUtils.md5Hex("123"), DigestUtils.md5Hex("123"), true, null);
             session.save(user);
         }
 

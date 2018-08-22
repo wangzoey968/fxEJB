@@ -11,12 +11,6 @@ import java.util.List;
  */
 public interface UserServiceLocal {
 
-    public Long getUserIdBySession(String sessionId) throws Exception;
-
-    public String getUsernameBySession(String sessionId) throws Exception;
-
-    public String getUsernameById(Long userId) throws Exception;
-
     //user的操作
     public List<Tb_User> listUser(String sessionId, String key) throws Exception;
 

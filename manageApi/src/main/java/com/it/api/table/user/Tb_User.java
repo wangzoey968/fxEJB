@@ -63,16 +63,13 @@ public class Tb_User implements Serializable {
     public Tb_User() {
     }
 
-    public Tb_User(String loginname, String username, String password, String superPassword, Boolean isEnable, String email, List<Tb_Role> roles, List<Tb_Auth> auths, List<Tb_Group> groups) {
+    public Tb_User(String loginname, String username, String password, String superPassword, Boolean isEnable, String email) {
         this.loginname = loginname;
         this.username = username;
         this.password = password;
         this.superPassword = superPassword;
         this.isEnable = isEnable;
         this.email = email;
-        this.roles = roles;
-        this.auths = auths;
-        this.groups = groups;
     }
 
     public Long getId() {

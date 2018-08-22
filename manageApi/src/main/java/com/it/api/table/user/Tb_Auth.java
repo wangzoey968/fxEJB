@@ -41,13 +41,10 @@ public class Tb_Auth implements Serializable {
     public Tb_Auth() {
     }
 
-    public Tb_Auth(String authname, String note, Long parent_id, List<Tb_Role> roles, List<Tb_User> users, List<Tb_Group> groups) {
+    public Tb_Auth(String authname, String note, Long parent_id) {
         this.authname = authname;
         this.note = note;
         this.parent_id = parent_id;
-        this.roles = roles;
-        this.users = users;
-        this.groups = groups;
     }
 
     @Override

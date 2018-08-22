@@ -22,23 +22,6 @@ import java.util.List;
 public class UserServiceRemote implements UserServiceLocal {
 
     @Override
-    public Long getUserIdBySession(String sessionId) throws Exception {
-        Tb_User user = Core.getUser(sessionId);
-        return user.getId();
-    }
-
-    @Override
-    public String getUsernameBySession(String sessionId) throws Exception {
-        Tb_User user = Core.getUser(sessionId);
-        return user.getUsername();
-    }
-
-    @Override
-    public String getUsernameById(Long userId) throws Exception {
-        return Core.getUsername(userId);
-    }
-
-    @Override
     public List<Tb_User> listUser(String sessionId, String key) throws Exception {
         return UserService.listUser(Core.getUser(sessionId), key);
     }

@@ -49,13 +49,10 @@ public class Tb_Role implements Serializable {
     public Tb_Role() {
     }
 
-    public Tb_Role(String rolename, String note, Long parent_id, List<Tb_User> users, List<Tb_Auth> auths, List<Tb_Group> groups) {
+    public Tb_Role(String rolename, String note, Long parent_id) {
         this.rolename = rolename;
         this.note = note;
         this.parent_id = parent_id;
-        this.users = users;
-        this.auths = auths;
-        this.groups = groups;
     }
 
     public Long getId() {

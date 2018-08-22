@@ -121,12 +121,12 @@ public class EJB {
 
     public static void startup() {
         getCoreService();
-        //getUserService();
         TaskUtil.taskPool.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
                 try {
                     Long now = System.currentTimeMillis();
+                    if (userService != null && (now - userServiceTime > testTime)) getUserService();
                     if (orderService != null && (now - orderServiceTime > testTime)) getOrderService();
                     //......
                 } catch (Exception e) {

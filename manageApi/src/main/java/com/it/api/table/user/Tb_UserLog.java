@@ -31,6 +31,7 @@ public class Tb_UserLog implements Serializable {
         return "Tb_UserLog{" +
                 "id=" + id +
                 ", tb_user_id=" + tb_user_id +
+                ", sessionId='" + sessionId + '\'' +
                 ", action='" + action + '\'' +
                 ", actionTime=" + actionTime +
                 '}';
@@ -39,8 +40,9 @@ public class Tb_UserLog implements Serializable {
     public Tb_UserLog() {
     }
 
-    public Tb_UserLog(Long tb_user_id, String action, Long actionTime) {
+    public Tb_UserLog(Long tb_user_id, String sessionId, String action, Long actionTime) {
         this.tb_user_id = tb_user_id;
+        this.sessionId = sessionId;
         this.action = action;
         this.actionTime = actionTime;
     }
