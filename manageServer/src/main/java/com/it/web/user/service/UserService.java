@@ -1,10 +1,7 @@
 package com.it.web.user.service;
 
 import com.it.api.table.Tb_Computer;
-import com.it.api.table.user.Tb_Auth;
-import com.it.api.table.user.Tb_Role;
-import com.it.api.table.user.Tb_User;
-import com.it.api.table.user.Tb_User_Role;
+import com.it.api.table.user.*;
 import com.it.util.HibernateUtil;
 import com.it.web.user.dao.UserDao;
 import org.hibernate.Session;
@@ -223,36 +220,35 @@ public class UserService {
         Session session = HibernateUtil.openSession();
         session.getTransaction().begin();
         Tb_User_Role ur = (Tb_User_Role) session.createQuery("from Tb_User_Role where tb_user_id=:uid and tb_role_id=:rid").setParameter("uid", userId).setParameter("rid", roleId).uniqueResult();
-        if (ur==null)throw new Exception("不存在");
+        if (ur == null) throw new Exception("不存在");
         session.delete(ur);
         session.getTransaction().commit();
     }
 
-    @Test
-    public void ss() {
-        Long uid = 1L;
-        HibernateUtil.initSessionFactory();
+    //为角色分配权限
+    public static Tb_Role_Auth addRoleAuth(Tb_User user, Long roleId, Long authId) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是超管");
         Session session = HibernateUtil.openSession();
-        List list = session.createQuery("select user,auth from Tb_User user left join Tb_User_Auth  au on user.id=au.tb_user_id left join Tb_Auth  auth on au.tb_auth_id=auth.id where user.id=:id")
-                .setParameter("id", uid).list();
-        Tb_User u = null;
-        List<Tb_Role> rs = session.createQuery("select role from Tb_User_Role  ur left join Tb_Role role on ur.tb_role_id=role.id where ur.tb_user_id=:uid").setParameter("uid", uid).list();
-        for (Tb_Role role : rs) {
-            List<Tb_Auth> as = session.createQuery("select auth from Tb_Auth auth left join Tb_Role_Auth ra on ra.tb_auth_id=auth.id where ra.tb_role_id=:rid").setParameter("rid", role.getId()).list();
-            //角色下的权限
-            role.setAuths(as);
-        }
-        for (Object o : list) {
-            Object[] objects = (Object[]) o;
-            Tb_User user = (Tb_User) objects[0];
-            Tb_Auth auth = (Tb_Auth) objects[1];
-            u = user;
-            //扩展的权限
+        session.getTransaction().begin();
+        Tb_Role_Auth ra = (Tb_Role_Auth) session.createQuery("from Tb_Role_Auth where tb_role_id=:rid and tb_auth_id =:aid").setParameter("rid", roleId).setParameter("aid", authId).uniqueResult();
+        if (ra != null) throw new Exception("已存在");
+        Tb_Role_Auth r = new Tb_Role_Auth();
+        r.setTb_role_id(roleId);
+        r.setTb_auth_id(authId);
+        session.save(r);
+        session.getTransaction().commit();
+        return r;
+    }
 
-            u.getAuths().add(auth);
-        }
-        u.setRoles(rs);
-        System.out.println(u.toString());
+    //删除角色下的权限
+    public static void deleteRoleAuth(Tb_User user, Long roleId, Long authId) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是超管");
+        Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        Tb_Role_Auth ra = (Tb_Role_Auth) session.createQuery("from Tb_Role_Auth where tb_role_id=:rid and tb_auth_id =:aid").setParameter("rid", roleId).setParameter("aid", authId).uniqueResult();
+        if (ra == null) throw new Exception("不存在");
+        session.delete(ra);
+        session.getTransaction().commit();
     }
 
 }

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.min.css"/>
+    <script src="../lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<style type="text/css">
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+</style>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="javascript:void(0)">准典印刷</a>
+        </div>
+        <div id="nav">
+            <ul id="navBar" class="nav navbar-nav">
+                <li flag='IOS'><a href="javascript:void(0)">IOS</a></li>
+                <li flag='SVN'><a href="javascript:void(0)">SVN</a></li>
+                <li flag='JAVA' class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                        JAVA
+                        <b class="caret"></b>
+                    </a>
+                    <ul flag='menu' class="dropdown-menu">
+                        <li flag='jmeter0'><a href="javascript:void(0)">jmeter0</a></li>
+                        <li flag='jmeter1'><a href="#">jmeter1</a></li>
+                        <li flag='jmeter2'><a href="javascript:void(0)">jmeter2</a></li>
+                        <li flag='jmeter3'><a href="javascript:void(0)">jmeter3</a></li>
+                        <li flag='jmeter4'><a href="javascript:void(0)">jmeter4</a></li>
+                    </ul>
+                </li>
+                <li flag='MySQL' class="dropdown ">
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                        MySQL
+                        <b class="caret"></b>
+                    </a>
+                    <ul flag='menu' class="dropdown-menu">
+                        <li flag='MySQL0'><a href="javascript:void(0)">MySQL0</a></li>
+                        <li flag='MySQL1'><a href="#">MySQL1</a></li>
+                        <li flag='jmeter6' class="dropdown-submenu"><a href="javascript:void(0)">另一个分离的链接</a>
+                            <ul flag="menu" class="dropdown-menu">
+                                <li flag='jmeter6-1'><a href="javascript:;">三级菜单</a></li>
+                                <li flag='jmeter6-2'><a href="javascript:;">三级菜单</a></li>
+                                <li flag='jmeter6-3'><a href="javascript:;">三级菜单</a></li>
+                                <li flag='jmeter6-4'><a href="javascript:;">三级菜单</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<script>
+    $(function () {
+        /*
+         * 每个页面中均包含此导航条,初始化的时候不进行激活,当点击某个item之后跳转到b页面,在b页面再次调用此方法,
+         * 传递的第一个参数是此页面的menu,第二个参数是name加.的拼接的字符串
+         */
+        //递归激活导航中的item
+        function activeNav(menu, name) {
+
+            //测试
+            var menus = [];
+            if (menu === null) {
+                //当menu不传递值的时候,直接从根目录遍历
+                var nav = document.getElementById("navBar");
+                for (var k = 0; k < nav.children.length; k++) {
+                    menus.push(nav.children[k]);
+                }
+            } else {
+                //当menu传递的有值的时候,直接遍历menu中的值
+                for (var f = 0; f < menu.children.length; f++) {
+                    menus.push(menu.children[f])
+                }
+            }
+
+            //正式
+            /*if (menu === null)return null;
+             var menus = [];
+             for (var f = 0; f < menu.children.length; f++) {
+             menus.push(menu.children[f])
+             }*/
+
+            for (var g = 0; g < menus.length; g++) {
+                var flag = menus[g].getAttribute("flag");
+                if (name.indexOf(flag) === 0) {
+                    menus[g].className += " active";
+                    name = name.substring(flag.length + 1);
+                    activeNav(menus[g], name);
+                }
+            }
+        }
+
+        activeNav(null, "MySQL.menu.jmeter6.menu.jmeter6-3");
+    })
+</script>
+
+</body>
+</html>
