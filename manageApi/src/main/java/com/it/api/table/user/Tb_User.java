@@ -33,16 +33,16 @@ public class Tb_User implements Serializable {
     private String email;
 
     @Transient
-    private List<Tb_Role> roles = new ArrayList<>();
+    private List<Tb_Role> roles = null;
 
     /**
      * auths是仅为了权限扩展/限制的临时存放;
      */
     @Transient
-    private List<Tb_Auth> auths = new ArrayList<>();
+    private List<Tb_Auth> auths = null;
 
     @Transient
-    private List<Tb_Group> groups = new ArrayList<>();
+    private List<Tb_Group> groups = null;
 
     @Override
     public String toString() {

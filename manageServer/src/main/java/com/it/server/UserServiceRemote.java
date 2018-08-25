@@ -4,6 +4,7 @@ import com.it.api.UserServiceLocal;
 import com.it.api.table.user.Tb_Auth;
 import com.it.api.table.user.Tb_Role;
 import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_User_Role;
 import com.it.web.user.service.Core;
 import com.it.web.user.service.UserService;
 
@@ -41,6 +42,7 @@ public class UserServiceRemote implements UserServiceLocal {
         UserService.deleteUser(Core.getUser(sessionId), userId);
     }
 
+    //role的相关操作
     @Override
     public List<Tb_Role> listUserRole(String sessionId, Long userId) throws Exception {
         return UserService.listUserRole(Core.getUser(sessionId), userId);
@@ -94,7 +96,12 @@ public class UserServiceRemote implements UserServiceLocal {
 
     //为用户分配角色
     @Override
-    public void assignRole(String sessionId, Boolean isAppend, Long userId, Long roleId) throws Exception {
-        UserService.assignRole(Core.getUser(sessionId), isAppend, userId, roleId);
+    public Tb_User_Role addUserRole(String sessionId, Long userId, Long roleId) throws Exception {
+        return UserService.addUserRole(Core.getUser(sessionId), userId, roleId);
+    }
+
+    @Override
+    public void deleteUserRole(String sessionId, Long userId, Long roleId) throws Exception {
+        UserService.deleteUserRole(Core.getUser(sessionId), userId, roleId);
     }
 }

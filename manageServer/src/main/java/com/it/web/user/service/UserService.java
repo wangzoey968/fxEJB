@@ -113,6 +113,7 @@ public class UserService {
         Session session = HibernateUtil.openSession();
         List<Tb_Role> roles = session.createQuery("select role from Tb_Role role left join Tb_User_Role ur on role.id=ur.tb_role_id where ur.tb_user_id=:uid")
                 .setParameter("uid", userId).list();
+        System.out.println(roles.toString() + "/roles");
         return roles;
     }
 
@@ -202,20 +203,29 @@ public class UserService {
     }
 
     //为用户分配角色
-    public static void assignRole(Tb_User user, Boolean isAppend, Long userId, Long roleId) throws Exception {
+    public static Tb_User_Role addUserRole(Tb_User user, Long userId, Long roleId) throws Exception {
         if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是管理员");
         Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
         Tb_User_Role ur = (Tb_User_Role) session.createQuery("from Tb_User_Role where tb_user_id=:uid and tb_role_id=:rid").setParameter("uid", userId).setParameter("rid", roleId).uniqueResult();
-        if (isAppend && ur == null) {
-            Tb_User_Role u = new Tb_User_Role();
-            u.setTb_user_id(userId);
-            u.setTb_role_id(roleId);
-            session.save(u);
-        } else if (!isAppend && ur != null) {
-            session.remove(ur);
-        } else {
-            throw new Exception("已存在");
-        }
+        if (ur != null) throw new Exception("已存在");
+        Tb_User_Role u = new Tb_User_Role();
+        u.setTb_user_id(userId);
+        u.setTb_role_id(roleId);
+        session.save(u);
+        session.getTransaction().commit();
+        return u;
+    }
+
+    //删除用户角色
+    public static void deleteUserRole(Tb_User user, Long userId, Long roleId) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("不是超管");
+        Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        Tb_User_Role ur = (Tb_User_Role) session.createQuery("from Tb_User_Role where tb_user_id=:uid and tb_role_id=:rid").setParameter("uid", userId).setParameter("rid", roleId).uniqueResult();
+        if (ur==null)throw new Exception("不存在");
+        session.delete(ur);
+        session.getTransaction().commit();
     }
 
     @Test
@@ -230,7 +240,7 @@ public class UserService {
         for (Tb_Role role : rs) {
             List<Tb_Auth> as = session.createQuery("select auth from Tb_Auth auth left join Tb_Role_Auth ra on ra.tb_auth_id=auth.id where ra.tb_role_id=:rid").setParameter("rid", role.getId()).list();
             //角色下的权限
-            role.getAuths().addAll(as);
+            role.setAuths(as);
         }
         for (Object o : list) {
             Object[] objects = (Object[]) o;
@@ -238,9 +248,10 @@ public class UserService {
             Tb_Auth auth = (Tb_Auth) objects[1];
             u = user;
             //扩展的权限
+
             u.getAuths().add(auth);
         }
-        u.getRoles().addAll(rs);
+        u.setRoles(rs);
         System.out.println(u.toString());
     }
 

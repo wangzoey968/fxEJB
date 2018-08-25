@@ -6,6 +6,7 @@ import com.it.client.mainFrame.MainFrame;
 import com.it.client.user.dialog.UserInfoDialog;
 import com.it.client.user.dialog.editor.UserEditorDialog;
 import com.it.client.util.FxmlUtil;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -96,91 +97,71 @@ public class UserTab extends Tab {
             alert.initOwner(MainFrame.getInstance());
             alert.showAndWait();
         });
-        tcId.setCellFactory(new Callback<TableColumn<Tb_User, Long>, TableCell<Tb_User, Long>>() {
+        tcId.setCellFactory(factory -> new TableCell<Tb_User, Long>() {
             @Override
-            public TableCell<Tb_User, Long> call(TableColumn<Tb_User, Long> param) {
-                return new TableCell<Tb_User, Long>() {
-                    @Override
-                    protected void updateItem(Long item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_User user = (Tb_User) this.getTableRow().getItem();
-                        if (!empty && user != null) {
-                            setText(user.getId().toString());
-                        }
-                    }
-                };
+            protected void updateItem(Long item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_User user = (Tb_User) this.getTableRow().getItem();
+                if (!empty && user != null) {
+                    setText(user.getId().toString());
+                }
             }
         });
-        tcUsername.setCellFactory(new Callback<TableColumn<Tb_User, String>, TableCell<Tb_User, String>>() {
+        tcUsername.setCellFactory(factory -> new TableCell<Tb_User, String>() {
             @Override
-            public TableCell<Tb_User, String> call(TableColumn<Tb_User, String> param) {
-                return new TableCell<Tb_User, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_User user = (Tb_User) this.getTableRow().getItem();
-                        if (!empty && user != null) {
-                            this.setText(user.getUsername());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_User user = (Tb_User) this.getTableRow().getItem();
+                if (!empty && user != null) {
+                    this.setText(user.getUsername());
+                }
             }
         });
-        tcLoginname.setCellFactory(new Callback<TableColumn<Tb_User, String>, TableCell<Tb_User, String>>() {
+        tcLoginname.setCellFactory(factory -> new TableCell<Tb_User, String>() {
             @Override
-            public TableCell<Tb_User, String> call(TableColumn<Tb_User, String> param) {
-                return new TableCell<Tb_User, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_User user = (Tb_User) this.getTableRow().getItem();
-                        if (!empty && user != null) {
-                            setText(user.getLoginname());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_User user = (Tb_User) this.getTableRow().getItem();
+                if (!empty && user != null) {
+                    setText(user.getLoginname());
+                }
             }
         });
-        tcEnable.setCellFactory(new Callback<TableColumn<Tb_User, Boolean>, TableCell<Tb_User, Boolean>>() {
+        tcEnable.setCellFactory(factory -> new TableCell<Tb_User, Boolean>() {
             @Override
-            public TableCell<Tb_User, Boolean> call(TableColumn<Tb_User, Boolean> param) {
-                return new TableCell<Tb_User, Boolean>() {
-                    @Override
-                    protected void updateItem(Boolean item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_User user = (Tb_User) getTableRow().getItem();
-                        if (!empty && user != null) {
-                            if (user.getEnable()) {
-                                this.setText("可用");
-                                this.setTextFill(Color.GREEN);
-                            } else {
-                                this.setText("不可用");
-                                this.setTextFill(Color.RED);
-                            }
-                        }
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_User user = (Tb_User) getTableRow().getItem();
+                if (!empty && user != null) {
+                    if (user.getEnable()) {
+                        this.setText("可用");
+                        this.setTextFill(Color.GREEN);
+                    } else {
+                        this.setText("不可用");
+                        this.setTextFill(Color.RED);
                     }
-                };
+                }
             }
         });
-        tcEmail.setCellFactory(new Callback<TableColumn<Tb_User, String>, TableCell<Tb_User, String>>() {
+        tcEmail.setCellFactory(factory -> new TableCell<Tb_User, String>() {
             @Override
-            public TableCell<Tb_User, String> call(TableColumn<Tb_User, String> param) {
-                return new TableCell<Tb_User, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_User user = (Tb_User) this.getTableRow().getItem();
-                        if (!empty && user != null) {
-                            this.setText(user.getEmail());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_User user = (Tb_User) this.getTableRow().getItem();
+                if (!empty && user != null) {
+                    this.setText(user.getEmail());
+                }
             }
         });
         btnSearch.setOnAction(action -> {
             doSearch();
         });
-        doSearch();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                doSearch();
+            }
+        });
     }
 
     private void doSearch() {

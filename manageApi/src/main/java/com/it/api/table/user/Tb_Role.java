@@ -26,13 +26,13 @@ public class Tb_Role implements Serializable {
     private Long parent_id;
 
     @Transient
-    private List<Tb_User> users = new ArrayList<>();
+    private List<Tb_User> users = null;
 
     @Transient
-    private List<Tb_Auth> auths = new ArrayList<>();
+    private List<Tb_Auth> auths = null;
 
     @Transient
-    private List<Tb_Group> groups = new ArrayList<>();
+    private List<Tb_Group> groups = null;
 
     @Override
     public String toString() {

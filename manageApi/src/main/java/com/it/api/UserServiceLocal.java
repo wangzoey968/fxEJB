@@ -3,6 +3,7 @@ package com.it.api;
 import com.it.api.table.user.Tb_Auth;
 import com.it.api.table.user.Tb_Role;
 import com.it.api.table.user.Tb_User;
+import com.it.api.table.user.Tb_User_Role;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface UserServiceLocal {
 
     public void deleteRole(String sessionId, Long roleId) throws Exception;
 
-    public List<Tb_Role> listAllRole(String sessionId)throws Exception;
+    public List<Tb_Role> listAllRole(String sessionId) throws Exception;
 
     //auth操作
     public List<Tb_Auth> listUserAuth(String sessionId, Long userId) throws Exception;
@@ -44,8 +45,8 @@ public interface UserServiceLocal {
     public List<Tb_Auth> listRoleAuth(String sessionId, Long roleId) throws Exception;
 
     //为用户分配角色,或者为用户移除某个角色,根据isAppend的值
-    public void assignRole(String sessionId, Boolean isAppend, Long userId, Long roleId) throws Exception;
+    public Tb_User_Role addUserRole(String sessionId, Long userId, Long roleId) throws Exception;
 
-
+    public void deleteUserRole(String sessionId, Long userId, Long roleId) throws Exception;
 
 }

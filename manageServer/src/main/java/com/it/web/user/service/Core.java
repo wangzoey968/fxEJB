@@ -141,11 +141,11 @@ public class Core {
             if (user == null) throw new Exception("无此用户");
             if (!user.getEnable()) throw new Exception("此用户已停用");
             if (!password.equals(user.getPassword())) throw new Exception("密码错误");
-            user.getRoles().addAll(listUserRole(user.getId()));
+            user.setRoles(listUserRole(user.getId()));
             for (Tb_Role role : user.getRoles()) {
-                role.getAuths().addAll(listRoleAuth(role.getId()));
+                role.setAuths(listRoleAuth(role.getId()));
             }
-            user.getAuths().addAll(listUserAuth(user.getId()));
+            user.setAuths(listUserAuth(user.getId()));
 
             log = new Tb_UserLog();
             log.setSessionId(UUID.randomUUID().toString());
@@ -212,14 +212,14 @@ public class Core {
         Tb_UserLog ul = getUserLog(sessionId);
         Tb_User user = (Tb_User) session.createQuery("select user from Tb_User user where user.id=:uid").setParameter("uid", ul.getTb_user_id()).uniqueResult();
         //获取用户的所有角色
-        user.getRoles().addAll(listUserRole(user.getId()));
+        user.setRoles(listUserRole(user.getId()));
         //获取角色下的所有权限
         for (Tb_Role role : user.getRoles()) {
             List<Tb_Auth> auths = listRoleAuth(role.getId());
-            role.getAuths().addAll(auths);
+            role.setAuths(auths);
         }
         //获取额外的权限
-        user.getAuths().addAll(listUserAuth(user.getId()));
+        user.setAuths(listUserAuth(user.getId()));
         return user;
     }
 

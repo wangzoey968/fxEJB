@@ -10,15 +10,14 @@ import com.it.client.util.FxmlUtil;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.util.Callback;
 
+import javax.management.relation.Role;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,33 +26,37 @@ import java.util.List;
 public class UserInfoDialog extends Dialog {
 
     @FXML
-    Button btnCreateRole;
+    private TableView<Tb_Role> tvRole;
     @FXML
-    TableView<Tb_Role> tvRole;
+    private TableColumn<Tb_Role, String> tcRolename, tcRoleNote;
     @FXML
-    TableColumn<Tb_Role, String> tcRolename, tcRoleNote;
-    @FXML
-    TableColumn<Tb_Role, CheckBox> tcRoleCheck;
+    private TableColumn<Tb_Role, Boolean> tcRoleCheck;
 
     @FXML
-    Button btnCreateAuth;
+    private TableView<Tb_Auth> tvAuth;
     @FXML
-    TableView<Tb_Auth> tvAuth;
+    private TableColumn<Tb_Auth, String> tcAuthname, tcAuthNote;
     @FXML
-    TableColumn<Tb_Auth, String> tcAuthname, tcAuthNote;
+    private TableColumn<Tb_Auth, Boolean> tcInclude;
     @FXML
-    TableColumn<Tb_Auth, Boolean> tcInclude;
-    @FXML
-    TableColumn<Tb_Auth, CheckBox> tcAuthCheck;
+    private TableColumn<Tb_Auth, Boolean> tcAuthCheck;
 
     private SimpleLongProperty userId = new SimpleLongProperty();
 
-    ContextMenu menu = new ContextMenu();
-    MenuItem extendRole = new MenuItem("分配角色");
-    MenuItem excludeRole = new MenuItem("取消角色");
+    private ContextMenu menu = new ContextMenu();
 
-    MenuItem extendAuth = new MenuItem("扩展权限");
-    MenuItem excludeAuth = new MenuItem("取消扩展");
+    private MenuItem refreshRole = new MenuItem("刷新");
+    private MenuItem addRole = new MenuItem("新建角色");
+    private MenuItem updateRole = new MenuItem("修改角色");
+    private MenuItem deleteRole = new MenuItem("修改角色");
+
+    private MenuItem refreshAuth = new MenuItem("刷新");
+    private MenuItem addAuth = new MenuItem("新建权限");
+    private MenuItem updateAuth = new MenuItem("修改权限");
+    private MenuItem deleteAuth = new MenuItem("删除权限");
+
+    private List<String> ownRole = new ArrayList<>();
+    private List<String> ownAuth = new ArrayList<>();
 
     public UserInfoDialog() {
         this.initOwner(MainFrame.getInstance());
@@ -65,10 +68,10 @@ public class UserInfoDialog extends Dialog {
                 row.setOnContextMenuRequested(req -> {
                     req.consume();
                     menu.getItems().clear();
-                    menu.getItems().addAll(extendRole);
+                    menu.getItems().addAll(refreshRole, new SeparatorMenuItem(), addRole);
                     Tb_Role item = row.getItem();
                     if (item != null) {
-                        menu.getItems().addAll(excludeRole);
+                        menu.getItems().addAll(updateRole, deleteRole);
                     }
                     menu.show(row, req.getScreenX(), req.getScreenY());
                 });
@@ -76,74 +79,68 @@ public class UserInfoDialog extends Dialog {
                 return row;
             }
         });
-        tcRoleCheck.setCellFactory(new Callback<TableColumn<Tb_Role, CheckBox>, TableCell<Tb_Role, CheckBox>>() {
+        tcRoleCheck.setCellFactory(new Callback<TableColumn<Tb_Role, Boolean>, TableCell<Tb_Role, Boolean>>() {
             @Override
-            public TableCell<Tb_Role, CheckBox> call(TableColumn<Tb_Role, CheckBox> param) {
-                return new TableCell<Tb_Role, CheckBox>() {
-                    @Override
-                    protected void updateItem(CheckBox item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_Role role = (Tb_Role) this.getTableRow().getItem();
-                        if (!empty && role != null) {
-                            CheckBox checkBox = new CheckBox();
-                            checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                                @Override
-                                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                    List<Tb_Role> roles = listUserRole();
-                                    List<Tb_Role> items = tvRole.getItems();
-                                    System.out.println(roles.toString());
-                                    System.out.println(items.toString());
-                                    for (Tb_Role r : roles) {
-                                        for (Tb_Role i : items) {
-                                            if (r.getRolename().equals(i.getRolename())) {
-                                                checkBox.setSelected(true);
-                                            }
-                                        }
-                                    }
-                                    if (newValue != null) {
-                                        try {
-                                            EJB.getUserService().assignRole(EJB.getSessionId(), newValue, userId.get(), role.getId());
-                                        } catch (Exception e) {
-                                            FxmlUtil.showException(e, null);
-                                        }
-                                    }
+            public TableCell<Tb_Role, Boolean> call(TableColumn<Tb_Role, Boolean> param) {
+                return new TableCell<Tb_Role, Boolean>() {
+                    ChangeListener<Boolean> listener = new ChangeListener<Boolean>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                            Tb_Role role = (Tb_Role) getTableRow().getItem();
+                            try {
+                                if (newValue) {
+                                    EJB.getUserService().addUserRole(EJB.getSessionId(), userId.get(), role.getId());
+                                } else {
+                                    EJB.getUserService().deleteUserRole(EJB.getSessionId(), userId.get(), role.getId());
                                 }
-                            });
-                            this.setGraphic(checkBox);
-                            this.setAlignment(Pos.CENTER);
+                            } catch (Exception e) {
+                                FxmlUtil.showException(e, null);
+                            }
+                        }
+                    };
+
+                    @Override
+                    protected void updateItem(Boolean item, boolean empty) {
+                        super.updateItem(item, empty);
+                        Tb_Role role = (Tb_Role) getTableRow().getItem();
+                        try {
+                            if (empty) {
+                                this.setGraphic(null);
+                            } else {
+                                if (role != null) {
+                                    CheckBox box = new CheckBox();
+                                    box.selectedProperty().removeListener(listener);
+                                    box.setSelected(ownRole.contains(role.getRolename()));
+                                    box.selectedProperty().addListener(listener);
+                                    this.setGraphic(box);
+                                    this.setAlignment(Pos.CENTER);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 };
             }
         });
-        tcRolename.setCellFactory(new Callback<TableColumn<Tb_Role, String>, TableCell<Tb_Role, String>>() {
+        tcRolename.setCellFactory(factory -> new TableCell<Tb_Role, String>() {
             @Override
-            public TableCell<Tb_Role, String> call(TableColumn<Tb_Role, String> param) {
-                return new TableCell<Tb_Role, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_Role role = (Tb_Role) this.getTableRow().getItem();
-                        if (!empty && role != null) {
-                            this.setText(role.getRolename());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_Role role = (Tb_Role) this.getTableRow().getItem();
+                if (!empty && role != null) {
+                    this.setText(role.getRolename());
+                }
             }
         });
-        tcRoleNote.setCellFactory(new Callback<TableColumn<Tb_Role, String>, TableCell<Tb_Role, String>>() {
+        tcRoleNote.setCellFactory(factory -> new TableCell<Tb_Role, String>() {
             @Override
-            public TableCell<Tb_Role, String> call(TableColumn<Tb_Role, String> param) {
-                return new TableCell<Tb_Role, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_Role role = (Tb_Role) this.getTableRow().getItem();
-                        if (!empty && role != null) {
-                            this.setText(role.getNote());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_Role role = (Tb_Role) this.getTableRow().getItem();
+                if (!empty && role != null) {
+                    this.setText(role.getNote());
+                }
             }
         });
         tvAuth.setRowFactory(new Callback<TableView<Tb_Auth>, TableRow<Tb_Auth>>() {
@@ -152,10 +149,12 @@ public class UserInfoDialog extends Dialog {
                 TableRow<Tb_Auth> row = new TableRow<>();
                 row.setOnContextMenuRequested(req -> {
                     menu.getItems().clear();
-                    menu.getItems().addAll(extendAuth);
+                    if (tvRole.getSelectionModel().getSelectedItem() != null) {
+                        menu.getItems().addAll(refreshAuth, new SeparatorMenuItem(), addAuth);
+                    }
                     Tb_Auth item = row.getItem();
                     if (item != null) {
-                        menu.getItems().addAll(excludeAuth);
+                        menu.getItems().addAll(updateAuth, deleteAuth);
                     }
                     menu.show(row, req.getScreenX(), req.getScreenY());
                 });
@@ -163,56 +162,55 @@ public class UserInfoDialog extends Dialog {
                 return row;
             }
         });
-        tcAuthCheck.setCellFactory(new Callback<TableColumn<Tb_Auth, CheckBox>, TableCell<Tb_Auth, CheckBox>>() {
+        tcAuthCheck.setCellFactory(new Callback<TableColumn<Tb_Auth, Boolean>, TableCell<Tb_Auth, Boolean>>() {
             @Override
-            public TableCell<Tb_Auth, CheckBox> call(TableColumn<Tb_Auth, CheckBox> param) {
-                return new TableCell<Tb_Auth, CheckBox>() {
+            public TableCell<Tb_Auth, Boolean> call(TableColumn<Tb_Auth, Boolean> param) {
+                return new TableCell<Tb_Auth, Boolean>() {
+                    ChangeListener<Boolean> listener = new ChangeListener<Boolean>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+                        }
+                    };
+
                     @Override
-                    protected void updateItem(CheckBox item, boolean empty) {
+                    protected void updateItem(Boolean item, boolean empty) {
                         super.updateItem(item, empty);
                         Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
-                        if (!empty && auth != null) {
-                            CheckBox checkBox = new CheckBox();
-                            checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                                @Override
-                                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                    //todo
-                                }
-                            });
-                            this.setGraphic(checkBox);
+                        if (empty) {
+                            this.setGraphic(null);
+                        } else {
+                            if (auth != null) {
+                                CheckBox box = new CheckBox();
+                                box.selectedProperty().removeListener(listener);
+                                //todo
+                                box.selectedProperty().addListener(listener);
+                                this.setGraphic(box);
+                                this.setAlignment(Pos.CENTER);
+                            }
                         }
                     }
                 };
             }
         });
-        tcAuthname.setCellFactory(new Callback<TableColumn<Tb_Auth, String>, TableCell<Tb_Auth, String>>() {
+        tcAuthname.setCellFactory(factory -> new TableCell<Tb_Auth, String>() {
             @Override
-            public TableCell<Tb_Auth, String> call(TableColumn<Tb_Auth, String> param) {
-                return new TableCell<Tb_Auth, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
-                        if (!empty && auth != null) {
-                            this.setText(auth.getAuthname());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
+                if (!empty && auth != null) {
+                    this.setText(auth.getAuthname());
+                }
             }
         });
-        tcAuthNote.setCellFactory(new Callback<TableColumn<Tb_Auth, String>, TableCell<Tb_Auth, String>>() {
+        tcAuthNote.setCellFactory(factory -> new TableCell<Tb_Auth, String>() {
             @Override
-            public TableCell<Tb_Auth, String> call(TableColumn<Tb_Auth, String> param) {
-                return new TableCell<Tb_Auth, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
-                        if (!empty && auth != null) {
-                            this.setText(auth.getNote());
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
+                if (!empty && auth != null) {
+                    this.setText(auth.getNote());
+                }
             }
         });
         tcInclude.setCellFactory(new Callback<TableColumn<Tb_Auth, Boolean>, TableCell<Tb_Auth, Boolean>>() {
@@ -224,14 +222,7 @@ public class UserInfoDialog extends Dialog {
                         super.updateItem(item, empty);
                         Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
                         if (!empty && auth != null) {
-                            //todo error
-                            /*if (auth.getInclude()) {
-                                this.setText("包含");
-                                this.setTextFill(Color.GREEN);
-                            } else {
-                                this.setText("排除");
-                                this.setTextFill(Color.RED);
-                            }*/
+                            //TODO
                         }
                     }
                 };
@@ -241,33 +232,45 @@ public class UserInfoDialog extends Dialog {
             @Override
             public void changed(ObservableValue<? extends Tb_Role> observable, Tb_Role oldValue, Tb_Role newValue) {
                 if (newValue != null) {
-                    searchRoleAuth();
+                    listRoleAuth();
                 }
             }
         });
-        btnCreateRole.setOnAction(action -> {
+        refreshRole.setOnAction(action -> {
+            listAllRole();
+        });
+        addRole.setOnAction(action -> {
             Tb_Role role = new RoleEditorDialog().createRole();
             if (role != null) {
                 new Alert(Alert.AlertType.INFORMATION, "新建角色成功").showAndWait();
+                tvRole.getItems().add(0, role);
+                tvRole.getSelectionModel().select(0);
             }
         });
-        btnCreateAuth.setOnAction(action -> {
+        updateRole.setOnAction(action -> {
+
+        });
+        deleteRole.setOnAction(action -> {
+
+        });
+
+        addAuth.setOnAction(action -> {
             Tb_Auth auth = new AuthEditorDialog().createAuth();
             if (auth != null) {
                 new Alert(Alert.AlertType.INFORMATION, "新建权限成功").showAndWait();
             }
         });
-        extendRole.setOnAction(action -> {
+        updateAuth.setOnAction(action -> {
 
         });
-        excludeRole.setOnAction(action -> {
+        deleteAuth.setOnAction(action -> {
 
         });
-        extendAuth.setOnAction(action -> {
-
-        });
-        excludeAuth.setOnAction(action -> {
-
+        setOnShowing(action -> {
+            ownRole.clear();
+            for (Tb_Role role : listUserRole()) {
+                ownRole.add(role.getRolename());
+            }
         });
     }
 
@@ -288,7 +291,7 @@ public class UserInfoDialog extends Dialog {
         this.showAndWait();
     }
 
-    private void searchRoleAuth() {
+    private void listRoleAuth() {
         try {
             Tb_Role item = tvRole.getSelectionModel().getSelectedItem();
             List<Tb_Auth> list = EJB.getUserService().listRoleAuth(EJB.getSessionId(), item.getId());
@@ -307,6 +310,23 @@ public class UserInfoDialog extends Dialog {
             FxmlUtil.showException(e, null);
         }
         return list;
+    }
+
+    private void listAllRole() {
+        try {
+            tvRole.getItems().clear();
+            List<Tb_Role> list = EJB.getUserService().listAllRole(EJB.getSessionId());
+            System.out.println(list.size());
+            System.out.println(list.toString());
+            tvRole.getItems().addAll(list);
+        } catch (Exception e) {
+            FxmlUtil.showException(e, null);
+        }
+    }
+
+    private List<Tb_Auth> listUserAuth() {
+
+        return null;
     }
 
 }

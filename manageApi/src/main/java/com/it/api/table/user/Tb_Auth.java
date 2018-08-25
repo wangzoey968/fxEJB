@@ -30,13 +30,13 @@ public class Tb_Auth implements Serializable {
     private Long parent_id;
 
     @Transient
-    private List<Tb_Role> roles = new ArrayList<>();
+    private List<Tb_Role> roles = null;
 
     @Transient
-    private List<Tb_User> users = new ArrayList<>();
+    private List<Tb_User> users = null;
 
     @Transient
-    private List<Tb_Group> groups = new ArrayList<>();
+    private List<Tb_Group> groups = null;
 
     public Tb_Auth() {
     }
