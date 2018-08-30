@@ -28,12 +28,7 @@ public class UserDao {
         Session session = HibernateUtil.openSession();
         session.getTransaction().begin();
         Tb_User u = (Tb_User) session.createQuery("from Tb_User where id=:id").setParameter("id", user.getId()).uniqueResult();
-        u.setLoginname(user.getLoginname());
-        u.setUsername(user.getUsername());
-        u.setPassword(user.getPassword());
-        u.setSuperPassword(user.getSuperPassword());
-        u.setEnable(user.getEnable());
-        u.setEmail(user.getEmail());
+        session.merge(user);
         session.update(u);
         session.getTransaction().commit();
         u.setPassword("******");
