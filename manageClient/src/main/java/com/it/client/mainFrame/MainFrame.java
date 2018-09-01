@@ -31,8 +31,6 @@ import java.util.List;
  */
 public class MainFrame extends Stage {
 
-    public static List<String> authList;    //权限列表；
-
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -42,9 +40,9 @@ public class MainFrame extends Stage {
     private static MainFrame instance = new MainFrame();
 
     public static MainFrame getInstance() {
-        if (instance == null) {
+        /*if (instance == null) {
             instance = new MainFrame();
-        }
+        }*/
         return instance;
     }
 

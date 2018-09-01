@@ -1,255 +1,303 @@
 package com.it.client.util.httpClient.task;
 
 import com.it.client.util.httpClient.core.HttpClient;
+import com.it.client.util.httpClient.core.ProgressCallback;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class HttpGetTask {
 
-    /*private ScheduledFuture sf
-    *//**
+    private ScheduledFuture sf = null;
+
+    /**
      * 头列表；
-     *//*
+     */
     private Map<String, String> header = new HashMap<>();
 
-    HttpGetTask addHeader(String key, String value) {
-        header.put(key, value)
+    public HttpGetTask addHeader(String key, String value) {
+        header.put(key, value);
         return this;
     }
-    *//**
+
+    /**
      * 参数列表；
-     *//*
+     */
     private Map<String, String> stringParams = new HashMap<>();
 
-    HttpGetTask addStringValue(String key, String value) {
+    public HttpGetTask addStringValue(String key, String value) {
         stringParams.put(key, value);
         return this;
     }
-    *//**
+
+    /**
      * 访问URL
-     *//*
+     */
     private String url;
 
-    HttpGetTask setUrl(String url) {
+    public HttpGetTask setUrl(String url) {
         this.url = url;
         return this;
     }
 
-    *//**
+    /**
      * 保存结果
-     *//*
+     */
     private String resultString = null;
 
-    String getResultString() {
-        return resultString
+    public String getResultString() {
+        return resultString;
     }
-    *//**
-     * 完成；
-     *//*
-    Boolean isSuccess = false;
-    Closure onSuccess = { String str -> }
 
-    HttpGetTask setOnSuccess(Closure onSuccess) {
+    /**
+     * 完成；
+     */
+    private Boolean isSuccess = false;
+    private Runnable onSuccess;
+
+    public HttpGetTask setOnSuccess(Runnable onSuccess) {
         this.onSuccess = onSuccess;
         return this;
     }
-    *//**
-     * 开始
-     *//*
-    Boolean isStart = false;
-    Closure onStart
 
-    HttpGetTask setOnStart(Closure onStart) {
+    /**
+     * 开始
+     */
+    private Boolean isStart = false;
+    private Runnable onStart;
+
+    public HttpGetTask setOnStart(Runnable onStart) {
         this.onStart = onStart;
         return this;
     }
-    *//**
-     * 取消
-     *//*
-    Boolean isAbort = false;
-    Closure onAbort
 
-    HttpGetTask setOnAbort(Closure onAbort) {
+    /**
+     * 取消
+     */
+    private Boolean isAbort = false;
+    private Runnable onAbort;
+
+    public HttpGetTask setOnAbort(Runnable onAbort) {
         this.onAbort = onAbort;
         return this;
     }
-    *//**
-     * 报错
-     *//*
-    Boolean isError = false;
-    Closure onError = { Exception e -> e.printStackTrace() }
 
-    HttpGetTask setOnError(Closure onError) {
+    /**
+     * 报错
+     */
+    private Boolean isError = false;
+    private Runnable onError;
+
+    public HttpGetTask setOnError(Runnable onError) {
         this.onError = onError;
         return this;
     }
-    *//**
+
+    /**
      * 是否同步
-     *//*
+     * 默认不同步
+     */
     private boolean sync = false;
 
-    HttpGetTask setSync(boolean sync) {
+    public HttpGetTask setSync(boolean sync) {
         this.sync = sync;
         return this;
     }
 
-    *//**
+    /**
      * 执行
-     *//*
-    HttpGetTask execute(String url) {
+     */
+    public HttpGetTask execute(String url) {
         this.setUrl(url);
-        return this.execute();
+        return this;
     }
-    *//**
+
+    /**
      * 取消；
-     *//*
-    void abort() {
-        if (sf != null && !sf.isDone()) sf.cancel(true)
+     */
+    public void abort() {
+        if (sf != null && !sf.isDone()) sf.cancel(true);
         isAbort = true;
         if (onAbort != null) onAbort.run();
     }
 
-    *//**
+    /**
      * Get请求数据；
-     *//*
-    HttpGetTask execute() {
-        InputStreamReader reader = null;
+     */
+    public HttpGetTask execute() {
         try {
-            sf = HttpClient.ses.schedule({
-                try {
-                    if (url == null) throw new Exception("URL未设置");
-                    isStart = true;
-                    if (onStart != null) onStart.call();
-                    //拼接参数；
-                    StringBuffer urb = new StringBuffer(url + "?")
-                    stringParams.each { urb.append("${it.key}=${it.value}&") }
-                    //HttpGet
-                    HttpGet httpGet = new HttpGet(urb.toURI());
-                    header.each { httpGet.addHeader(it.key, it.value) }
-                    RequestConfig requestConfig = RequestConfig.custom()
-                            .setConnectionRequestTimeout(1000)
-                            .setConnectTimeout(5000)
-                            .setSocketTimeout(5000).build();
-                    httpGet.setConfig(requestConfig);
-                    //执行；
-                    CloseableHttpResponse res = HttpClient.httpClient.execute(httpGet);
-                    reader = new InputStreamReader(res.getEntity().getContent(), Charset.forName("UTF-8"));
+            sf = HttpClient.getSchedule().schedule(new Runnable() {
+                @Override
+                public void run() {
+                    InputStreamReader reader = null;
+                    try {
+                        if (url == null) throw new Exception("URL未设置");
+                        isStart = true;
+                        if (onStart != null) onStart.run();
+                        //拼接参数；
+                        StringBuffer urb = new StringBuffer(url + "?");
+                        for (Map.Entry<String, String> entry : stringParams.entrySet()) {
+                            urb.append(entry.getKey() + "=" + entry.getValue() + "&");
+                        }
+                        //HttpGet
+                        HttpGet httpGet = new HttpGet(urb.toString());
+                        for (Map.Entry<String, String> entry : header.entrySet()) {
+                            httpGet.addHeader(entry.getKey(), entry.getValue());
+                        }
+                        RequestConfig requestConfig = RequestConfig.custom()
+                                .setConnectionRequestTimeout(1000)
+                                .setConnectTimeout(5000)
+                                .setSocketTimeout(5000).build();
+                        httpGet.setConfig(requestConfig);
+                        //执行；
+                        CloseableHttpResponse res = HttpClient.getHttpClient().execute(httpGet);
+                        reader = new InputStreamReader(res.getEntity().getContent(), Charset.forName("UTF-8"));
 
-                    char[] buff = new char[1024];
-                    int length = 0;
-                    StringBuffer stringBuffer = new StringBuffer();
-                    while ((length = reader.read(buff)) != -1) {
-                        stringBuffer.append(new String(buff, 0, length));
-                    }
-                    reader.close(); reader = null;
-                    resultString = stringBuffer.toString();
+                        char[] buff = new char[1024];
+                        int length = 0;
+                        StringBuffer buffer = new StringBuffer();
+                        while ((length = reader.read(buff)) != -1) {
+                            buffer.append(new String(buff, 0, length));
+                        }
+                        resultString = buffer.toString();
 
-                    if (res.getStatusLine().getStatusCode() != 200) {
-                        throw new Exception(res.getStatusLine().toString())
-                    } else {
-                        isSuccess = true;
-                        if (onSuccess != null) onSuccess.call(stringBuffer.toString());
+                        if (res.getStatusLine().getStatusCode() != 200) {
+                            throw new Exception(res.getStatusLine().toString());
+                        } else {
+                            isSuccess = true;
+                            if (onSuccess != null) onSuccess.run();
+                            //if (onSuccess != null) onSuccess.call(stringBuffer.toString());
+                        }
+                    } catch (Exception e) {
+                        isError = true;
+                        if (onError != null) onError.run();
+                    } finally {
+                        try {
+                            if (reader != null) {
+                                reader.close();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (e) {
-                    isError = true;
-                    if (onError != null) onError.call(e);
                 }
-            }, 0, TimeUnit.MILLISECONDS)
+            }, 0, TimeUnit.MILLISECONDS);
             if (sync) {
                 sf.get(10, TimeUnit.SECONDS);
                 if (!sf.isDone()) sf.cancel(true);
             }
-        } catch (e) {
-            e.printStackTrace()
-        } finally {
-            if (reader) reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return this;
     }
 
-    *//**
+
+    private String realUrl = null;
+
+    /**
      * 下载文件；
-     *//*
-    HttpGetTask execute(String path, String fileName, ProgressCallback progressCallBack = null) {
-        InputStream ins = null;
-        FileOutputStream out = null
+     */
+    public HttpGetTask execute(String path, String fileName, ProgressCallback progressCallBack) {
         try {
-            sf = HttpClient.ses.schedule({
-                try {
-                    if (url == null) throw new Exception("URL未设置");
-                    isStart = true;
-                    if (onStart != null) onStart.call();
-                    //拼接参数；
-                    StringBuffer urb = new StringBuffer(url + "?");
-                    stringParams.each { urb.append("${it.key}=${it.value}&") }
-                    //探测下载地址；
-                    realUrl = urb.toURI().toString();
-                    HttpResponse res = getHttpResponse(realUrl);
-                    if (res.getStatusLine().getStatusCode() != 200) throw new Exception(res.getStatusLine().toString());
-                    //输入流
-                    ins = res.getEntity().getContent();
-                    //输出流；
-                    if (!Paths.get(path).toFile().exists()) Files.createDirectories(Paths.get(path));
-                    String fName = fileName == null ? realUrl.substring(realUrl.lastIndexOf('/')) : fileName;
-                    File file = new File(path + "\\" + fName + ".tmp");
-                    out = new FileOutputStream(file);
-                    //读取数据；
-                    final long totalSize = res.getEntity().getContentLength();
-                    long processed = 0;
-                    byte[] buff = new byte[1024];
-                    int length = 0;
-                    while ((length = ins.read(buff)) != -1) {
-                        out.write(buff, 0, length);
-                        processed += length;
-                        if (progressCallBack != null) progressCallBack.progress(processed, totalSize)
+            sf = HttpClient.getSchedule().schedule(new Runnable() {
+                @Override
+                public void run() {
+                    InputStream ins = null;
+                    FileOutputStream out = null;
+                    try {
+                        if (url == null) throw new Exception("URL未设置");
+                        isStart = true;
+                        if (onStart != null) onStart.run();
+                        //拼接参数；
+                        StringBuffer urb = new StringBuffer(url + "?");
+                        for (Map.Entry<String, String> entry : stringParams.entrySet()) {
+                            urb.append(entry.getKey() + "=" + entry.getValue() + "&");
+                        }
+                        //探测下载地址；
+                        realUrl = new URI(urb.toString()).toString();
+                        HttpResponse res = getHttpResponse(realUrl);
+                        if (res.getStatusLine().getStatusCode() != 200) {
+                            throw new Exception(res.getStatusLine().toString());
+                        }
+                        //输入流
+                        ins = res.getEntity().getContent();
+                        //输出流；
+                        if (!Paths.get(path).toFile().exists()) Files.createDirectories(Paths.get(path));
+                        String fName = fileName == null ? realUrl.substring(realUrl.lastIndexOf('/')) : fileName;
+                        File file = new File(path + "\\" + fName + ".tmp");
+                        out = new FileOutputStream(file);
+                        //读取数据；
+                        final long totalSize = res.getEntity().getContentLength();
+                        long processed = 0;
+                        byte[] buffer = new byte[1024];
+                        int length = 0;
+                        while ((length = ins.read(buffer)) != -1) {
+                            out.write(buffer, 0, length);
+                            processed += length;
+                            if (progressCallBack != null) progressCallBack.progress(processed, totalSize);
+                        }
+                        Files.move(Paths.get(path + "\\" + fName + ".tmp"), Paths.get(path + "\\" + fName));
+                        if (onSuccess != null) {
+                            onSuccess.run();
+                            //onSuccess.call(Paths.get(path + "\\" + fName).toAbsolutePath().toString());
+                        }
+                    } catch (Exception e) {
+                        isError = true;
+                        if (onError != null) onError.run();
+                    } finally {
+                        try {
+                            if (ins != null) {
+                                ins.close();
+                            }
+                            if (out != null) {
+                                out.close();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    ins.close(); ins = null;
-                    out.close(); out = null;
-                    Files.move(Paths.get(path + "\\" + fName + ".tmp"), Paths.get(path + "\\" + fName));
-                    if (onSuccess != null) onSuccess.call(Paths.get(path + "\\" + fName).toAbsolutePath().toString());
-                } catch (e) {
-                    isError = true;
-                    if (onError != null) onError.call(e);
                 }
-            }, 0, TimeUnit.MILLISECONDS)
+            }, 0, TimeUnit.MILLISECONDS);
             if (sync) sf.get();
-        } catch (e) {
-            e.printStackTrace()
-        } finally {
-            if (ins) ins.close();
-            if (out) out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return this;
     }
 
-    *//**
+
+    /**
      * 用于下载文件时探测真实URL
-     *//*
-    private String realUrl;
-    *//**
-     * 用于下载文件时探测真实URL
-     *//*
+     */
     private HttpResponse getHttpResponse(String url) throws Exception {
         HttpResponse res = null;
         HttpGet httpGet = new HttpGet(url);
         RequestConfig requestConfig = RequestConfig.custom().setRedirectsEnabled(false).build();
         httpGet.setConfig(requestConfig);
-        header.each { httpGet.addHeader(it.key, it.value) }
-        res = HttpClient.httpClient.execute(httpGet);
+        for (Map.Entry<String, String> entry : header.entrySet()) {
+            httpGet.addHeader(entry.getKey(), entry.getValue());
+        }
+        res = HttpClient.getHttpClient().execute(httpGet);
         if (res.containsHeader("Location")) {
             realUrl = res.getFirstHeader("Location").getValue();
             return getHttpResponse(realUrl);
         }
         return res;
-    }*/
-
+    }
 
 }

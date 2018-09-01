@@ -8,12 +8,18 @@ import org.junit.Test;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
  * Created by wangzy on 2018/8/6.
  */
 public class LittleTest {
+
+    public static void sssss() {
+        System.out.println("111111111111111111111");
+    }
 
     /**
      * 数据库返回数据的测试
@@ -31,15 +37,14 @@ public class LittleTest {
             List<Tb_Auth> as = session.createQuery("select auth from Tb_Auth auth left join Tb_Role_Auth ra on ra.tb_auth_id=auth.id where ra.tb_role_id=:rid").setParameter("rid", role.getId()).list();
             //角色下的权限
             role.setAuths(as);
-        }
-        for (Object o : list) {
-            Object[] objects = (Object[]) o;
-            Tb_User user = (Tb_User) objects[0];
-            Tb_Auth auth = (Tb_Auth) objects[1];
-            u = user;
-            //扩展的权限
-
-            u.getAuths().add(auth);
+            for (Object o : list) {
+                Object[] objects = (Object[]) o;
+                Tb_User user = (Tb_User) objects[0];
+                Tb_Auth auth = (Tb_Auth) objects[1];
+                u = user;
+                //扩展的权限
+                u.getAuths().add(auth);
+            }
         }
         u.setRoles(rs);
         System.out.println(u.toString());
@@ -47,9 +52,9 @@ public class LittleTest {
 
 
     @Test
-    public void ss() {
+    public void getDir() {
         System.out.println(System.getProperty("user.dir"));
-        System.out.println(String.format("%.2f%%",0.56f));
+        System.out.println(String.format("%.2f%%", 0.56f));
 
         this.getClass().getResourceAsStream("");//返回的是inputstream
 
@@ -96,8 +101,13 @@ public class LittleTest {
     }
 
     @Test
-    public void ssssss(){
-
+    public void ssssss() {
+        HashMap<String, Boolean> map = new HashMap<>();
+        map.put("权限1", true);
+        map.put("权限2", true);
+        map.put("权限1", true);
+        map.put("权限2", false);
+        System.out.println(map.toString());
     }
 
 }

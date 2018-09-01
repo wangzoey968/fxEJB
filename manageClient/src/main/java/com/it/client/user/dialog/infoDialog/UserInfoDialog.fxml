@@ -21,7 +21,7 @@
               <columns>
                   <TableColumn fx:id="tcAuthCheck" prefWidth="50.0" text="选择" />
                 <TableColumn fx:id="tcAuthname" prefWidth="75.0" text="权限名称" />
-                  <TableColumn fx:id="tcInclude" prefWidth="75.0" text="包含" />
+                  <TableColumn fx:id="tcExtend" prefWidth="75.0" text="包含" />
                 <TableColumn fx:id="tcAuthNote" prefWidth="75.0" text="备注" />
               </columns>
             </TableView>

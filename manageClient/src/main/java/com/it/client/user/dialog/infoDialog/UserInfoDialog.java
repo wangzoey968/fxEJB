@@ -1,4 +1,4 @@
-package com.it.client.user.dialog;
+package com.it.client.user.dialog.infoDialog;
 
 import com.it.api.table.user.Tb_Auth;
 import com.it.api.table.user.Tb_Role;
@@ -10,15 +10,16 @@ import com.it.client.util.FxmlUtil;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
-import javax.management.relation.Role;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangzy on 2018/8/15.
@@ -37,7 +38,7 @@ public class UserInfoDialog extends Dialog {
     @FXML
     private TableColumn<Tb_Auth, String> tcAuthname, tcAuthNote;
     @FXML
-    private TableColumn<Tb_Auth, Boolean> tcInclude;
+    private TableColumn<Tb_Auth, Boolean> tcExtend;
     @FXML
     private TableColumn<Tb_Auth, Boolean> tcAuthCheck;
 
@@ -48,15 +49,15 @@ public class UserInfoDialog extends Dialog {
     private MenuItem refreshRole = new MenuItem("刷新");
     private MenuItem addRole = new MenuItem("新建角色");
     private MenuItem updateRole = new MenuItem("修改角色");
-    private MenuItem deleteRole = new MenuItem("修改角色");
+    private MenuItem deleteRole = new MenuItem("删除角色");
 
     private MenuItem refreshAuth = new MenuItem("刷新");
     private MenuItem addAuth = new MenuItem("新建权限");
     private MenuItem updateAuth = new MenuItem("修改权限");
     private MenuItem deleteAuth = new MenuItem("删除权限");
 
-    private List<String> ownRole = new ArrayList<>();
-    private List<String> ownAuth = new ArrayList<>();
+    private Map<String, Boolean> roleMap = new HashMap<>();//拥有的角色
+    private Map<String, Boolean> authMap = new HashMap<>();//额外的权限
 
     public UserInfoDialog() {
         this.initOwner(MainFrame.getInstance());
@@ -71,7 +72,7 @@ public class UserInfoDialog extends Dialog {
                     menu.getItems().addAll(refreshRole, new SeparatorMenuItem(), addRole);
                     Tb_Role item = row.getItem();
                     if (item != null) {
-                        menu.getItems().addAll(updateRole, deleteRole);
+                        menu.getItems().addAll(updateRole, deleteRole, new SeparatorMenuItem(), addAuth);
                     }
                     menu.show(row, req.getScreenX(), req.getScreenY());
                 });
@@ -96,6 +97,8 @@ public class UserInfoDialog extends Dialog {
                             } catch (Exception e) {
                                 FxmlUtil.showException(e, null);
                             }
+                            listUserRole();
+                            listUserAuth();
                         }
                     };
 
@@ -110,7 +113,11 @@ public class UserInfoDialog extends Dialog {
                                 if (role != null) {
                                     CheckBox box = new CheckBox();
                                     box.selectedProperty().removeListener(listener);
-                                    box.setSelected(ownRole.contains(role.getRolename()));
+                                    if (roleMap.containsKey(role.getRolename())) {
+                                        box.setSelected(true);
+                                    } else {
+                                        box.setSelected(false);
+                                    }
                                     box.selectedProperty().addListener(listener);
                                     this.setGraphic(box);
                                     this.setAlignment(Pos.CENTER);
@@ -169,7 +176,20 @@ public class UserInfoDialog extends Dialog {
                     ChangeListener<Boolean> listener = new ChangeListener<Boolean>() {
                         @Override
                         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-
+                            Tb_Auth auth = (Tb_Auth) getTableRow().getItem();
+                            try {
+                                //可以理解为,不论怎么对用户进行扩权或限制权限,都是对tb_user_auth的操作,和tb_role_auth无关,
+                                //所以可以直接对tb_user_auth操作
+                                if (newValue) {
+                                    EJB.getUserService().addUserAuth(EJB.getSessionId(), userId.get(), auth.getId());
+                                } else {
+                                    EJB.getUserService().deleteUserAuth(EJB.getSessionId(), userId.get(), auth.getId());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            listUserRole();
+                            listUserAuth();
                         }
                     };
 
@@ -177,13 +197,21 @@ public class UserInfoDialog extends Dialog {
                     protected void updateItem(Boolean item, boolean empty) {
                         super.updateItem(item, empty);
                         Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
+                        Tb_Role role = tvRole.getSelectionModel().getSelectedItem();
                         if (empty) {
                             this.setGraphic(null);
                         } else {
                             if (auth != null) {
                                 CheckBox box = new CheckBox();
                                 box.selectedProperty().removeListener(listener);
-                                //todo
+                                if (roleMap.containsKey(role.getRolename())) {
+                                    box.setSelected(true);
+                                }else {
+                                    box.setSelected(false);
+                                }
+                                if (authMap.containsKey(auth.getAuthname())) {
+                                    box.setSelected(auth.getExtend());
+                                }
                                 box.selectedProperty().addListener(listener);
                                 this.setGraphic(box);
                                 this.setAlignment(Pos.CENTER);
@@ -213,7 +241,7 @@ public class UserInfoDialog extends Dialog {
                 }
             }
         });
-        tcInclude.setCellFactory(new Callback<TableColumn<Tb_Auth, Boolean>, TableCell<Tb_Auth, Boolean>>() {
+        tcExtend.setCellFactory(new Callback<TableColumn<Tb_Auth, Boolean>, TableCell<Tb_Auth, Boolean>>() {
             @Override
             public TableCell<Tb_Auth, Boolean> call(TableColumn<Tb_Auth, Boolean> param) {
                 return new TableCell<Tb_Auth, Boolean>() {
@@ -222,7 +250,13 @@ public class UserInfoDialog extends Dialog {
                         super.updateItem(item, empty);
                         Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
                         if (!empty && auth != null) {
-                            //TODO
+                            if (auth.getExtend()) {
+                                this.setText("包含");
+                                this.setTextFill(Color.GREEN);
+                            } else {
+                                this.setText("排除");
+                                this.setTextFill(Color.RED);
+                            }
                         }
                     }
                 };
@@ -240,37 +274,75 @@ public class UserInfoDialog extends Dialog {
             listAllRole();
         });
         addRole.setOnAction(action -> {
-            Tb_Role role = new RoleEditorDialog().createRole();
+            Tb_Role role = new RoleEditorDialog().addRole();
             if (role != null) {
-                new Alert(Alert.AlertType.INFORMATION, "新建角色成功").showAndWait();
                 tvRole.getItems().add(0, role);
                 tvRole.getSelectionModel().select(0);
+                new Alert(Alert.AlertType.INFORMATION, "新建角色成功").showAndWait();
             }
         });
         updateRole.setOnAction(action -> {
-
+            Tb_Role item = tvRole.getSelectionModel().getSelectedItem();
+            Tb_Role role = new RoleEditorDialog().updateRole(item);
+            if (role != null) {
+                tvRole.getItems().set(tvRole.getItems().indexOf(item), role);
+                tvRole.getSelectionModel().select(role);
+                tvRole.refresh();
+                new Alert(Alert.AlertType.INFORMATION, "修改角色成功").showAndWait();
+            }
         });
         deleteRole.setOnAction(action -> {
-
+            listUserRole();
+            listUserAuth();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确认删除?");
+            alert.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, event -> {
+                try {
+                    EJB.getUserService().deleteRole(EJB.getSessionId(), tvRole.getSelectionModel().getSelectedItem().getId());
+                } catch (Exception e) {
+                    FxmlUtil.showException(e, null);
+                }
+            });
+            alert.initOwner(MainFrame.getInstance());
+            alert.showAndWait();
         });
 
         addAuth.setOnAction(action -> {
-            Tb_Auth auth = new AuthEditorDialog().createAuth();
+            listUserRole();
+            listUserAuth();
+            Tb_Auth auth = new AuthEditorDialog().createAuth(tvRole.getSelectionModel().getSelectedItem().getId());
             if (auth != null) {
+                tvAuth.getItems().add(0, auth);
+                tvAuth.refresh();
                 new Alert(Alert.AlertType.INFORMATION, "新建权限成功").showAndWait();
             }
         });
         updateAuth.setOnAction(action -> {
-
+            Tb_Auth item = tvAuth.getSelectionModel().getSelectedItem();
+            Tb_Auth auth = new AuthEditorDialog().updateAuth(item);
+            tvAuth.getItems().set(tvAuth.getItems().indexOf(item), auth);
+            tvAuth.getSelectionModel().select(auth);
+            tvAuth.refresh();
         });
         deleteAuth.setOnAction(action -> {
-
+            listUserRole();
+            listUserAuth();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确认删除?");
+            alert.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, event -> {
+                try {
+                    EJB.getUserService().deleteAuth(EJB.getSessionId(), tvAuth.getSelectionModel().getSelectedItem().getId());
+                } catch (Exception e) {
+                    FxmlUtil.showException(e, null);
+                }
+            });
+            alert.initOwner(MainFrame.getInstance());
+            alert.showAndWait();
+        });
+        refreshAuth.setOnAction(action -> {
+            listRoleAuth();
         });
         setOnShowing(action -> {
-            ownRole.clear();
-            for (Tb_Role role : listUserRole()) {
-                ownRole.add(role.getRolename());
-            }
+            listUserRole();
+            listUserAuth();
         });
     }
 
@@ -294,39 +366,48 @@ public class UserInfoDialog extends Dialog {
     private void listRoleAuth() {
         try {
             Tb_Role item = tvRole.getSelectionModel().getSelectedItem();
-            List<Tb_Auth> list = EJB.getUserService().listRoleAuth(EJB.getSessionId(), item.getId());
+            List<Tb_Auth> list = EJB.getUserService().listRoleAuth(EJB.getSessionId(), userId.get(), item.getId());
             tvAuth.getItems().clear();
             tvAuth.getItems().addAll(list);
+            tvAuth.refresh();
         } catch (Exception e) {
             FxmlUtil.showException(e, null);
         }
     }
 
-    private List<Tb_Role> listUserRole() {
-        List<Tb_Role> list = null;
+    private void listUserRole() {
         try {
-            list = EJB.getUserService().listUserRole(EJB.getSessionId(), userId.get());
+            roleMap.clear();
+            List<Tb_Role> list = EJB.getUserService().listUserRole(EJB.getSessionId(), userId.get());
+            for (Tb_Role role : list) {
+                roleMap.put(role.getRolename(), true);
+            }
         } catch (Exception e) {
             FxmlUtil.showException(e, null);
         }
-        return list;
     }
 
     private void listAllRole() {
         try {
             tvRole.getItems().clear();
             List<Tb_Role> list = EJB.getUserService().listAllRole(EJB.getSessionId());
-            System.out.println(list.size());
-            System.out.println(list.toString());
             tvRole.getItems().addAll(list);
+            tvRole.refresh();
         } catch (Exception e) {
             FxmlUtil.showException(e, null);
         }
     }
 
-    private List<Tb_Auth> listUserAuth() {
-
-        return null;
+    private void listUserAuth() {
+        try {
+            authMap.clear();
+            List<Tb_Auth> list = EJB.getUserService().listUserAuth(EJB.getSessionId(), userId.get());
+            for (Tb_Auth auth : list) {
+                authMap.put(auth.getAuthname(), auth.getExtend());
+            }
+        } catch (Exception e) {
+            FxmlUtil.showException(e, null);
+        }
     }
 
 }

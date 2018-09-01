@@ -56,14 +56,6 @@ public class Core {
             session.save(user);
         }
 
-        /*Tb_User_Auth au = (Tb_User_Auth) session.createQuery("from Tb_User_Auth where tb_auth_id=:aid and tb_user_id=:uid")
-                .setParameter("aid", auth.getId())
-                .setParameter("uid", user.getId()).uniqueResult();
-        if (au == null) {
-            au = new Tb_User_Auth(auth.getId(), user.getId(), true);
-            session.save(au);
-        }*/
-
         Tb_Role_Auth ra = (Tb_Role_Auth) session.createQuery("from Tb_Role_Auth where tb_role_id=:rid and tb_auth_id=:aid")
                 .setParameter("rid", role.getId())
                 .setParameter("aid", auth.getId()).uniqueResult();
@@ -208,6 +200,7 @@ public class Core {
      * 设置的map中获取UserLog对象,再获取整个user对象,为客户端使用
      */
     public static Tb_User getUser(String sessionId) {
+        System.out.println("Core.getUser--->String sessionId");
         Session session = HibernateUtil.openSession();
         Tb_UserLog ul = getUserLog(sessionId);
         Tb_User user = (Tb_User) session.createQuery("select user from Tb_User user where user.id=:uid").setParameter("uid", ul.getTb_user_id()).uniqueResult();

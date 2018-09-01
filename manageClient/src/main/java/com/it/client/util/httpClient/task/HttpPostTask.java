@@ -8,10 +8,16 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.CharsetUtils;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -90,7 +96,7 @@ public class HttpPostTask {
      * 完成；
      */
     private Boolean isSuccess = false;
-    Runnable onSuccess;
+    private Runnable onSuccess;
 
     public HttpPostTask setOnSuccess(Runnable runnable) {
         this.onSuccess = onSuccess;
@@ -101,7 +107,7 @@ public class HttpPostTask {
      * 开始
      */
     private Boolean isStart = false;
-    Runnable onStart;
+    private Runnable onStart;
 
     public HttpPostTask setOnStart(Runnable onStart) {
         this.onStart = onStart;
@@ -112,7 +118,7 @@ public class HttpPostTask {
      * 取消
      */
     private Boolean isAbort = false;
-    Runnable onAbort;
+    private Runnable onAbort;
 
     public HttpPostTask setOnAbort(Runnable onAbort) {
         this.onAbort = onAbort;
@@ -123,7 +129,7 @@ public class HttpPostTask {
      * 报错
      */
     private Boolean isError = false;
-    Runnable onError;
+    private Runnable onError;
 
     public HttpPostTask setOnError(Runnable onError) {
         this.onError = onError;
@@ -132,6 +138,7 @@ public class HttpPostTask {
 
     /**
      * 是否同步
+     * 默认不同步
      */
     private boolean sync = false;
 
@@ -165,87 +172,85 @@ public class HttpPostTask {
      * 执行Post
      */
     public HttpPostTask execute(ProgressCallback progressCallback) {
-        InputStreamReader reader = null;
         try {
-            sf = HttpClient.getSchedule().schedule(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (url == null) throw new Exception("URL未设置");
-                                isStart = true;
-                                if (onStart != null) onStart.run();
-                                //HttpPost
-                                HttpPost httppost = new HttpPost(url);
-                                RequestConfig requestConfig = RequestConfig.custom()
-                                        .setConnectTimeout(5000).setConnectionRequestTimeout(1000)
-                                        .setSocketTimeout(5000).build();
-                                httppost.setConfig(requestConfig);
-                                for (Map.Entry<String, String> entry : header.entrySet()) {
-                                    httppost.addHeader(entry.getKey(),entry.getValue());
-                                }
-                                //HttpEntity
-                                HttpEntity httpEntity = null;
+            sf = HttpClient.getSchedule().schedule(new Runnable() {
+                @Override
+                public void run() {
+                    InputStreamReader reader = null;
+                    try {
+                        if (url == null) throw new Exception("URL未设置");
+                        isStart = true;
+                        if (onStart != null) onStart.run();
+                        //HttpPost
+                        HttpPost httppost = new HttpPost(url);
+                        RequestConfig requestConfig = RequestConfig.custom()
+                                .setConnectTimeout(5000)
+                                .setConnectionRequestTimeout(1000)
+                                .setSocketTimeout(5000).build();
+                        httppost.setConfig(requestConfig);
+                        for (Map.Entry<String, String> entry : header.entrySet()) {
+                            httppost.addHeader(entry.getKey(), entry.getValue());
+                        }
+                        //HttpEntity
+                        HttpEntity httpEntity = null;
 
-                                /*if (!files.isEmpty()) {
-                                    MultipartEntityBuilder builder = MultipartEntityBuilder.create()
-                                            .setCharset(Charset.forName("UTF-8"))
-                                            .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                                            .setContentType(ContentType.MULTIPART_FORM_DATA);
-                                    stringParams.each {
-                                        builder.addPart(it.key, new StringBody(it.value, ContentType.TEXT_PLAIN.withCharset("UTF-8")))
-                                    }
-                                    files.each {
-                                        builder.addPart(it.key, new FileBody(it.value));
-                                    }
-                                    httpEntity = builder.build();
-                                } else if (stringBody != null) {
-                                    httpEntity = new StringEntity(stringBody, "UTF-8");
-                                    httpEntity.setContentEncoding("UTF-8");
-                                } else {
-                                    List<NameValuePair> pas = new ArrayList<>();
-                                    stringParams.each {
-                                        pas.add(new BasicNameValuePair(it.key, it.value))
-                                    }
-                                    httpEntity = new UrlEncodedFormEntity(pas, Charset.forName("UTF-8"));
-                                }
-
-                                httppost.setEntity(progressCallback == null ? httpEntity : new ProgressHttpEntityWrapper(httpEntity, progressCallback));
-                                CloseableHttpResponse res = HttpClient.getHttpClient().execute(httppost);
-
-                                reader = new InputStreamReader(res.getEntity().getContent(), Charset.forName("UTF-8"));
-
-                                char[] buff = new char[1024];
-                                int length = 0;
-                                StringBuilder stringBuffer = new StringBuilder();
-                                while ((length = reader.read(buff)) != -1) {
-                                    stringBuffer.append(new String(buff, 0, length));
-                                }
-                                reader.close();
-                                reader = null;
-                                resultString = stringBuffer.toString();
-                                if (res.getStatusLine().getStatusCode() != 200) {
-                                    throw new Exception(res.getStatusLine().toString());
-                                } else {
-                                    isSuccess = true;
-                                    if (onSuccess != null) onSuccess.call(resultString);
-                                }*/
-                            } catch (Exception e) {
-                                isError = true;
+                        if (!files.isEmpty()) {
+                            MultipartEntityBuilder builder = MultipartEntityBuilder.create()
+                                    .setCharset(Charset.forName("UTF-8"))
+                                    .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                                    .setContentType(ContentType.MULTIPART_FORM_DATA);
+                            for (Map.Entry<String, String> entry : stringParams.entrySet()) {
+                                builder.addPart(entry.getKey(), new StringBody(entry.getValue(), ContentType.TEXT_PLAIN.withCharset("UTF-8")));
                             }
+                            for (Map.Entry<String, File> entry : files.entrySet()) {
+                                builder.addPart(entry.getKey(), new FileBody(entry.getValue()));
+                            }
+                            httpEntity = builder.build();
+                        } else if (stringBody != null) {
+                            httpEntity = new StringEntity(stringBody, "UTF-8");
+                        } else {
+                            List<NameValuePair> pas = new ArrayList<>();
+                            for (Map.Entry<String, String> entry : stringParams.entrySet()) {
+                                pas.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+                            }
+                            httpEntity = new UrlEncodedFormEntity(pas, Charset.forName("UTF-8"));
+                        }
+
+                        httppost.setEntity(progressCallback == null ? httpEntity : new ProgressHttpEntityWrapper(httpEntity, progressCallback));
+                        CloseableHttpResponse res = HttpClient.getHttpClient().execute(httppost);
+
+                        reader = new InputStreamReader(res.getEntity().getContent(), Charset.forName("UTF-8"));
+
+                        char[] buffer = new char[1024];
+                        int length = 0;
+                        StringBuilder stringBuffer = new StringBuilder();
+                        while ((length = reader.read(buffer)) != -1) {
+                            stringBuffer.append(new String(buffer, 0, length));
+                        }
+                        resultString = stringBuffer.toString();
+                        if (res.getStatusLine().getStatusCode() != 200) {
+                            throw new Exception(res.getStatusLine().toString());
+                        } else {
+                            isSuccess = true;
+                            if (onSuccess != null) onSuccess.run();
+                            //if (onSuccess != null) onSuccess.call(resultString);
+                        }
+                    } catch (Exception e) {
+                        isError = true;
+                    } finally {
+                        try {
+                            if (reader != null) {
+                                reader.close();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                    , 0, TimeUnit.SECONDS
-            );
+                }
+            }, 0, TimeUnit.SECONDS);
             if (sync) sf.get();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (reader != null) reader.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
         return this;
     }

@@ -20,7 +20,7 @@ public class Tb_Auth implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = false, unique = true)
     private String authname;
 
     @Column(length = 255)
@@ -28,6 +28,12 @@ public class Tb_Auth implements Serializable {
 
     @Column
     private Long parent_id;
+
+    /**
+     * 这个是为了判断权限是否是额外扩展或限制添加的
+     */
+    @Transient
+    private Boolean isExtend;
 
     @Transient
     private List<Tb_Role> roles = null;
@@ -114,5 +120,13 @@ public class Tb_Auth implements Serializable {
 
     public void setGroups(List<Tb_Group> groups) {
         this.groups = groups;
+    }
+
+    public Boolean getExtend() {
+        return isExtend;
+    }
+
+    public void setExtend(Boolean extend) {
+        isExtend = extend;
     }
 }

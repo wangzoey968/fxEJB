@@ -10,6 +10,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 
+import java.io.File;
+import java.nio.file.Files;
+
 /**
  * Created by wangzy on 2018/8/16.
  */
@@ -23,14 +26,14 @@ public class AuthEditorDialog extends Dialog {
         this.getDialogPane().setContent(FxmlUtil.loadFXML(this));
     }
 
-    public Tb_Auth createAuth() {
-        this.setTitle("添加权限");
+    public Tb_Auth createAuth(Long roleId) {
+        this.setTitle("添加角色下的权限");
         this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         final Tb_Auth[] auths = new Tb_Auth[1];
         this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, event -> {
             try {
                 event.consume();
-                auths[0] = EJB.getUserService().addAuth(EJB.getSessionId(), setNewValue());
+                auths[0] = EJB.getUserService().addRole1Auth(EJB.getSessionId(), roleId, setNewValue());
                 this.close();
             } catch (Exception e) {
                 FxmlUtil.showException(e, MainFrame.getInstance());
@@ -45,11 +48,12 @@ public class AuthEditorDialog extends Dialog {
         Tb_Auth auth = new Tb_Auth();
         auth.setAuthname(tfAuthname.getText());
         auth.setNote(tfNote.getText());
+        auth.setExtend(true);
         return auth;
     }
 
     public Tb_Auth updateAuth(Tb_Auth auth) {
-        this.setTitle("修改权限");
+        this.setTitle("修改角色下的权限");
         this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         setTextValue(auth);
         final Tb_Auth[] auths = new Tb_Auth[1];

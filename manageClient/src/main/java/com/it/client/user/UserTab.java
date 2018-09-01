@@ -3,7 +3,7 @@ package com.it.client.user;
 import com.it.api.table.user.Tb_User;
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
-import com.it.client.user.dialog.UserInfoDialog;
+import com.it.client.user.dialog.infoDialog.UserInfoDialog;
 import com.it.client.user.dialog.editor.UserEditorDialog;
 import com.it.client.util.FxmlUtil;
 import javafx.application.Platform;
@@ -34,10 +34,10 @@ public class UserTab extends Tab {
     @FXML
     private TableColumn<Tb_User, Boolean> tcEnable;
 
-    ContextMenu menu = new ContextMenu();
-    MenuItem addItem = new MenuItem("添加");
-    MenuItem updateItem = new MenuItem("修改");
-    MenuItem deleteItem = new MenuItem("删除");
+    private ContextMenu menu = new ContextMenu();
+    private MenuItem addItem = new MenuItem("添加");
+    private MenuItem updateItem = new MenuItem("修改");
+    private MenuItem deleteItem = new MenuItem("删除");
 
     public UserTab() {
         this.setText("用户管理");

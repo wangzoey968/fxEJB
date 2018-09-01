@@ -23,7 +23,7 @@ public class RoleEditorDialog extends Dialog {
         this.getDialogPane().setContent(FxmlUtil.loadFXML(this));
     }
 
-    public Tb_Role createRole() {
+    public Tb_Role addRole() {
         this.setTitle("添加角色");
         this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         final Tb_Role[] roles = new Tb_Role[1];

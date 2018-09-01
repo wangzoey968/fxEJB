@@ -7,6 +7,7 @@ import com.it.web.user.dao.UserDao;
 import org.hibernate.Session;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
@@ -129,7 +130,8 @@ public class UserService {
         session.getTransaction().begin();
         Tb_Role r = (Tb_Role) session.createQuery("from Tb_Role where id=:id").setParameter("id", role.getId()).uniqueResult();
         if (r == null) throw new Exception("请刷新");
-        session.update(role);
+        session.merge(role);
+        session.update(r);
         session.getTransaction().commit();
         return role;
     }
@@ -152,12 +154,33 @@ public class UserService {
     }
 
     //***************************************auth相关操作
-    public static List<Tb_Auth> listAuth(Tb_User user, Long userId) throws Exception {
+    public static List<Tb_Auth> listUserAuth(Tb_User user, Long userId) throws Exception {
         if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是管理员");
         Session session = HibernateUtil.openSession();
-        List<Tb_Auth> list = session.createQuery("select auth from Tb_Auth auth left join Tb_User_Auth au on auth.id=au.tb_auth_id where au.tb_user_id=:uid")
+        List list = session.createQuery("select auth ,ua from Tb_Auth auth left join Tb_User_Auth ua where ua.tb_auth_id=auth.id and ua.tb_user_id=:uid")
                 .setParameter("uid", userId).list();
-        return list;
+        ArrayList<Tb_Auth> auths = new ArrayList<>();
+        for (Object o : list) {
+            Object[] objects = (Object[]) o;
+            Tb_Auth auth = (Tb_Auth) objects[0];
+            Tb_User_Auth ua = (Tb_User_Auth) objects[1];
+            auth.setExtend(ua.getExtend());
+            auths.add(auth);
+        }
+        return auths;
+    }
+
+    public static Tb_Auth addRole1Auth(Tb_User user, Long roleId, Tb_Auth auth) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是管理员");
+        Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        session.save(auth);
+        Tb_Role_Auth ra = new Tb_Role_Auth();
+        ra.setTb_role_id(roleId);
+        ra.setTb_auth_id(auth.getId());
+        session.save(ra);
+        session.getTransaction().commit();
+        return auth;
     }
 
     public static Tb_Auth addAuth(Tb_User user, Tb_Auth auth) throws Exception {
@@ -175,7 +198,8 @@ public class UserService {
         session.getTransaction().begin();
         Tb_Auth a = (Tb_Auth) session.createQuery("from Tb_Auth where id=:id").setParameter("id", auth.getId()).uniqueResult();
         if (a == null) throw new Exception("请刷新");
-        session.update(auth);
+        session.merge(auth);
+        session.update(a);
         session.getTransaction().commit();
         return auth;
     }
@@ -192,10 +216,26 @@ public class UserService {
 
 
     //****************************************
-    public static List<Tb_Auth> listRoleAuth(Tb_User user, Long roleId) throws Exception {
+    public static List<Tb_Auth> listRoleAuth(Tb_User user, Long userId, Long roleId) throws Exception {
         if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是管理员");
         Session session = HibernateUtil.openSession();
-        List<Tb_Auth> list = session.createQuery("select auth from Tb_Role_Auth ra left join Tb_Auth  auth on ra.tb_role_id=auth.id where ra.tb_role_id=:id").setParameter("id", roleId).list();
+        /*List<Tb_Auth> list = session.createQuery("select auth from Tb_Role_Auth ra left join Tb_Auth  auth on ra.tb_auth_id=auth.id where ra.tb_role_id=:id")
+                .setParameter("id", roleId).list();
+        for (Tb_Auth auth : list) {
+            Tb_User_Auth ua = (Tb_User_Auth) session.createQuery("from Tb_User_Auth where tb_user_id=:uid and tb_auth_id=:aid").setParameter("uid", userId).setParameter("aid", auth.getId()).uniqueResult();
+            if (ua == null) {
+                auth.setExtend(true);
+            } else {
+                auth.setExtend(ua.getExtend());
+            }
+        }*/
+
+        List<Tb_Auth> list = session.createQuery("select auth from Tb_Role_Auth ra left join Tb_Auth auth on ra.tb_auth_id=auth.id where ra.tb_role_id=:rid")
+                .setParameter("rid", roleId).list();
+        for (Tb_Auth auth : list) {
+            auth.setExtend(true);
+        }
+        System.out.println(list.toString() + "-----------11111111-----------");
         return list;
     }
 
@@ -248,6 +288,37 @@ public class UserService {
         Tb_Role_Auth ra = (Tb_Role_Auth) session.createQuery("from Tb_Role_Auth where tb_role_id=:rid and tb_auth_id =:aid").setParameter("rid", roleId).setParameter("aid", authId).uniqueResult();
         if (ra == null) throw new Exception("不存在");
         session.delete(ra);
+        session.getTransaction().commit();
+    }
+
+    //添加扩展或限制的用户权限
+    public static Tb_User_Auth addUserAuth(Tb_User user, Long userId, Long authId) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是超管");
+        Session session = HibernateUtil.openSession();
+        Tb_User_Auth ua = (Tb_User_Auth) session.createQuery("from Tb_User_Auth where tb_user_id=:uid and tb_auth_id=:aid")
+                .setParameter("uid", userId)
+                .setParameter("aid", authId).uniqueResult();
+        if (ua != null) throw new Exception("已存在");
+        session.getTransaction().begin();
+        Tb_User_Auth uauth = new Tb_User_Auth();
+        uauth.setTb_user_id(userId);
+        uauth.setTb_auth_id(authId);
+        uauth.setExtend(true);
+        session.save(uauth);
+        session.getTransaction().commit();
+        return uauth;
+    }
+
+    //删除扩展或限制的用户权限
+    public static void deleteUserAuth(Tb_User user, Long userId, Long authId) throws Exception {
+        if (!Core.getUserAllAuths(user).contains("超管")) throw new Exception("您不是超管");
+        Session session = HibernateUtil.openSession();
+        Tb_User_Auth ua = (Tb_User_Auth) session.createQuery("from Tb_User_Auth where tb_user_id=:uid and tb_auth_id=:aid")
+                .setParameter("uid", userId)
+                .setParameter("aid", authId).uniqueResult();
+        if (ua == null) throw new Exception("不存在");
+        session.getTransaction().begin();
+        session.delete(ua);
         session.getTransaction().commit();
     }
 
