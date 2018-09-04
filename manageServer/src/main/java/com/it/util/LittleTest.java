@@ -103,11 +103,28 @@ public class LittleTest {
     @Test
     public void ssssss() {
         HashMap<String, Boolean> map = new HashMap<>();
+        //只能有一个key
         map.put("权限1", true);
         map.put("权限2", true);
         map.put("权限1", true);
         map.put("权限2", false);
         System.out.println(map.toString());
+    }
+
+    @Test
+    public void tt() {
+        int temp;
+        int a = 1;
+        int b = 1;
+        int range = 100;
+
+        while (b < range) {
+            temp = b;
+            b = a + b;
+            a = temp;
+            System.out.println(a);
+        }
+
     }
 
 }

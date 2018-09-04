@@ -73,7 +73,7 @@ public class UserServiceRemote implements UserServiceLocal {
 
     @Override
     public Tb_Auth addRole1Auth(String sessionId, Long roleId, Tb_Auth auth) throws Exception {
-        return UserService.addRole1Auth(Core.getUser(sessionId),roleId,auth);
+        return UserService.addRole1Auth(Core.getUser(sessionId), roleId, auth);
     }
 
     @Override
@@ -92,8 +92,8 @@ public class UserServiceRemote implements UserServiceLocal {
     }
 
     @Override
-    public List<Tb_Auth> listRoleAuth(String sessionId,Long userId, Long roleId) throws Exception {
-        return UserService.listRoleAuth(Core.getUser(sessionId),userId, roleId);
+    public List<Tb_Auth> listRoleAuth(String sessionId, Long userId, Long roleId) throws Exception {
+        return UserService.listRoleAuth(Core.getUser(sessionId), userId, roleId);
     }
 
     //为用户分配角色
@@ -120,8 +120,8 @@ public class UserServiceRemote implements UserServiceLocal {
 
     //为用户扩展权限
     @Override
-    public Tb_User_Auth addUserAuth(String sessionId, Long userId, Long authId) throws Exception {
-        return UserService.addUserAuth(Core.getUser(sessionId), userId, authId);
+    public Tb_User_Auth addUserAuth(String sessionId, Long userId, Long authId, Boolean isExtend) throws Exception {
+        return UserService.addUserAuth(Core.getUser(sessionId), userId, authId, isExtend);
     }
 
     @Override

@@ -32,7 +32,7 @@ public interface UserServiceLocal {
     //auth操作-------------------------------
     public List<Tb_Auth> listUserAuth(String sessionId, Long userId) throws Exception;
 
-    public Tb_Auth addRole1Auth(String sessionId,Long roleId,Tb_Auth auth)throws Exception;
+    public Tb_Auth addRole1Auth(String sessionId, Long roleId, Tb_Auth auth) throws Exception;
 
     public Tb_Auth addAuth(String sessionId, Tb_Auth auth) throws Exception;
 
@@ -41,7 +41,7 @@ public interface UserServiceLocal {
     public void deleteAuth(String sessionId, Long authId) throws Exception;
 
     //获取某个role下的全部auth-----------------------
-    public List<Tb_Auth> listRoleAuth(String sessionId,Long userId, Long roleId) throws Exception;
+    public List<Tb_Auth> listRoleAuth(String sessionId, Long userId, Long roleId) throws Exception;
 
     //对tb_user_role操作
     public Tb_User_Role addUserRole(String sessionId, Long userId, Long roleId) throws Exception;
@@ -54,7 +54,7 @@ public interface UserServiceLocal {
     public void deleteRoleAuth(String sessionId, Long roleId, Long authId) throws Exception;
 
     //对tb_user_auth操作
-    public Tb_User_Auth addUserAuth(String sessionId, Long userId, Long authId) throws Exception;
+    public Tb_User_Auth addUserAuth(String sessionId, Long userId, Long authId, Boolean isExtend) throws Exception;
 
     public void deleteUserAuth(String sessionId, Long userId, Long authId) throws Exception;
 

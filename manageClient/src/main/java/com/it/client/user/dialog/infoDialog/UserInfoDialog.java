@@ -177,13 +177,20 @@ public class UserInfoDialog extends Dialog {
                         @Override
                         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                             Tb_Auth auth = (Tb_Auth) getTableRow().getItem();
+                            Tb_Role role = tvRole.getSelectionModel().getSelectedItem();
                             try {
-                                //可以理解为,不论怎么对用户进行扩权或限制权限,都是对tb_user_auth的操作,和tb_role_auth无关,
-                                //所以可以直接对tb_user_auth操作
-                                if (newValue) {
-                                    EJB.getUserService().addUserAuth(EJB.getSessionId(), userId.get(), auth.getId());
+                                if (roleMap.containsKey(role.getRolename())) {
+                                    if (newValue) {
+                                        EJB.getUserService().deleteUserAuth(EJB.getSessionId(), userId.get(), auth.getId());
+                                    } else {
+                                        EJB.getUserService().addUserAuth(EJB.getSessionId(), userId.get(), auth.getId(), false);
+                                    }
                                 } else {
-                                    EJB.getUserService().deleteUserAuth(EJB.getSessionId(), userId.get(), auth.getId());
+                                    if (newValue) {
+                                        EJB.getUserService().addUserAuth(EJB.getSessionId(), userId.get(), auth.getId(), true);
+                                    } else {
+                                        EJB.getUserService().deleteUserAuth(EJB.getSessionId(), userId.get(), auth.getId());
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -206,11 +213,11 @@ public class UserInfoDialog extends Dialog {
                                 box.selectedProperty().removeListener(listener);
                                 if (roleMap.containsKey(role.getRolename())) {
                                     box.setSelected(true);
-                                }else {
+                                } else {
                                     box.setSelected(false);
                                 }
                                 if (authMap.containsKey(auth.getAuthname())) {
-                                    box.setSelected(auth.getExtend());
+                                    box.setSelected(authMap.get(auth.getAuthname()));
                                 }
                                 box.selectedProperty().addListener(listener);
                                 this.setGraphic(box);

@@ -60,6 +60,7 @@ public class Tb_Auth implements Serializable {
                 ", authname='" + authname + '\'' +
                 ", note='" + note + '\'' +
                 ", parent_id=" + parent_id +
+                ", isExtend=" + isExtend +
                 ", roles=" + roles +
                 ", users=" + users +
                 ", groups=" + groups +
@@ -98,6 +99,14 @@ public class Tb_Auth implements Serializable {
         this.parent_id = parent_id;
     }
 
+    public Boolean getExtend() {
+        return isExtend;
+    }
+
+    public void setExtend(Boolean extend) {
+        isExtend = extend;
+    }
+
     public List<Tb_Role> getRoles() {
         return roles;
     }
@@ -120,13 +129,5 @@ public class Tb_Auth implements Serializable {
 
     public void setGroups(List<Tb_Group> groups) {
         this.groups = groups;
-    }
-
-    public Boolean getExtend() {
-        return isExtend;
-    }
-
-    public void setExtend(Boolean extend) {
-        isExtend = extend;
     }
 }
