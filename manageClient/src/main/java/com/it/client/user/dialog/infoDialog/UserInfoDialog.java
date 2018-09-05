@@ -38,8 +38,6 @@ public class UserInfoDialog extends Dialog {
     @FXML
     private TableColumn<Tb_Auth, String> tcAuthname, tcAuthNote;
     @FXML
-    private TableColumn<Tb_Auth, Boolean> tcExtend;
-    @FXML
     private TableColumn<Tb_Auth, Boolean> tcAuthCheck;
 
     private SimpleLongProperty userId = new SimpleLongProperty();
@@ -248,27 +246,6 @@ public class UserInfoDialog extends Dialog {
                 }
             }
         });
-        tcExtend.setCellFactory(new Callback<TableColumn<Tb_Auth, Boolean>, TableCell<Tb_Auth, Boolean>>() {
-            @Override
-            public TableCell<Tb_Auth, Boolean> call(TableColumn<Tb_Auth, Boolean> param) {
-                return new TableCell<Tb_Auth, Boolean>() {
-                    @Override
-                    protected void updateItem(Boolean item, boolean empty) {
-                        super.updateItem(item, empty);
-                        Tb_Auth auth = (Tb_Auth) this.getTableRow().getItem();
-                        if (!empty && auth != null) {
-                            if (auth.getExtend()) {
-                                this.setText("包含");
-                                this.setTextFill(Color.GREEN);
-                            } else {
-                                this.setText("排除");
-                                this.setTextFill(Color.RED);
-                            }
-                        }
-                    }
-                };
-            }
-        });
         tvRole.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tb_Role>() {
             @Override
             public void changed(ObservableValue<? extends Tb_Role> observable, Tb_Role oldValue, Tb_Role newValue) {
@@ -285,6 +262,7 @@ public class UserInfoDialog extends Dialog {
             if (role != null) {
                 tvRole.getItems().add(0, role);
                 tvRole.getSelectionModel().select(0);
+                tvRole.refresh();
                 new Alert(Alert.AlertType.INFORMATION, "新建角色成功").showAndWait();
             }
         });

@@ -250,6 +250,17 @@ public class UserService {
         if (ur == null) throw new Exception("不存在");
         session.delete(ur);
         session.getTransaction().commit();
+        deleteUserExtendExclude(userId);
+    }
+
+    public static void deleteUserExtendExclude(Long userId) throws Exception {
+        Session session = HibernateUtil.openSession();
+        List<Tb_User_Auth> list = session.createQuery("from Tb_User_Auth where tb_user_id=:uid").setParameter("uid", userId).list();
+        session.getTransaction().begin();
+        for (Tb_User_Auth ua : list) {
+            session.delete(ua);
+        }
+        session.getTransaction().commit();
     }
 
     //为角色分配权限

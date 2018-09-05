@@ -48,7 +48,6 @@ public class AuthEditorDialog extends Dialog {
         Tb_Auth auth = new Tb_Auth();
         auth.setAuthname(tfAuthname.getText());
         auth.setNote(tfNote.getText());
-        auth.setExtend(true);
         return auth;
     }
 

@@ -14,6 +14,16 @@ public class MainMenus {
     public static List<MenuData> menuDatas = new ArrayList<>();
 
     static {
+        //下单
+        List<MenuData> subOrder = new ArrayList<>();
+        subOrder.add(new MenuData("下单", "FUN", "打开下单", "显示下单", null));
+        subOrder.add(new MenuData("订单查询", "FUN", "打开查询订单", "显示订单查询", null));
+        List<MenuData> childOrder = new ArrayList<>();
+        childOrder.add(new MenuData("订单详情","FUN","打开订单详情","显示订单详情",null));
+        subOrder.add(new MenuData("详情", "MENU", "", "显示订单详情", childOrder));
+        MenuData order = new MenuData("订单", "MENU", "", "订单", subOrder);
+        menuDatas.add(order);
+
         //财务
         List<MenuData> subFinance = new ArrayList<>();
         subFinance.add(new MenuData("订单价格", "FUN", "打开订单价格", "超管", null));
@@ -37,11 +47,11 @@ public class MainMenus {
         menuDatas.add(accidentSet);
 
         //用户设置
-        List<MenuData> subUserSet=new ArrayList<>();
-        subUserSet.add(new MenuData("用户设置","FUN","打开用户设置","超管",null));
-        subUserSet.add(new MenuData("角色设置","FUN","打开角色设置","超管",null));
-        subUserSet.add(new MenuData("权限设置","FUN","打开权限设置","超管",null));
-        MenuData userSet=new MenuData("用户设置","MENU","","超管",subUserSet);
+        List<MenuData> subUserSet = new ArrayList<>();
+        subUserSet.add(new MenuData("用户设置", "FUN", "打开用户设置", "超管", null));
+        subUserSet.add(new MenuData("角色设置", "FUN", "打开角色设置", "超管", null));
+        subUserSet.add(new MenuData("权限设置", "FUN", "打开权限设置", "超管", null));
+        MenuData userSet = new MenuData("用户设置", "MENU", "", "超管", subUserSet);
         menuDatas.add(userSet);
 
     }
@@ -63,7 +73,7 @@ public class MainMenus {
     private static void generateMenu(List<MenuData> list, Tb_User user) {
         //先提取出所有权限的名称;
         List<String> auths = Core.getUserAllAuths(user);
-        System.out.println(auths.toString()+"/auths");
+        System.out.println(auths.toString() + "/auths");
         ArrayList<MenuData> newMenu = new ArrayList<>();
         newMenu.addAll(list);
         for (MenuData menuData : list) {
