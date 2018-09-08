@@ -3,6 +3,7 @@ package com.it.client.mainFrame;
 import com.it.api.MenuData;
 import com.it.client.WebContainer.WebTab;
 import com.it.client.order.OrderTab;
+import com.it.client.order.cus.CusCreateOrderTab;
 import com.it.client.user.AuthTab;
 import com.it.client.user.RoleTab;
 import com.it.client.user.UserTab;
@@ -60,7 +61,7 @@ public class MenuHandler extends MenuItem {
         switch (funName) {
             //订单
             case "打开下单":
-                MainFrame.getInstance().addTab(new OrderTab());
+                MainFrame.getInstance().addTab(new CusCreateOrderTab());
                 break;
             case "打开查询订单":
                 MainFrame.getInstance().addTab(new OrderTab());

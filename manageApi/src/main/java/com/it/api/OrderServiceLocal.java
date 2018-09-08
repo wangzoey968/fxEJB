@@ -5,6 +5,6 @@ package com.it.api;
  */
 public interface OrderServiceLocal {
 
-    public void test() throws Exception;
+
 
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<VBox prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox maxHeight="40.0" minHeight="40.0" prefHeight="40.0" VBox.vgrow="NEVER">
+            <children>
+                <ToolBar maxHeight="40.0" minHeight="40.0" prefHeight="40.0" HBox.hgrow="ALWAYS">
+                    <items>
+                        <Label graphicTextGap="0.0" text="查询传单记录："/>
+                        <DatePicker fx:id="dpFrom" prefWidth="120.0"/>
+                        <Label text="--"/>
+                        <DatePicker fx:id="dpTo" prefWidth="120.0"/>
+                        <Button fx:id="btnSearch" mnemonicParsing="false" prefWidth="60.0"
+                                style="-fx-text-fill: Green; -fx-border-color: Green; -fx-border-radius: 3;" text="查询"/>
+                        <HBox prefHeight="40.0" prefWidth="604.0"/>
+                        <Button fx:id="btnMingPianOrder" mnemonicParsing="false" text="名片下单"/>
+                        <Button fx:id="btnDanYeOrder" mnemonicParsing="false" text="单页下单"/>
+                    </items>
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                </ToolBar>
+            </children>
+        </HBox>
+        <TableView fx:id="tvOrder" prefHeight="10.0" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="tcCreateTime" prefWidth="110.0" text="创建时间">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="createTime"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcFileName" prefWidth="370.0" text="文件名">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="fileName"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcOrderType" prefWidth="90.0" text="订单类型">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="orderType"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcParams" prefWidth="197.0" text="参数">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="productDesc"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcAmount" prefWidth="75.0" text="数量">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="amount"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcMoney" prefWidth="70.0" text="金额">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="productMoney"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcStatus" prefWidth="130.0" text="状态"/>
+                <TableColumn fx:id="tcOperate" prefWidth="100.0" text="操作"/>
+            </columns>
+        </TableView>
+        <HBox VBox.vgrow="NEVER">
+            <children>
+                <ToolBar prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                <ToolBar prefHeight="40.0">
+                    <items>
+                        <Label text="上传速度"/>
+                        <Label fx:id="lbSpeed" text="0"/>
+                        <Label text="KB/S"/>
+                    </items>
+                    <padding>
+                        <Insets right="30.0"/>
+                    </padding>
+                </ToolBar>
+            </children>
+        </HBox>
+    </children>
+</VBox>

@@ -1,25 +1,30 @@
 package com.it.util;
 
+import com.it.api.table.order.Tb_Order;
 import com.it.api.table.user.Tb_Auth;
 import com.it.api.table.user.Tb_Role;
 import com.it.api.table.user.Tb_User;
+import com.sun.javafx.application.PlatformImpl;
+import com.sun.javafx.tk.Toolkit;
+import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.hibernate.Session;
 import org.junit.Test;
 
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wangzy on 2018/8/6.
  */
 public class LittleTest {
-
-    public static void sssss() {
-        System.out.println("111111111111111111111");
-    }
 
     /**
      * 数据库返回数据的测试
@@ -78,30 +83,7 @@ public class LittleTest {
     }
 
     @Test
-    public void sss() throws Exception {
-        /*SAXReader reader = new SAXReader();
-        URI uri = FtpConfigService.class.getClass().getClassLoader().getResource("ConfigServer.xml").toURI();
-        Document document = reader.read(Paths.get(uri).toFile());
-        //获取根节点元素对象
-        Element root = document.getRootElement();
-        List<Element> list = root.elements();
-        for (Element s : list) {
-            System.out.println(s.getName() + "/" + s.getText());
-        }*/
-        ArrayList<String> list_1 = new ArrayList<>();
-        list_1.add("111");
-        list_1.add("2222");
-        ArrayList<String> list2 = new ArrayList<>();
-        list2.add("1111111111");
-        list2.add("22222222222");
-        list_1.addAll(list2);
-        for (String s : list_1) {
-            System.out.println(s);
-        }
-    }
-
-    @Test
-    public void ssssss() {
+    public void mapTest() {
         HashMap<String, Boolean> map = new HashMap<>();
         //只能有一个key
         map.put("权限1", true);
@@ -111,20 +93,29 @@ public class LittleTest {
         System.out.println(map.toString());
     }
 
+    //fibonacci
     @Test
-    public void tt() {
+    public void fibonacci() {
         int temp;
-        int a = 1;
+        int a = 0;
         int b = 1;
         int range = 100;
 
-        while (b < range) {
+        while (a < range) {
+            System.out.println(a);
             temp = b;
             b = a + b;
             a = temp;
-            System.out.println(a);
         }
+    }
 
+    @Test
+    public void lambda() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.forEach(System.out::println);
     }
 
 }
+

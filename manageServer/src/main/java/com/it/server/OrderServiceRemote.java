@@ -15,9 +15,6 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class OrderServiceRemote implements OrderServiceLocal {
 
-    @Override
-    public void test() throws Exception {
-        System.out.println("this is test of OrderServiceLocal");
-    }
+
 
 }

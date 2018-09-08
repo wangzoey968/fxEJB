@@ -97,6 +97,8 @@ public class UserInfoDialog extends Dialog {
                             }
                             listUserRole();
                             listUserAuth();
+                            tvRole.refresh();
+                            tvAuth.refresh();
                         }
                     };
 
@@ -195,6 +197,8 @@ public class UserInfoDialog extends Dialog {
                             }
                             listUserRole();
                             listUserAuth();
+                            tvRole.refresh();
+                            tvAuth.refresh();
                         }
                     };
 
