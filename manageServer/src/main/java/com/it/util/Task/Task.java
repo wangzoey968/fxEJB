@@ -11,8 +11,15 @@ import java.util.concurrent.ScheduledFuture;
 public abstract class Task implements Runnable, Serializable {
 
     public ScheduledFuture runLater() {
-        //ServerTask.runLater(this);
-        return null;
+        return ServerTask.runLater(this);
+    }
+
+    public void runAtFixTime(String fixTime) {
+        ServerTask.runAtFixTime(this, fixTime);
+    }
+
+    public void runAtFixRate(Long firstRunDelay, Long delayGap) {
+        ServerTask.runAtFixRate(this, firstRunDelay, delayGap);
     }
 
 }

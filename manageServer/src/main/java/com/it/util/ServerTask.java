@@ -1,14 +1,11 @@
 package com.it.util;
 
 import com.it.util.Task.CleanTask;
-import javafx.concurrent.Task;
-import jdk.nashorn.internal.runtime.logging.Logger;
+import com.it.util.Task.Task;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class ServerTask {
@@ -47,15 +44,27 @@ public class ServerTask {
         return res;
     }
 
+    public static void runAtFixTime(Task task, String fixTime) {
+        Timestamp time = Timestamp.valueOf(fixTime);
+        schedulePool.schedule(task, time.getTime(), TimeUnit.MILLISECONDS);
+    }
+
+    public static void runAtFixRate(Task task, Long firstRunDelay, Long delayGap) {
+        schedulePool.scheduleAtFixedRate(task, firstRunDelay, delayGap, TimeUnit.MILLISECONDS);
+    }
+
     public static void init() {
         LocalDateTime now = LocalDateTime.now();
         //定时任务
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                /**
+                 * 执行定时任务,直接new CleanTask()即可
+                 */
                 new CleanTask().run();
             }
-        }, now.getMinute(), 1000 * 60L);
+        }, now.getMinute(), 1000 * 60 * 60 * 24L);
     }
 
     public static void destroy() {

@@ -20,7 +20,7 @@
                         <DatePicker fx:id="dpTo" prefWidth="120.0"/>
                         <Button fx:id="btnSearch" mnemonicParsing="false" prefWidth="60.0"
                                 style="-fx-text-fill: Green; -fx-border-color: Green; -fx-border-radius: 3;" text="查询"/>
-                        <HBox prefHeight="40.0" prefWidth="604.0"/>
+                        <HBox HBox.hgrow="ALWAYS"/>
                         <Button fx:id="btnMingPianOrder" mnemonicParsing="false" text="名片下单"/>
                         <Button fx:id="btnDanYeOrder" mnemonicParsing="false" text="单页下单"/>
                     </items>

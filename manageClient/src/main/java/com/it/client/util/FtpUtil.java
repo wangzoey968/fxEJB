@@ -1,5 +1,6 @@
 package com.it.client.util;
 
+import javafx.scene.image.ImageView;
 import org.apache.commons.codec.digest.DigestUtils;
 import sun.net.ftp.FtpClient;
 import sun.net.ftp.FtpDirEntry;
@@ -143,9 +144,9 @@ public class FtpUtil {
             byte[] buff = new byte[150000];
             int s;
             while ((s = is.read(buff)) >= 0) {
-                if (s > 0) {
+                //if (s > 0) {
                     os.write(buff, 0, s);
-                }
+                //}
             }
             os.close();
             is.close();

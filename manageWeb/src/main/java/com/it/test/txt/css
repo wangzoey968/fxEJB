@@ -1,0 +1,9 @@
+设置某一行文字在某个div中上下居中显示的时候:line-height:div的高度;
+设置宽高的时候可以写成,500px或者30%
+进行定位的时候可以写成,40%(相对于父级node)
+
+background-attachment:fixed使背景固定
+
+可以进行图片定位,当浏览器变宽或者变窄的时候,显示图片的中间部分
+<div style='width: 100%;height:530px;background-position:center;background-image: url("images/bannerWeb.png");'>
+</div>

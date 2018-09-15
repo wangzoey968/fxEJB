@@ -4,12 +4,13 @@ root
 timer66
 笔记本:
 root+lighter
-
+公司centos
+root:zoey91968
+admin:wangzoey
 
 准点账号
 wangzy
 123546
-
 
 客户客户端测试账号
 18016347400   123   202cb962ac59075b964b07152d234b70

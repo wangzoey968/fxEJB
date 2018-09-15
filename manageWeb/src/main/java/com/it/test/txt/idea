@@ -1,0 +1,10 @@
+ctrl+alt+shift+u:maven依赖和类图;
+ctrl+f12:方法结构图和类继承图;
+ctrl+alt+h:方法调用层次;
+ctrl+h:类结构图;
+ctrl+q:显示注释文档;
+alt+1:打开或隐藏工程面板;
+alt+left/right:左右切换代码页;
+
+ctrl+shift+f:项目查找字符串;
+ctrl+shift+r:项目替换字符串;

@@ -1,0 +1,237 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TreeView-Lise</title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-table.min.css">
+    <script src="lib/jquery-3.2.1.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap-table.min.js"></script>
+    <script src="lib/bootstrap/bootstraptable-treeview.js"></script>
+    <script src="lib/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="lib/bootstrap/js/mybootstrap.js"></script>
+    <script src="lib/config.js"></script>
+    <style>
+        #tree_table {
+            margin-top: -40px !important;
+        }
+
+        .bootstrap-table .table > tbody > tr > td {
+            padding: 4px !important
+        }
+    </style>
+</head>
+
+<body>
+<div style="margin:20px">
+    时间：
+    <span style="position: relative;">
+        <input type="text" style="display:inline-block;width: 150px;padding-left: 6px;" id="startTime"
+               class="form_datetime form-control" >
+    </span>-
+    <span style="position: relative;">
+        <input type="text" style="display:inline-block;width: 150px;padding-left: 6px;" id="endTime"
+               class="form_datetime form-control">
+    </span>
+    <input type="text" class="form-control" style="display:inline-block;width: 140px;margin:0 4px;" id="keyWord" placeholder="关键字">
+    <input type="checkbox" id="onlyNotCheckout" checked="checked"/>仅未结账
+    <button id="btn-search" class="btn btn-primary">
+        <span class="glyphicon glyphicon-zoom-in" style="margin-right: 2px;"></span>查询
+    </button>
+    <button id="allNotCheckout" class="btn btn-primary">
+        所有未结账
+    </button>
+    <input style="float: right;margin-left: 20px;margin-right: 20px;" type="button" id="collapseAllTree" value="折叠所有"
+           class="btn btn-default"/>
+    <input style="float: right;margin-left: 20px;" type="button" id="expandAllTree" value="展开所有"
+           class="btn btn-default"/>
+    <table id="tree_table"></table>
+</div>
+<script>
+    $(function () {
+        $('#tree_table').bootstrapTable({
+            striped: true,
+            height: 600,
+            treeView: true,
+            treeId: "incomeId",
+            treeField: "incomeId",
+            columns: [{
+                checkbox: true,
+                align: "center",
+            }, {
+                field: 'incomeId',
+                title: '账单号',
+                width: 7 + "%",
+                align: "right",
+                sortable: true,
+                formatter: function (value, row, index) {
+                    //判断是否包含字母
+                    if (value.toString().match(/\D/) === null) {
+                        return value;
+                    } else {
+                        return null;
+                    }
+                }
+            }, {
+                field: 'createTime',
+                title: '创建时间',
+                width: 12 + "%",
+                align: "center",
+                sortable: true,
+            }, {
+                field: 'checkoutDeadline',
+                title: '最迟结账时间',
+                width: 13 + "%",
+                align: "center",
+                sortable: true,
+            }, {
+                field: 'totalMoney',
+                title: '总金额',
+                width: 20,
+                align: "center",
+                sortable: true,
+            }, {
+                field: 'payedMoney',
+                title: '已支付',
+                width: 20,
+                align: "center",
+                sortable: true,
+            }, {
+                field: 'lossMoney',
+                title: '优惠',
+                width: 20,
+                align: "center",
+                sortable: true,
+            }, {
+                field: "orderId",
+                title: "订单号",
+                width: 10 + '%',
+                align: "center",
+                sortable: "true",
+            }, {
+                field: "orderTagRework",
+                title: "补单?",
+                width: 20,
+                align: "center",
+                sortable: "true",
+                formatter: function (value, row, index) {
+                    if (row.level === 2) {
+                        return "补单";
+                    } else {
+                        return ""
+                    }
+                }
+            }, {
+                field: "orderTitle",
+                title: "订单标题",
+                width: 15 + '%',
+                align: "center",
+                sortable: "true",
+            }, {
+                field: "productType",
+                title: "订单类型",
+                width: 6 + '%',
+                align: "center",
+                sortable: "true",
+            }, {
+                field: "productDesc",
+                title: "产品描述",
+                width: 25 + '%',
+                align: "center",
+                sortable: "true",
+            }, {
+                field: "productMoney",
+                title: "产品金额",
+                width: 20,
+                align: "center",
+                sortable: "true",
+            }, {
+                field: "deliveryMoney",
+                title: "配送费用",
+                width: 20,
+                align: "center",
+                sortable: "true",
+            }]
+        });
+
+        $("#btn-search").on("click", function () {
+            setObj(false)
+        });
+
+        $("#allNotCheckout").on("click", function () {
+            setObj(true);
+        });
+
+        var setObj = function (boo) {
+            var obj = {};
+            obj.startTime = $("#startTime").val();
+            obj.endTime = $("#endTime").val();
+            obj.keyWord = $("#keyWord").val();
+            obj.isOnlyNotCheckout = $("#onlyNotCheckout").prop("checked");
+            obj.isAllNotCheckout = boo;
+            console.log("obj", obj);
+            dataGet(obj);
+        };
+
+        var dataGet = function (obj) {
+            $.ajax({
+                url: _root + '/cus/finance/listFinanceBill.do',
+                type: 'POST',
+                dataType: _json,
+                data: obj,
+                success: function (data) {
+                    if (data.result) {
+                        $('#tree_table').bootstrapTable('load', data.rows);
+                    } else {
+                        _control.alert(data.message, "错误", null);
+                    }
+                },
+                error: function (http, text) {
+                    _control.alert(text, "错误", null)
+                }
+            });
+        };
+
+        $("#expandAllTree").on('click', function () {
+            $('#tree_table').bootstrapTable("expandAllTree")
+        });
+
+        $("#collapseAllTree").on('click', function () {
+            $('#tree_table').bootstrapTable("collapseAllTree")
+        });
+
+        /*默认范围为本月1号至现在*/
+        var d = new Date();
+        var d1 = [];
+        var m = (d.getMonth() + 1) < 10 ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1);
+        d1.push(d.getFullYear(), m, "01");
+        $('#startTime').val(d1.join("-"));
+
+        var date = new Date();
+        var dateArr = [];
+        var monthStr = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+        var dayStr = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        dateArr.push(date.getFullYear(), monthStr, dayStr);
+        var dateStr = dateArr.join('-');
+        $('#endTime').val(dateStr);
+
+        /*日历插件*/
+        $(".form_datetime").datetimepicker({
+            language: 'zh-CN',
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            startView: 2,
+            maxView: 3,
+            minView: 2
+        }).on('show', function () {
+            $('.icon-arrow-left').addClass('glyphicon-menu-left');
+            $('.icon-arrow-right').addClass('glyphicon-menu-right');
+        });
+
+    });
+</script>
+</body>
+
+</html>
