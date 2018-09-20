@@ -1,0 +1,10 @@
+---------------------------windows----------------------
+查看所有的局域网ip:arp -a
+查看本机ip及相关配置:ipconfig /all
+
+
+
+----------------------------linux-------------
+查看网络配置:ifconfig
+切换用户权限:su root.如果要设置为其他用户,直接su admin
+重启网卡:service network restart

@@ -50,3 +50,48 @@ alt 属性用来为图像定义一串预备的可替换的文本
 	</select>
 	<textarea name="comment" rows="60" cols="20"></textarea>
 </form>
+
+
+
+
+-----------------------------html模板-----------------
+<meta charset=utf-8 />
+<title>脚本控制交互元素<details></title>
+<style type="text/css">
+　body{
+　 font-size:12px
+　}
+　span{
+　　font-weight:bold;
+　}
+　details {
+　　overflow: hidden;
+　　height: 0;
+　padding-left:200px;
+　　position: relative;
+　　display: block;
+　}
+　details[open] {
+　　height:auto;
+　}
+</style>
+</head>
+<body>
+　<span onClick="span1_click();">单击我试试</span>
+　<details id="details1">
+　　生成于 2012-05-17
+　</details>
+　<script type="text/javascript">
+    　 //根据属性控制是否显示内容
+    　 function span1_click(){
+    　　 var objD=document.getElementById("details1");
+    　　　 var attD=objD.getAttribute("open");
+    　　　 if(attD!="open"){
+    　　　　　objD.setAttribute("open","open");
+    　　　 }else{
+    　　　　 objD.removeAttribute("open");
+    　　　 }
+    　 }
+   </script>
+</body>
+</html>

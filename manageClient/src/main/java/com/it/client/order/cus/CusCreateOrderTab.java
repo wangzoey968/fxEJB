@@ -1,36 +1,36 @@
 package com.it.client.order.cus;
 
-import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
-import com.it.client.order.cus.Bean_MakeOrder;
 import com.it.client.util.FxmlUtil;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.application.Preloader;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
+import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ProgressBarTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.util.Callback;
-import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -48,18 +48,15 @@ public class CusCreateOrderTab extends Tab {
     @FXML
     private TableView<Bean_MakeOrder> tvOrder;
     @FXML
-    private TableColumn<Bean_MakeOrder, String> tcCreateTime, tcFileName, tcOrderType, tcParams, tcStatus, tcOperate;
+    private TableColumn<Bean_MakeOrder, String> tcCreateTime, tcFileName, tcOrderType, tcParams, tcOperate;
     @FXML
-    private TableColumn<Bean_MakeOrder, Integer> tcAmount, tcMoney;
+    private TableColumn<Bean_MakeOrder, Integer> tcAmount, tcStatus, tcMoney;
 
     public CusCreateOrderTab() {
         this.setText("下单");
         this.setContent(FxmlUtil.loadFXML(this));
         dpFrom.setValue(LocalDate.now());
         dpTo.setValue(LocalDate.now());
-        btnSearch.setOnAction(action -> {
-            doSearch();
-        });
         btnMingPianOrder.setOnAction(action -> {
             chooseFile("名片");
         });
@@ -88,39 +85,145 @@ public class CusCreateOrderTab extends Tab {
         tcFileName.setCellValueFactory(factory ->
                 new SimpleStringProperty(factory.getValue().getFile().getAbsolutePath())
         );
-        tcOrderType.setCellValueFactory(factory ->
-                new SimpleStringProperty(factory.getValue().getOrder().getOrderType())
-        );
-        tcStatus.setCellFactory(new Callback<TableColumn<Bean_MakeOrder, String>, TableCell<Bean_MakeOrder, String>>() {
+        tcOrderType.setCellFactory(new Callback<TableColumn<Bean_MakeOrder, String>, TableCell<Bean_MakeOrder, String>>() {
             @Override
             public TableCell<Bean_MakeOrder, String> call(TableColumn<Bean_MakeOrder, String> param) {
                 TableCell<Bean_MakeOrder, String> cell = new TableCell<Bean_MakeOrder, String>() {
                     @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        ListView<String> view = new ListView<>();
+                        view.getItems().addAll("单页", "名片");
+                        StackPane pane = new StackPane(view);
+                        pane.setPrefWidth(80);
+                        pane.setPrefHeight(80);
+                        Popup popup = new Popup();
+                        popup.getContent().add(pane);
+                        popup.setAutoHide(true);
+                        popup.show(this, this.localToScreen(0, 0).getX(), this.localToScreen(0, 0).getY());
+                        popup.setOnHidden(event -> {
+                            commitEdit(view.getSelectionModel().getSelectedItem());
+                        });
+                        view.setOnMouseClicked(event -> {
+                            event.consume();
+                            popup.hide();
+                        });
+                    }
+
+                    @Override
+                    public void commitEdit(String newValue) {
+                        super.commitEdit(newValue);
+                        Bean_MakeOrder bean = tvOrder.getSelectionModel().getSelectedItem();
+                        if (bean == null) return;
+                        if (bean.getOrder() == null) return;
+                        if (newValue == null) return;
+                        if (newValue.equals(bean.getOrder().getOrderType())) return;
+                        bean.getOrder().setOrderType(newValue);
+                        updateItem(newValue, false);
+                    }
+
+                    @Override
                     protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        Bean_MakeOrder bean = (Bean_MakeOrder) this.getTableRow().getItem();
+                        if (empty || bean == null) {
+                            this.setText(null);
+                        } else {
+                            HBox box = new HBox();
+                            box.setSpacing(10);
+                            box.getChildren().addAll(new Text(bean.getOrder().getOrderType()), new Text("修改"));
+                            box.setAlignment(Pos.CENTER);
+                            this.setAlignment(Pos.CENTER);
+                            this.setGraphic(box);
+                        }
+                    }
+                };
+                cell.setOnMouseClicked(event -> {
+                    event.consume();
+                    if (!cell.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
+                        cell.startEdit();
+                    }
+                });
+                return cell;
+            }
+        });
+        tcParams.setCellFactory(new Callback<TableColumn<Bean_MakeOrder, String>, TableCell<Bean_MakeOrder, String>>() {
+            @Override
+            public TableCell<Bean_MakeOrder, String> call(TableColumn<Bean_MakeOrder, String> param) {
+                TableCell<Bean_MakeOrder, String> cell = new TableCell<Bean_MakeOrder, String>() {
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                    }
+
+                    @Override
+                    public void commitEdit(String newValue) {
+                        super.commitEdit(newValue);
+                    }
+
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                    }
+                };
+                cell.setOnMouseClicked(event -> {
+                    event.consume();
+                    if (cell.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
+                        cell.startEdit();
+                    }
+                });
+                return cell;
+            }
+        });
+        tcStatus.setCellFactory(new Callback<TableColumn<Bean_MakeOrder, Integer>, TableCell<Bean_MakeOrder, Integer>>() {
+            @Override
+            public TableCell<Bean_MakeOrder, Integer> call(TableColumn<Bean_MakeOrder, Integer> param) {
+                TableCell<Bean_MakeOrder, Integer> cell = new TableCell<Bean_MakeOrder, Integer>() {
+                    @Override
+                    protected void updateItem(Integer item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setText(null);
                         } else {
                             Bean_MakeOrder bean = (Bean_MakeOrder) this.getTableRow().getItem();
-                            if (bean != null) {
-                                switch (bean.getOrderStatus()) {
-                                    case 0:
-                                        this.setText("未上传");
-                                        break;
-                                    case 1:
-                                        this.setText("正在上传");
-                                        break;
-                                    case 2:
-                                        this.setText("已取消");
-                                        break;
-                                    case 3:
-                                        this.setText("已删除");
-                                        break;
-                                    case 4:
-                                        this.setText("上传完成");
-                                        break;
+                            if (bean == null) return;
+
+                            //todo show progressBar progressing
+                            Label label = new Label();
+                            label.setTextAlignment(TextAlignment.CENTER);
+                            label.textProperty().unbind();
+                            label.textProperty().bind(Bindings.concat(bean.getUploadedSize() + "/" + bean.getTotalSize()));
+
+                            ProgressBar bar = new ProgressBar();
+                            Bindings.divide(bean.uploadedSizeProperty(), bean.totalSizeProperty()).addListener(new ChangeListener<Number>() {
+                                @Override
+                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                    double percent = bean.getUploadedSize() / bean.getTotalSize();
+                                    bar.setProgress(Double.parseDouble(String.format("%.1f", percent)));
                                 }
+                            });
+                            bar.progressProperty().unbind();
+                            bar.progressProperty().bind(Bindings.divide(bean.uploadedSizeProperty(), bean.totalSizeProperty()));
+
+                            Group group = new Group(bar, label);
+                            switch (bean.getOrderStatus()) {
+                                case 0:
+                                    this.setGraphic(bar);
+                                    break;
+                                case 1:
+                                    this.setGraphic(bar);
+                                    break;
+                                case 2:
+                                    this.setText("已取消");
+                                    break;
+                                case 3:
+                                    this.setText("已删除");
+                                    break;
+                                case 4:
+                                    this.setText("上传完成");
+                                    break;
                             }
+
                         }
                     }
                 };
@@ -175,10 +278,14 @@ public class CusCreateOrderTab extends Tab {
                             Bean_MakeOrder bean = (Bean_MakeOrder) this.getTableRow().getItem();
                             if (bean != null) {
                                 HBox box = new HBox();
-                                Hyperlink hlUpload = new Hyperlink("上传");
-                                Hyperlink hlCancel = new Hyperlink("取消");
+                                box.setSpacing(10);
+                                Button hlUpload = new Button("上传");
+                                hlUpload.setStyle("-fx-background-color: royalblue");
+                                Button hlCancel = new Button("取消");
+                                hlCancel.setStyle("-fx-background-color: gray");
                                 hlUpload.setOnAction(action -> {
-                                    uploadFile(bean);
+                                    bean.uploadFile();
+                                    tvOrder.refresh();
                                 });
                                 hlCancel.setOnAction(action -> {
                                     cancelTask(bean);
@@ -193,15 +300,6 @@ public class CusCreateOrderTab extends Tab {
                 };
             }
         });
-
-    }
-
-    private void doSearch() {
-        try {
-            //todo 查询记录
-        } catch (Exception e) {
-            FxmlUtil.showException(e, null);
-        }
     }
 
     //打开上传文件的选择对话框
@@ -217,7 +315,7 @@ public class CusCreateOrderTab extends Tab {
             fc.setInitialDirectory(lastOpenPath.toFile());
         }
         List<File> files = fc.showOpenMultipleDialog(MainFrame.getInstance());
-        if (!files.isEmpty()) {
+        if (files != null && !files.isEmpty()) {
             lastOpenPath = files.get(0).toPath().getParent();
             for (File file : files) {
                 String filename = file.getName();
@@ -233,59 +331,28 @@ public class CusCreateOrderTab extends Tab {
 
     //添加文件到表格中
     private void addFileToTab(File file, String orderType) {
-        Bean_MakeOrder bean = new Bean_MakeOrder();
-        bean.setFile(file);
-        bean.setOrderStatus(0);
-        bean.getOrder().setCreateTime(System.currentTimeMillis());
-        bean.getOrder().setOrderType(orderType);
-        tvOrder.getItems().add(bean);
-        tvOrder.refresh();
-    }
-
-    /**
-     * 上传文件
-     */
-    private void uploadFile(Bean_MakeOrder bean) {
-        FileInputStream ins = null;
-        FileOutputStream outs = null;
         try {
-            File file = bean.getFile();
-            if (file != null) {
-                Path path = Paths.get("E:/testFile/");
-                if (!Files.exists(path)) {
-                    Files.createDirectories(path);
+            ObservableList<Bean_MakeOrder> items = tvOrder.getItems();
+            for (Bean_MakeOrder item : items) {
+                boolean equal = item.getFile().getAbsolutePath().equals(file.getAbsolutePath());
+                if (equal) {
+                    throw new Exception("文件已经被选中,请选择其他文件");
                 }
-                ins = new FileInputStream(file);
-                outs = new FileOutputStream(path + File.separator + file.getName());
-                byte[] b = new byte[10];
-                int len;
-                while ((len = ins.read(b)) > 0) {
-                    bean.setOrderStatus(Bean_MakeOrderStatus.UPLOADING);
-                    tvOrder.refresh();
-                    outs.write(b, 0, len);
-                }
-                EJB.getOrderService().makeOrder(EJB.getSessionId(), bean.getOrder());
-                bean.setOrderStatus(Bean_MakeOrderStatus.UPLOADED);
-                tvOrder.refresh();
             }
+            Bean_MakeOrder bean = new Bean_MakeOrder();
+            bean.setFile(file);
+            bean.setOrderStatus(0);
+            bean.getOrder().setCreateTime(System.currentTimeMillis());
+            bean.getOrder().setOrderType(orderType);
+            tvOrder.getItems().add(bean);
+            tvOrder.refresh();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (ins != null) {
-                    ins.close();
-                }
-                if (outs != null) {
-                    outs.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
     /**
-     * 取消下单,同时删除文件
+     * 取消下单
      */
     private void cancelTask(Bean_MakeOrder bean) {
         tvOrder.getItems().remove(bean);

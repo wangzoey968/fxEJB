@@ -7,3 +7,10 @@ background-attachment:fixed使背景固定
 可以进行图片定位,当浏览器变宽或者变窄的时候,显示图片的中间部分
 <div style='width: 100%;height:530px;background-position:center;background-image: url("images/bannerWeb.png");'>
 </div>
+
+display属性
+none    此元素不会被显示。
+block    此元素将显示为块级元素，此元素前后会带有换行符。是让对象成为块级元素(比如a，span等)
+inline    默认。此元素会被显示为内联元素，元素前后没有换行符。
+inline-block    行内块元素。
+inherit    规定应该从父元素继承 display 属性的值.
