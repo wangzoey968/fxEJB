@@ -8,3 +8,17 @@
 查看网络配置:ifconfig
 切换用户权限:su root.如果要设置为其他用户,直接su admin
 重启网卡:service network restart
+
+linux下的查找
+find(不常用)
+一般使用whereis和locate进行查找,一般在使用locate之前要先进行更新数据库updatedb
+
+pwd(print working directory)打印当前工作空间
+
+chmod修改权限
+
+man一下可以查看命令的具体写法
+
+cat filename 显示文件的内容
+
+grep 过滤

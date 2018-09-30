@@ -4,9 +4,14 @@
 
 background-attachment:fixed使背景固定
 
+float:left 使某个div浮动显示,不换行
+
 可以进行图片定位,当浏览器变宽或者变窄的时候,显示图片的中间部分
 <div style='width: 100%;height:530px;background-position:center;background-image: url("images/bannerWeb.png");'>
 </div>
+
+定义行高,可以达到文字居中的效果
+line-height:40px
 
 display属性
 none    此元素不会被显示。
@@ -14,3 +19,22 @@ block    此元素将显示为块级元素，此元素前后会带有换行符�
 inline    默认。此元素会被显示为内联元素，元素前后没有换行符。
 inline-block    行内块元素。
 inherit    规定应该从父元素继承 display 属性的值.
+
+//使用css实现,当鼠标进入的时候进行缩放,此处定义缩放的时间设置
+img.scaleImg{
+    transition: all 0.5s ease 0s;
+    -webkit-transition: all 0.5s ease 0s;
+    -moz-transition: all 0.5s ease 0s;
+}
+//此处定义缩放的大小
+img.scaleImg {
+    transform: scale(1.04, 1.04);
+    -webkit-transform: scale(1.04, 1.04);
+    -moz-transform: scale(1.04, 1.04);
+}
+
+//悬浮的时候
+position:absolute;
+top:30px;
+left:60px
+

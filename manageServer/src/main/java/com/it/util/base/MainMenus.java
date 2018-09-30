@@ -20,6 +20,7 @@ public class MainMenus {
         subOrder.add(new MenuData("订单查询", "FUN", "打开查询订单", "显示订单查询", null));
         List<MenuData> childOrder = new ArrayList<>();
         childOrder.add(new MenuData("订单详情","FUN","打开订单详情","显示订单详情",null));
+        childOrder.add(new MenuData("订单进度","URL","/manageServer/cus/order/order.html","显示订单详情",null));
         subOrder.add(new MenuData("详情", "MENU", "", "显示订单详情", childOrder));
         MenuData order = new MenuData("订单", "MENU", "", "订单", subOrder);
         menuDatas.add(order);

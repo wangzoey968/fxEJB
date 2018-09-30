@@ -11,6 +11,7 @@ import com.it.client.util.ConfigUtil;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
+import sun.applet.Main;
 
 public class MenuHandler extends MenuItem {
 
