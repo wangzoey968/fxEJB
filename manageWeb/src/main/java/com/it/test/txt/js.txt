@@ -16,3 +16,84 @@ if( value instanceOf Array){
 
 bom对象
 window对象
+
+获取儿子级别的input
+$("parent > child")
+parent下的所有input
+$("parent ~ input")
+prev平级紧跟的input
+$(prev + input)
+
+//添加类
+$("#par").addClass("selected");
+
+//增加权重,给某个checkbox绑定click事件
+$("#modal-param .tr-price input[type='checkbox']").click(function () {})
+var count = $('input[type="checkbox"]:checked').length;
+$(".tr-price input[type='checkbox']").prop('checked',true)
+
+window.location.href = 'app/product/product.html'
+
+$( document ).ready(function() {
+    console.log('----------')
+});
+
+$(this).parent().next("span").show();
+
+$(value).find('label').eq(0).text(text);
+
+parentDiv.empty();
+
+parentDiv.html(array.join(""));
+
+$(this).text();
+
+$(this).children()[0]
+
+$("<b>hello</b>").appendTo("body");
+
+parentDiv.find(".btnCell").on("click", function () {
+    var cell = $(this);
+    if(cell.attr("disabled") === "disabled") return;
+    var paper = cell.text();
+    cell.addClass('btnCell-selected').siblings('.btnCell').removeClass('btnCell-selected');
+    if (callBack && oldPaper != paper) {
+        oldPaper = paper;
+        callBack(paper);
+    }
+});
+
+//*********************************************
+/*侧边导航栏*/
+    //左侧导航栏状态函数
+    $('#nav_right').hide();
+    function navL_active(){
+        var scrollTop = document.body.scrollTop || document.documentElement.scrollTop; //浏览器滚动条的top位置
+        if(scrollTop > 500){
+            $('#nav_right').show();
+            $('#slideNav').show();
+            if(scrollTop<900){
+                $('.navL_list1').addClass('navL_cur').siblings().removeClass('navL_cur')
+            } else if(scrollTop<1300){
+                $('.navL_list2').addClass('navL_cur').siblings().removeClass('navL_cur')
+            }else if(scrollTop<1800){
+                $('.navL_list3').addClass('navL_cur').siblings().removeClass('navL_cur')
+            }else if(scrollTop<2300){
+                $('.navL_list4').addClass('navL_cur').siblings().removeClass('navL_cur')
+            }else if(scrollTop<2800){
+                $('.navL_list5').addClass('navL_cur').siblings().removeClass('navL_cur')
+            }else if(scrollTop<3100){
+                $('.navL_list6').addClass('navL_cur').siblings().removeClass('navL_cur')
+            }
+        }else{
+            $('#nav_right').hide();
+            $('#slideNav').hide()
+        }
+    }
+    //页面加载时进行初始化
+    navL_active();
+    //页面滚动时改变状态
+    $(window).scroll(function() {
+        navL_active();
+    });
+//*********************************************
