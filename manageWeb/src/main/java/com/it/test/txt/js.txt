@@ -24,6 +24,12 @@ $("parent ~ input")
 prev平级紧跟的input
 $(prev + input)
 
+//嵌入视频
+<video src="http://www.zhundianyinwu.com/zd.mp4" controls="controls" width="600" height='400'
+    style="margin-left: 130px;margin-top: 20px;"  preload="auto"  poster="/LunaServer/cusweb/image/companyVideo.jpg">
+    您的浏览器不支持 video 标签。
+</video>
+
 //添加类
 $("#par").addClass("selected");
 
@@ -52,6 +58,11 @@ $(this).children()[0]
 
 $("<b>hello</b>").appendTo("body");
 
+某个字符串中是否含有pvc searchType.search('PVC') !== -1
+
+//根据位置进行显示
+ropeImgBox.css("left",$(this).position().left +137+ "px").show();
+
 parentDiv.find(".btnCell").on("click", function () {
     var cell = $(this);
     if(cell.attr("disabled") === "disabled") return;
@@ -64,6 +75,14 @@ parentDiv.find(".btnCell").on("click", function () {
 });
 
 //*********************************************
+
+/*enter键按下，并且搜索输入框获取焦点时，发送查询请求*/
+    $(document).keyup(function (event) {
+        if (event.keyCode === 13 && $('#keyWord')[0] === document.activeElement) {
+            $("#btn-search").trigger("click");
+        }
+    });
+
 /*侧边导航栏*/
     //左侧导航栏状态函数
     $('#nav_right').hide();
@@ -97,3 +116,55 @@ parentDiv.find(".btnCell").on("click", function () {
         navL_active();
     });
 //*********************************************
+
+var getHost = function () {
+    var host = window.location.hostname; //返回 web 主机的域名
+    var path = window.location.pathname; //返回当前页面的路径和文件名
+    var port = window.location.port; //返回 web 主机的端口 （80 或 443）
+    var protocal = window.location.protocol; //返回所使用的 web 协议（http:// 或 https://）
+    console.log(host, path, port, protocal)
+
+    //window.history.back()
+    //window.history.forward()
+    //window.history.go(-1)
+
+    //window.close()
+    var appName = window.navigator.appCodeName
+    var isCookie = window.navigator.cookieEnabled
+    var arr = window.navigator.plugins
+
+    window.setTimeout('console.log("---")', 10, null);
+
+};
+getHost()
+
+var c = 0;
+var t;
+
+function stopCount(t) {
+    console.log(c);
+    clearTimeout(t)
+}
+
+function countDown() {
+    c = c + 1;
+    console.log('now-', c);
+    t = setTimeout('countDown()', 1000);
+    if (c > 15) {
+        stopCount(t)
+    }
+}
+
+//countDown()
+//window.prompt('输入')
+
+var cookie = document.cookie.indexOf('1');
+
+function setCookie(c_name, value, expiredays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + expiredays);
+    document.cookie = c_name + "=" + escape(value) +
+        ((expiredays === null) ? "" : ";expires=" + exdate.toUTCString())
+}
+
+//********************************************

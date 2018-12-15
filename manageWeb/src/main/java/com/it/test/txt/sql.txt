@@ -1,5 +1,5 @@
 查询每科都大于80的学生姓名
-SELECT * FROM tb_sj_mapping AS map GROUP BY map.tb_SpareParts_Id HAVING MIN(tb_Job_Id)>120;
+SELECT * FROM tb_sj_mapping AS map GROUP BY map.tb_SpareParts_Id HAVING MIN(tb_Job_Id)>80;
 
 数据库查询的时候,limit 0,100,表示从起始的为值开始查询,共查询100条
 
@@ -176,3 +176,46 @@ public static List<Tb_SpareParts> listSpareParts(String sid, CusTb_SparePartsSea
 	}
 	return resList;
 }  
+
+
+//mysql循环插入数据-----------------------------------------start
+create PROCEDURE insertToUserMessage (num int)
+
+begin
+	declare i int default 0;
+	WHILE i < num do
+		INSERT INTO z_test(id,name,fenshu) VALUES(NULL,'zhang',i);
+		SET  i = i + 1;
+	END while;
+end ;
+
+call insertToUserMessage(500);
+//mysql循环插入数据--------------------------------------end
+
+SELECT
+	orderId AS '订单号',
+	orderType AS '订单类型',
+	businessManagerName AS '业务经理',
+	customerName,
+	deadlineTime AS '交货日期',
+	preSetDeliveryTime AS '预定送货时间',
+	preSetDeliveryMan AS '预定送货人',
+	productMoney AS '产品金额',
+	realityDeliveryTime AS '实际送货时间',
+	realityDeliveryMan AS '实际送货人',
+	CASE deleted
+WHEN TRUE THEN
+	'已删除'
+WHEN FALSE THEN
+	'在'
+END '是否删除',
+ CASE delivered
+WHEN TRUE THEN
+	'已送达'
+WHEN FALSE THEN
+	'未'
+ELSE
+	'数据无效'
+END '是否送达'
+FROM
+	tb_order

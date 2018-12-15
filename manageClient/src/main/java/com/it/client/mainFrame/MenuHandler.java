@@ -4,6 +4,7 @@ import com.it.api.MenuData;
 import com.it.client.WebContainer.WebTab;
 import com.it.client.order.OrderTab;
 import com.it.client.order.cus.CusCreateOrderTab;
+import com.it.client.supplier.SupplierTab;
 import com.it.client.user.AuthTab;
 import com.it.client.user.RoleTab;
 import com.it.client.user.UserTab;
@@ -71,9 +72,14 @@ public class MenuHandler extends MenuItem {
                 MainFrame.getInstance().addTab(new OrderTab());
                 break;
 
-            //财务 todo
+            //财务
             case "打开现金流":
                 MainFrame.getInstance().addTab(new OrderTab());
+                break;
+
+            //供应商管理
+            case "打开供应商设置":
+                MainFrame.getInstance().addTab(new SupplierTab());
                 break;
 
             //用户,角色,权限管理

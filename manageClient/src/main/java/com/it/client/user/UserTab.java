@@ -7,6 +7,7 @@ import com.it.client.user.dialog.infoDialog.UserInfoDialog;
 import com.it.client.user.dialog.editor.UserEditorDialog;
 import com.it.client.util.FxmlUtil;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -27,8 +28,9 @@ public class UserTab extends Tab {
     private Button btnSearch, btnAdd, btnUpdate, btnDelete;
     @FXML
     private TableView<Tb_User> tvUser;
+    /*此处使用number,不要使用long,double等类型,不然setcellvaluefactory的时候出错*/
     @FXML
-    private TableColumn<Tb_User, Long> tcId;
+    private TableColumn<Tb_User, Number> tcId;
     @FXML
     private TableColumn<Tb_User, String> tcLoginname, tcUsername, tcEmail;
     @FXML
@@ -97,16 +99,9 @@ public class UserTab extends Tab {
             alert.initOwner(MainFrame.getInstance());
             alert.showAndWait();
         });
-        tcId.setCellFactory(factory -> new TableCell<Tb_User, Long>() {
-            @Override
-            protected void updateItem(Long item, boolean empty) {
-                super.updateItem(item, empty);
-                Tb_User user = (Tb_User) this.getTableRow().getItem();
-                if (!empty && user != null) {
-                    setText(user.getId().toString());
-                }
-            }
-        });
+        tcId.setCellValueFactory(factory ->
+                new SimpleLongProperty(factory.getValue().getId())
+        );
         tcUsername.setCellFactory(factory -> new TableCell<Tb_User, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {

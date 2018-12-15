@@ -2,6 +2,7 @@ package com.it.util.base;
 
 import com.google.gson.reflect.TypeToken;
 import com.it.api.MenuData;
+import com.it.api.table.customer.Tb_Supplier;
 import com.it.api.table.user.Tb_User;
 import com.it.util.GsonUtil;
 import com.it.web.user.service.Core;
@@ -19,8 +20,8 @@ public class MainMenus {
         subOrder.add(new MenuData("下单", "FUN", "打开下单", "显示下单", null));
         subOrder.add(new MenuData("订单查询", "FUN", "打开查询订单", "显示订单查询", null));
         List<MenuData> childOrder = new ArrayList<>();
-        childOrder.add(new MenuData("订单详情","FUN","打开订单详情","显示订单详情",null));
-        childOrder.add(new MenuData("订单进度","URL","/manageServer/cus/order/order.html","显示订单详情",null));
+        childOrder.add(new MenuData("订单详情", "FUN", "打开订单详情", "显示订单详情", null));
+        childOrder.add(new MenuData("订单进度", "URL", "/manageServer/cus/order/order.html", "显示订单详情", null));
         subOrder.add(new MenuData("详情", "MENU", "", "显示订单详情", childOrder));
         MenuData order = new MenuData("订单", "MENU", "", "订单", subOrder);
         menuDatas.add(order);
@@ -46,6 +47,12 @@ public class MainMenus {
         subAccidentSet.add(new MenuData("事故类型设置", "FUN", "打开事故类型设置", "超管", null));
         MenuData accidentSet = new MenuData("损失设置", "MENU", "", "事故设置", subAccidentSet);
         menuDatas.add(accidentSet);
+
+        //供应商管理
+        ArrayList<MenuData> subSupplierSet = new ArrayList<>();
+        subSupplierSet.add(new MenuData("供应商设置", "FUN", "打开供应商设置", "供应商设置", null));
+        MenuData supplierSet = new MenuData("供应商设置", "MENU", "", "供应商设置", subSupplierSet);
+        menuDatas.add(supplierSet);
 
         //用户设置
         List<MenuData> subUserSet = new ArrayList<>();

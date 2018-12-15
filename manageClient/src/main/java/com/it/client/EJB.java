@@ -2,6 +2,7 @@ package com.it.client;
 
 import com.it.api.CoreServiceLocal;
 import com.it.api.OrderServiceLocal;
+import com.it.api.SupplierServiceLocal;
 import com.it.api.UserServiceLocal;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.TaskUtil;
@@ -119,6 +120,19 @@ public class EJB {
         return coreService;
     }
 
+    private static SupplierServiceLocal supplierService = null;
+    private static Long supplierServiceTime = 0L;
+
+    public static SupplierServiceLocal getSupplierService() {
+        supplierServiceTime = System.currentTimeMillis();
+        try {
+            supplierService = (SupplierServiceLocal) context.lookup("java:manageServer//SupplierServiceRemote!com.it.api.SupplierServiceLocal");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return supplierService;
+    }
+
     public static void startup() {
         getCoreService();
         TaskUtil.taskPool.scheduleWithFixedDelay(new Runnable() {
@@ -128,6 +142,7 @@ public class EJB {
                     Long now = System.currentTimeMillis();
                     if (userService != null && (now - userServiceTime > testTime)) getUserService();
                     if (orderService != null && (now - orderServiceTime > testTime)) getOrderService();
+                    if (supplierService != null && (now - supplierServiceTime > testTime)) getSupplierService();
                     //......
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -36,10 +36,10 @@ import java.util.Set;
 public class CommonController {
 
     @Autowired
-    UserServiceInter userServiceImpl;
+    private UserServiceInter userServiceImpl;
 
     @Autowired
-    Gson gson;
+    private Gson gson;
 
     /**
      * 直接在Controller中写的测试
@@ -54,7 +54,7 @@ public class CommonController {
 
     @RequestMapping("/views/{path}")
     public String common(@PathVariable("path") String path) {
-        System.out.println("请求路径是:"+path);
+        System.out.println("请求路径是:" + path);
         return path;
     }
 
