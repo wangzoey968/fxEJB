@@ -1,7 +1,3 @@
-new Alert(Alert.AlertType.INFORMATION, "编辑之前请先选中").showAndWait();
-
-JobDialog.newInstance().load(job)
-
 this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, {
 	it.consume()//清除事件
 	Tb_whWare ware = tbWare.getSelectionModel().getSelectedItem()
@@ -155,3 +151,81 @@ m1.setOnAction {
 	}
 }
 
+////////////////////////////////////////////////////////////////////////
+屏幕的左上角为(0.0)原点
+stage>scene>node //舞台>场景>节点
+
+new webview().getWebEngine().loadcontent()
+
+new htmleditor().gettext()获取网页编辑器的文本
+new htmleditor().gethtmltext()获取带有页面标签的文本字符串
+
+退出时system.exit(0)
+
+Menu菜单
+    new Menu().setaccelerator(keycombination.keycombination("ctrl+x"))//设置快捷键
+Menuitem//菜单子项
+CheckMenuItem//菜单中可以多选的item
+Contextmenu,//上下文,鼠标右键显示的内容
+
+Clipboard.getsystemclipboard()//获取系统的剪切板
+new Clipboardcontent()//创建剪切板
+
+Cursor.hand//手型光标
+MouseButton.enumeration
+MouseEvent.enumeration
+WindowEvent.enumeration
+TimeLine.indefinite//无穷大,动画的时候用
+
+new LinearGradient()线型梯度
+new Button.fire()//触发
+Event.fireEvent(a,b)//触发
+fxcollection.observablearraylist()
+setmousetransparent()设置当前页面是否对鼠标不起作用
+initmodality()设置模态框样式
+pickupbounds()是否包括边界(把边界计算在内)
+
+label
+textfield
+textarea
+button
+checkbox
+radiobutton
+separator//分隔符
+splitmenubutton//分离式菜单按钮,可以直接写在toolbar中,点击后直接执行
+combobox//组合下拉框,点击后,相当于选中某个item
+passwordtextfield
+togglegroup,togglebutton
+tootip//提示
+alert//弹框
+notifaction//提醒
+dialog//对话框
+group
+tableview,tablecell
+treeview,treeitem
+listview
+imageview
+gridpane//new inset()设置间距
+slider
+
+tablecolumn.setsorttype()
+tableview.setcellfactory()
+tableview.setcellvaluefactory()
+
+//设置图片
+Image image=new Image(this.getclass().getresourceasstream("logo.ico"))
+new ImageView(image)
+
+//缩放
+label.setscalex(1.5)//放大1.5倍
+label.setgraphic(new image("back.png"))//设置图像
+label.setEffect(new DropShadow())//设置效果
+
+//滑块
+slider.setmax()//设置最大值
+slider.setmin()//设置最小值
+slider.setshowticklabels(true)//是否显示标签
+slider.setshowtickmarks(true)//设置是否显示刻度
+slider.setmajormarkunit(50)//显示主刻度单位距离
+slider.setminortickcount(5)//设置次刻度之间的间距
+slider.setblockincrement(10)//设置每次移动距离

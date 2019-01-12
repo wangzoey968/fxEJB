@@ -66,6 +66,10 @@ public class UserDao {
         Tb_User user = new Tb_User();
         user.setId(userId);
         session.refresh(user, LockMode.UPGRADE_NOWAIT);
+        //清除
+        session.evict(user);
+        //
+        session.load(Tb_User.class, 1, LockMode.UPGRADE);
         user.setEnable(isEnable);
         session.update(user);
         return user;

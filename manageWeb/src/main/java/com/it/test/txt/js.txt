@@ -3,8 +3,7 @@ Number(),ParseInt(),ParseFloat()
 
 js中使用方括号来访问对象的属性
 常用person[name]
-或者使用
-person.name
+或者使用person.name
 
 判断是否是某种数据类型
 if( value instanceOf Array){
@@ -40,7 +39,7 @@ $(".tr-price input[type='checkbox']").prop('checked',true)
 
 window.location.href = 'app/product/product.html'
 
-$( document ).ready(function() {
+$(document).ready(function() {
     console.log('----------')
 });
 
@@ -52,6 +51,42 @@ parentDiv.empty();
 
 parentDiv.html(array.join(""));
 
+//数组删除制定index的元素
+var arr=[1,2,3,5,6]
+arr.splice(2,1)//删除index是2的元素,如果第二个参数是2就表示删除两个元素
+
+//元素是否在某个array中,返回-1或者所在的index
+$.inArray(element,array);
+
+//使用array向后台传递值
+var arr=new Array();
+arr.push(T)
+
+//使用set向后台传递值
+var set=new Set()
+set.add(T)
+
+//map
+var map=new Map()
+map.set(T1,T2);
+
+//向后台传递map,后台再进行转化
+var selections = $('#table-customer').bootstrapTable('getSelections');
+var obj = {};
+$.each(selections, function (index, element) {
+    //核心步骤
+    obj[element.tel] = element.customerName
+});
+var post = {};
+//转化为json字符串
+post.map = JSON.stringify(obj);
+var temp = $('#template').val();
+$.each(rows, function (index, element) {
+    if (element.templateContent === temp) {
+        post.id = element.id
+    }
+});
+
 $(this).text();
 
 $(this).children()[0]
@@ -59,6 +94,8 @@ $(this).children()[0]
 $("<b>hello</b>").appendTo("body");
 
 某个字符串中是否含有pvc searchType.search('PVC') !== -1
+
+
 
 //根据位置进行显示
 ropeImgBox.css("left",$(this).position().left +137+ "px").show();
