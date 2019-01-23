@@ -77,23 +77,3 @@ class PaperDaoImpl implements PaperDao {
     private SessionFactory sessionFactory
 	...
 }
-
-
-hibernate表中的注解
-表对应的类名上的注解
-@AutoClone
-@Entity
-@Table(indexes = [
-        @Index(columnList = "priceListParamId"),
-        @Index(columnList = "amount")],					//索引
-        uniqueConstraints = @UniqueConstraint(columnNames = ["priceListParamId", "amount"]))//联合约束
-class Tb_P_fengTao_PriceListMoney implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)//主键生成策略
-    Long id
-	
-	@Column(length = 16, nullable = false,unique=true)	//是否唯一
-    String schemeName 
-	
-}

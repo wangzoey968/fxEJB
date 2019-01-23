@@ -57,12 +57,6 @@ session.createQuery("FROM Tb_User WHERE userName like :keyword").setParameter('k
 
 在数据库中执行条件的时候某列例如 where username=null 和 where username is null(列里面的值为null空)效果是不同的
 
-SELECT p,pfm,f FROM Tb_P_Papers p " +
-		" LEFT JOIN Tb_P_Papers_FullSize_Mapping pfm ON p.id=pfm.papers_id " +
-		" LEFT JOIN Tb_P_Papers_FullSize f ON f.id=pfm.fullSize_id " +
-		" WHERE p.orderType=:orderType
-
-
 数据库的粒度
 表锁,页锁(一般是2-16k),行锁
 
@@ -118,6 +112,11 @@ MyIASM ,MySql的默认引擎，但不提供事务的支持，也不支持行级�
 
 Myisam 只支持表级锁，InnoDB支持行级锁 添加了(行级锁/表级锁)锁的数据不能被其它事务再锁定，也不被其它事务修改（修改、删除） 。是表级锁时，不管是否查询到记录，都会锁定表。
 
+for update 在sql语句最后加上这个表示锁定某些条记录
+
+insert产生表级锁
+update产生行级锁
+
 LockMode中的锁的模式
 none,表示当缓存中存在对象,直接返回对象的引用,否则到数据库中去select.此为默认值
 read,表示不论缓存中是否有该对象,都到数据库中去查找.如果设置了版本检查,就和内存中的对象版本比较.
@@ -126,30 +125,6 @@ upgrade_nowait,和LockMode.UPGRADE具有同样功能,此外,对于Oracle等支�
 wait,表示请求的资源被锁定未释放的时候,进行等待(blocking),直到资源被释放或者用户强制结束命令.
 write,这种模式仅供hibernate内部使用,程序中不应该出现.
 force,强制更新数据库的对象的版本属性,表明当前事物已经更新了这个对象.
-
-
-	查询带有group by和where
-	List<Bean_CountDelivery> list = new ArrayList<>();
-	Hibernate.openSession {
-		Session session ->
-			session.createQuery("SELECT preSetDeliveryMan,realityDeliveryMan,productType,count(*),sum(productMoney) " +
-					" FROM Tb_Order WHERE " +
-					(dateType == '下单时间' ? " createTime >= :dateFrom AND createTime <=:dateTo " : "") +
-					(dateType == '预设配送时间' ? " preSetDeliveryTime >= :dateFrom AND preSetDeliveryTime <=:dateTo " : "") +
-					(skipReworkOrder ? " AND tagRework=false " : "") +
-					" GROUP BY preSetDeliveryMan,realityDeliveryMan,productType ")
-					.setParameter('dateFrom', Timestamp.valueOf("${dateFrom} 00:00:00.000"))
-					.setParameter('dateTo', Timestamp.valueOf("${dateTo} 23:59:59.000"))
-					.list().each {
-				list.add(new Bean_CountDelivery(
-						preSetDeliveryMan: it[0] as String,
-						realityDeliveryMan: it[1] as String,
-						productType: it[2] as String,
-						orderCount: it[3] as Integer,
-						productMoneySum: String.format('%.2f', it[4] as Double).toDouble()
-				))
-			}
-	}
 
 		session.createQuery("SELECT o FROM Tb_Order o LEFT JOIN Tb_SpareParts sp ON sp.orderId=o.orderId " +
 				" LEFT JOIN Tb_MusicWire mw ON sp.id=mw.tb_SpareParts_Id " +
@@ -163,31 +138,6 @@ force,强制更新数据库的对象的版本属性,表明当前事物已经更�
 				.setParameter('keyword', "%" + keyword).list().each { Tb_Order order ->
 			if (list.find { it.id == order.id } == null) list.add(order);
 		}
-
-
-//查询tb_spareparts和其中的tb_job
-//param中只含有一个orderId
-public static List<Tb_SpareParts> listSpareParts(String sid, CusTb_SparePartsSearchParam param) {
-	def mySelf = RmiUtil.cusUserService.getCusUser(sid);
-	List<Tb_SpareParts> resList = new ArrayList<Tb_SpareParts>()
-	Hibernate.openSession {
-		Session session ->
-			session.createQuery(" select sp from Tb_SpareParts sp where sp.orderId in (:orderIds) ")
-					.setParameter("orderIds", param.orderIds).list().each {
-				Tb_SpareParts sp=it as Tb_SpareParts;
-				resList.add(sp)
-			}
-	//注意需要什么对象就直接select对象,不然容易报转换异常
-	//在left join查询的时候,各个表的属性都会查询出来,要注意防止转化异常
-			session.createQuery(" select job FROM Tb_Job job LEFT JOIN Tb_MusicWire mw ON job.id = mw.tb_Job_Id LEFT JOIN Tb_SpareParts sp ON mw.tb_SpareParts_Id = sp.id WHERE sp.orderId IN (:ids) ")
-					.setParameter("ids", param.orderIds).list().each {
-					Tb_Job job = it as Tb_Job
-					resList.each {it.jobList.add(job)}
-			}
-	}
-	return resList;
-}  
-
 
 //mysql循环插入数据-----------------------------------------start
 create PROCEDURE insertToUserMessage (num int)

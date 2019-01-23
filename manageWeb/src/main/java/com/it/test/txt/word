@@ -8,3 +8,6 @@ descendant 子孙
 axis 轴
 defered 延迟
 mandatory 托管的
+scheduler调度器
+marshaling 汇集
+encapsulation封装

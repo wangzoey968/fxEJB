@@ -1,16 +1,16 @@
 //原生js,保存文件
 <script type="text/javascript">
-        var arr= [1,2,3];
-        var isIE = (navigator.userAgent.indexOf('MSIE') >= 0);
-        if (isIE) {
-            var strHTML = 'txt';
-            var winSave = window.open();
-            winSave.document.open("text","utf-8");
-            winSave.document.write(arr);
-            winSave.document.execCommand("SaveAs",true,"code.txt");
-            winSave.close();
-        } else {
-            var mimeType =  'text/plain';
-            document.getElementById('createInvote').setAttribute('href', 'data:' + mimeType  +  ';charset=utf-8,' + encodeURIComponent(arr));
-        }
-    </script>
+    var arr= [1,2,3];
+    var isIE = (navigator.userAgent.indexOf('MSIE') >= 0);
+    if (isIE) {
+        var strHTML = 'txt';
+        var winSave = window.open();
+        winSave.document.open("text","utf-8");
+        winSave.document.write(arr);
+        winSave.document.execCommand("SaveAs",true,"code.txt");
+        winSave.close();
+    } else {
+        var mimeType =  'text/plain';
+        document.getElementById('createInvote').setAttribute('href', 'data:' + mimeType  +  ';charset=utf-8,' + encodeURIComponent(arr));
+    }
+</script>

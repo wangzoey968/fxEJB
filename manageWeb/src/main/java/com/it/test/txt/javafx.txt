@@ -221,7 +221,7 @@ label.setscalex(1.5)//放大1.5倍
 label.setgraphic(new image("back.png"))//设置图像
 label.setEffect(new DropShadow())//设置效果
 
-//滑块
+//滑块,tick刻度,minortick最小的刻度
 slider.setmax()//设置最大值
 slider.setmin()//设置最小值
 slider.setshowticklabels(true)//是否显示标签

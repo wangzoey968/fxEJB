@@ -10,6 +10,8 @@ Class.getResource("/") 返回的是classpath的位置
 getClassLoader().getResource("")  返回的是classpath的位置
 getClassLoader().getResource("/")  错误的!!
 
+请求时常用的类httpurlconnection,url
+
 system.getproperty("user.dir")代表是进入到该模块下的目录
 
 ///使用文件管理器打开某个文件

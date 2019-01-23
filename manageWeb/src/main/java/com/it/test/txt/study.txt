@@ -95,9 +95,6 @@ Jini(Java Intelligent Network Infrastructure),(网络基础)JINI查询服务
 
 java没有c++中的作用域运算符"::"
 
-scheduler调度器
-marshaling 汇集
-encapsulation封装
 **************************************************************************************
 head first java
 

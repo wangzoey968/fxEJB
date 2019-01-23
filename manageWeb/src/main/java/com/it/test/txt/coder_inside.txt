@@ -1,4 +1,4 @@
-关键字 instanceOf 判断是否是某类的示例.java中保留的关键字
+关键字 instanceOf 判断是否是某类的实例.java中保留的关键字
 treemap是红黑树的具体实现
 
 单元测试
