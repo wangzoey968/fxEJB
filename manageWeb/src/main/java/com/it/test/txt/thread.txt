@@ -1,0 +1,35 @@
+java内存结构:堆内存(heap),栈(stack),方法区
+
+heap包括年轻代,老年代
+--------年轻代:eden,from survivor,to survivor
+--------老年代:在年轻代中经历了N次垃圾回收后仍然存活的对象，就会被放到年老代中
+Java堆唯一的目的是存放对象实例，几乎所有的对象实例和数组都在这里
+
+stack又分为java虚拟机栈和本地方法栈主要用于方法的执行。
+
+方法区存储类信息、常量、静态变量等数据，是线程共享的区域
+
+JDK1.6之前字符串常量池位于方法区之中。JDK1.7字符串常量池已经被挪到堆之中。
+
+
+CAS（compare and swap）的缩写，中文翻译成比较并交换。
+整个java.util.concurrent都是建立在CAS之上的，因此对于synchronized阻塞算法，J.U.C在性能上有了很大的提升
+CAS是项乐观锁技术，当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败
+使用CAS在线程冲突严重时，会大幅降低程序性能；CAS只适合于线程冲突较少的情况使用。
+synchronized在jdk1.6之后，已经改进优化。synchronized的底层实现主要依靠Lock-Free的队列，
+基本思路是自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量。在线程冲突较少的情况下，可以获得和CAS类似的性能；
+而线程冲突严重的情况下，性能远高于CAS。
+
+blockquence//阻塞队列
+synchronized的升级版是reentrantlock//锁
+countdownlatch//
+
+所以无特殊情况下，推荐使用synchronized
+
+当我们需要获取线程的执行结果时，就需要用到它们。Callable用于产生结果，Future用于获取结果。
+Callable 是一个接口，它只包含一个call()方法。Callable是一个返回结果并且可能抛出异常的任务。
+为了便于理解，我们可以将Callable比作一个Runnable接口，而Callable的call()方法则类似于Runnable的run()方法。
+可以直接new callable()然后使用executors.submit(call),启动获取结果
+
+FutureTask可用于异步获取执行结果或取消执行任务的场景。可以在外部通过FutureTask的get方法异步获取执行结果，
+FutureTask还可以确保即使调用了多次run方法，它都只会执行一次Runnable或者Callable任务，

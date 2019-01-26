@@ -1,3 +1,6 @@
+javafx中可以设计一个类,继承service(fx包下的),进行上传进度的控制
+executors,可以用来设计线程池
+
 this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, {
 	it.consume()//清除事件
 	Tb_whWare ware = tbWare.getSelectionModel().getSelectedItem()
