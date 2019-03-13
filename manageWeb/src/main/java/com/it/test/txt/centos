@@ -23,6 +23,8 @@ cat filename 显示文件的内容
 
 grep 过滤
 
+免费的dns,114.114.114.114和114.114.115.115
+
 vmnet0是桥接模式使用的,vmnet1是仅主机使用时的,vmnet8是nat模式使用的
 bootproto='static'静态ip
 dhcp也就是动态分配ip地址,一般在使用nat模式的时候取消勾选

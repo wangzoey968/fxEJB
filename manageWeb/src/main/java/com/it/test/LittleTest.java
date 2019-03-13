@@ -20,12 +20,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by wangzy on 2018/5/5.
@@ -142,7 +140,7 @@ public class LittleTest {
 
     @Test
     public void ss11(){
-        System.out.println(System.getProperty("webModuleRootDir")+"src/main/java/com/it/util/ftpServer/ConfigServer.xml");
+        String s = DigestUtils.md5Hex("123");
     }
 
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane fx:id="apRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="357.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox fx:id="hbImgBar" prefHeight="357.0" prefWidth="700.0"/>
+        <StackPane layoutY="278.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0"
+                   AnchorPane.rightAnchor="-1.0">
+            <children>
+                <VBox styleClass="bottomBarBackground"/>
+                <VBox alignment="TOP_CENTER" layoutY="281.0" prefWidth="600.0" spacing="5.0"
+                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                      StackPane.alignment="BOTTOM_CENTER">
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <HBox fx:id="hbToggleBar" alignment="CENTER_LEFT" spacing="3.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <ToggleButton fx:id="sw0" mnemonicParsing="false" selected="true"
+                                                      styleClass="img-switch" text="1">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="imgSwitch"/>
+                                            </toggleGroup>
+                                        </ToggleButton>
+                                        <ToggleButton fx:id="sw1" mnemonicParsing="false" styleClass="img-switch"
+                                                      text="2" toggleGroup="$imgSwitch"/>
+                                        <ToggleButton fx:id="sw2" mnemonicParsing="false" styleClass="img-switch"
+                                                      text="3" toggleGroup="$imgSwitch"/>
+                                        <ToggleButton fx:id="sw3" mnemonicParsing="false" styleClass="img-switch"
+                                                      text="4" toggleGroup="$imgSwitch"/>
+                                    </children>
+                                </HBox>
+                                <Hyperlink fx:id="hlForgetPassword" alignment="CENTER" minWidth="65.0" text="找回密码">
+                                    <padding>
+                                        <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0"/>
+                                    </padding>
+                                </Hyperlink>
+                            </children>
+                        </HBox>
+                        <GridPane alignment="CENTER_RIGHT" hgap="5.0" vgap="5.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+                                <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+                                <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0"/>
+                                <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0"/>
+                                <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
+                            </rowConstraints>
+                            <children>
+                                <Label text="手机号："/>
+                                <ComboBox fx:id="cmbUsername" editable="true" minHeight="25.0" minWidth="140.0"
+                                          prefHeight="25.0" prefWidth="140.0" GridPane.columnIndex="1"/>
+                                <Label text="密　码：" GridPane.columnIndex="2"/>
+                                <PasswordField fx:id="iptPassword" minHeight="25.0" minWidth="110.0" prefHeight="25.0"
+                                               prefWidth="110.0" GridPane.columnIndex="3"/>
+                                <CheckBox fx:id="cbRem" mnemonicParsing="false" text="记住密码" GridPane.columnIndex="4"/>
+                                <Button fx:id="btnLogin" minHeight="25.0" minWidth="65.0" mnemonicParsing="false"
+                                        text="登录" GridPane.columnIndex="5"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </GridPane>
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+                    </padding>
+                </VBox>
+            </children>
+        </StackPane>
+        <Button fx:id="btnClose" layoutX="531.0" layoutY="3.0" mnemonicParsing="false"
+                style="-fx-background-color: none;" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+            <graphic>
+                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@close.png"/>
+                    </image>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </ImageView>
+            </graphic>
+            <padding>
+                <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0"/>
+            </padding>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </Button>
+    </children>
+</AnchorPane>
+

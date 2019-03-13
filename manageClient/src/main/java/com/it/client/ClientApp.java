@@ -1,5 +1,6 @@
 package com.it.client;
 
+import com.it.client.login.LoginStage;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.mainFrame.RegComputer;
 import com.it.client.mainFrame.ToolBarIcon;
@@ -17,8 +18,9 @@ public class ClientApp extends Application {
             ConfigUtil.init();
             HttpClient.init();
             EJB.startup();
-            MainFrame.getInstance().init();
-            MainFrame.getInstance().show();
+            //MainFrame.getInstance().init();
+            //MainFrame.getInstance().show();
+            LoginStage.getInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }

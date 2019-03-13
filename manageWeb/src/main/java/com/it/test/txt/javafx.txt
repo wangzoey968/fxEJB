@@ -1,6 +1,44 @@
 javafx中可以设计一个类,继承service(fx包下的),进行上传进度的控制
 executors,可以用来设计线程池
 
+//图标
+categoryAxis
+numberAxis
+
+//快捷键
+keycombination
+public void keyEvent(KeyEvent event){
+    new menuitem().setaccelerator(new keycodecombination(keycode.c,keycombination.shift_down,keycombination.ctrl_down))
+}
+
+//动画中的关键帧
+keyframe
+
+//javafx的layout
+A容器包含B,C,D节点
+A的border边框
+A的内部紧挨A的边框的距离为padding
+B,C,D的外部到容器或其他节点的距离为margin
+B,C,D之间的间距为spacing
+
+
+//截图
+public javafx.scene.image.Image ss() {
+    double dpi = Screen.getPrimary().getDpi();
+    LocalDate now = LocalDate.now();
+    Worker.State state = Worker.State.SUCCEEDED;
+    WritableImage image = null;
+    try {
+        GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Robot robot = new Robot(environment.getScreenDevices()[0]);
+        BufferedImage capture = robot.createScreenCapture(environment.getMaximumWindowBounds());
+        image = SwingFXUtils.toFXImage(capture, null);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return image;
+}
+
 this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, {
 	it.consume()//清除事件
 	Tb_whWare ware = tbWare.getSelectionModel().getSelectedItem()
@@ -126,20 +164,6 @@ cmbUsername.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 	}
 });
 
-
-//右键选项
-new AuthedMenu('仓库设置', '显示仓库首页', null,
-	new AuthedMenuItem('品牌设置', '显示仓库首页', null, {
-		PaperParamEditor.newInstance().showAndWait()
-	}),
-	new AuthedMenuItem('供应商设置', '显示仓库首页', null, {
-		SupplierViewer.newInstance().showAndWait()
-	}),
-	new AuthedMenuItem('领料单位设置', '显示仓库首页', null, {
-		ConsumerViewer.newInstance().showAndWait()
-	})
-),
-
 rowContextMenu.items.add(new Menu('定金', null, m401, m402))
 			rowContextMenu.items.add(new SeparatorMenuItem())
 			rowContextMenu.items.add(m200)   //修改交货时间
@@ -180,11 +204,13 @@ MouseEvent.enumeration
 WindowEvent.enumeration
 TimeLine.indefinite//无穷大,动画的时候用
 
+ambientgradient环绕
 new LinearGradient()线型梯度
 new Button.fire()//触发
 Event.fireEvent(a,b)//触发
 fxcollection.observablearraylist()
 setmousetransparent()设置当前页面是否对鼠标不起作用
+setmnenoricparsing(true)设置是否(alt和首字母)调用
 initmodality()设置模态框样式
 pickupbounds()是否包括边界(把边界计算在内)
 

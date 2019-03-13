@@ -11,3 +11,8 @@ mandatory 托管的
 scheduler调度器
 marshaling 汇集
 encapsulation封装
+diffuse 散射
+affine仿射
+interpolate插入
+specular反射
+ambient 环绕的,周围的
