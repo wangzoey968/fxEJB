@@ -4,6 +4,7 @@ import com.it.api.table.Tb_Computer;
 import com.it.api.table.user.*;
 import com.it.util.HibernateUtil;
 import com.it.web.user.dao.UserDao;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.junit.Test;
 
@@ -318,6 +319,16 @@ public class UserService {
         session.getTransaction().begin();
         session.delete(userAuth);
         session.getTransaction().commit();
+    }
+
+    public static Tb_User login(String username, String password) throws Exception {
+        Session session = HibernateUtil.openSession();
+        Tb_User user = (Tb_User) session.createQuery("from Tb_User where loginname=:un").setParameter("un", username).uniqueResult();
+        if (user == null) throw new Exception("用户不存在");
+        if (!user.getPassword().equals(DigestUtils.md5Hex(password))) {
+            throw new Exception("密码或用户名输入错误");
+        }
+        return user;
     }
 
 }

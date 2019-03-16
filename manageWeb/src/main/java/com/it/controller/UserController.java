@@ -112,7 +112,7 @@ public class UserController {
     public byte[] userImg(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Resource resource = new ClassPathResource("/headIcon.jpg");
         byte[] bytes = FileCopyUtils.copyToByteArray(resource.getInputStream());
-        //File sss = new File(Paths.get("sss").toUri().toURL().toString());
+        //file sss = new file(Paths.get("sss").toUri().toURL().toString());
         return bytes;
     }
 

@@ -25,7 +25,7 @@ public class PrintTest extends JFrame implements ActionListener, Printable {
     private JButton printTextButton = new JButton("Print Text");
     private JButton previewButton = new JButton("Print Preview");
     private JButton printText2Button = new JButton("Print Text2");
-    private JButton printFileButton = new JButton("Print File");
+    private JButton printFileButton = new JButton("Print file");
     private JButton printFrameButton = new JButton("Print Frame");
     private JButton exitButton = new JButton("Exit");
     private JLabel tipLabel = new JLabel("");

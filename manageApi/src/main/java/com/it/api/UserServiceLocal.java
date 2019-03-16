@@ -58,4 +58,7 @@ public interface UserServiceLocal {
 
     public void deleteUserAuth(String sessionId, Long userId, Long authId) throws Exception;
 
+    //登录
+    public Tb_User login(String username, String password) throws Exception;
+
 }

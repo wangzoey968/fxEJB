@@ -128,4 +128,10 @@ public class UserServiceRemote implements UserServiceLocal {
     public void deleteUserAuth(String sessionId, Long userId, Long authId) throws Exception {
         UserService.deleteUserAuth(Core.getUser(sessionId), userId, authId);
     }
+
+    @Override
+    public Tb_User login(String username, String password) throws Exception {
+        Tb_User user = UserService.login(username, password);
+        return user;
+    }
 }

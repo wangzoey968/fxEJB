@@ -9,6 +9,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebEvent;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Level;
@@ -141,8 +143,10 @@ public class LittleTest {
     }
 
     @Test
-    public void ss11(){
-        System.out.println(System.getProperty("webModuleRootDir")+"src/main/java/com/it/util/ftpServer/ConfigServer.xml");
+    public void ss11() {
+        String s = DigestUtils.md5Hex("123");
+        System.out.println(System.getProperty("user.dir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml");
+
     }
 
 }

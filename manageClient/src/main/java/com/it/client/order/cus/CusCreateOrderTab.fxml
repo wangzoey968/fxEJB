@@ -14,21 +14,23 @@
             <children>
                 <ToolBar maxHeight="40.0" minHeight="40.0" prefHeight="40.0" HBox.hgrow="ALWAYS">
                     <items>
-                        <Label graphicTextGap="0.0" text="查询传单记录："/>
-                        <DatePicker fx:id="dpFrom" prefWidth="120.0"/>
-                        <Label text="--"/>
-                        <DatePicker fx:id="dpTo" prefWidth="120.0"/>
-                        <Button fx:id="btnSearch" mnemonicParsing="false" prefWidth="60.0"
-                                style="-fx-text-fill: Green; -fx-border-color: Green; -fx-border-radius: 3;" text="查询"/>
-                        <HBox HBox.hgrow="ALWAYS"/>
-                        <Button fx:id="btnMingPianOrder" mnemonicParsing="false" text="名片下单"/>
-                        <Button fx:id="btnDanYeOrder" mnemonicParsing="false" text="单页下单"/>
+                        <Label graphicTextGap="0.0" text="查询传单记录：" />
+                        <DatePicker fx:id="dpFrom" prefWidth="120.0" />
+                        <Label text="--" />
+                        <DatePicker fx:id="dpTo" prefWidth="120.0" />
+                        <Button fx:id="btnSearch" mnemonicParsing="false" prefWidth="60.0" style="-fx-text-fill: Green; -fx-border-color: Green; -fx-border-radius: 3;" text="查询" />
+                        <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="lbText" text="Label" />
+                     </children></HBox>
+                        <Button fx:id="btnMingPianOrder" mnemonicParsing="false" text="名片下单" />
+                        <Button fx:id="btnDanYeOrder" mnemonicParsing="false" text="单页下单" />
                     </items>
                     <HBox.margin>
-                        <Insets/>
+                        <Insets />
                     </HBox.margin>
                     <padding>
-                        <Insets left="20.0" right="20.0"/>
+                        <Insets left="20.0" right="20.0" />
                     </padding>
                 </ToolBar>
             </children>
@@ -37,49 +39,49 @@
             <columns>
                 <TableColumn fx:id="tcCreateTime" prefWidth="110.0" text="创建时间">
                     <cellValueFactory>
-                        <PropertyValueFactory property="createTime"/>
+                        <PropertyValueFactory property="createTime" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcFileName" prefWidth="370.0" text="文件名">
                     <cellValueFactory>
-                        <PropertyValueFactory property="fileName"/>
+                        <PropertyValueFactory property="fileName" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcOrderType" prefWidth="90.0" text="订单类型">
                     <cellValueFactory>
-                        <PropertyValueFactory property="orderType"/>
+                        <PropertyValueFactory property="orderType" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcParams" prefWidth="197.0" text="参数">
                     <cellValueFactory>
-                        <PropertyValueFactory property="productDesc"/>
+                        <PropertyValueFactory property="productDesc" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcAmount" prefWidth="75.0" text="数量">
                     <cellValueFactory>
-                        <PropertyValueFactory property="amount"/>
+                        <PropertyValueFactory property="amount" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcMoney" prefWidth="70.0" text="金额">
                     <cellValueFactory>
-                        <PropertyValueFactory property="productMoney"/>
+                        <PropertyValueFactory property="productMoney" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="tcStatus" prefWidth="130.0" text="状态"/>
-                <TableColumn fx:id="tcOperate" prefWidth="100.0" text="操作"/>
+                <TableColumn fx:id="tcStatus" prefWidth="130.0" text="状态" />
+                <TableColumn fx:id="tcOperate" prefWidth="100.0" text="操作" />
             </columns>
         </TableView>
         <HBox VBox.vgrow="NEVER">
             <children>
-                <ToolBar prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                <ToolBar prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                 <ToolBar prefHeight="40.0">
                     <items>
-                        <Label text="上传速度"/>
-                        <Label fx:id="lbSpeed" text="0"/>
-                        <Label text="KB/S"/>
+                        <Label text="上传速度" />
+                        <Label fx:id="lbSpeed" text="0" />
+                        <Label text="KB/S" />
                     </items>
                     <padding>
-                        <Insets right="30.0"/>
+                        <Insets right="30.0" />
                     </padding>
                 </ToolBar>
             </children>

@@ -18,7 +18,7 @@ public class MyThread implements Runnable {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MyThread thread = new MyThread();
         thread.run();
     }
