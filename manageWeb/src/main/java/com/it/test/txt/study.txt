@@ -2,8 +2,6 @@
 当前页码:pageNum;
 每页条数:pageSize;
 
-可以用sql语句解决的问题就不要用java代码去解决
-
 if/while
     break,是指终止本次循环,不进行后续循环
     continue,终止本次循环,进行下次循环
@@ -26,11 +24,11 @@ finalize()方法是由垃圾回收器调用的
 java中的所有异常都是从throwable接口实现而来的
 
 排序
-1.使用collections进行排序,但是list中的element必须是string类型
+1.使用collections进行排序,但是list中的element必须是string类型,否则排序是根据地址值进行的
   collections.sort(list)
   collections.reverse(list)
 2.没有限制(用的较少)
-  要比较的类implement comparable接口,并在compareTo中进行比较,返回负数则表示传入的类大于该类
+  要比较的类implement comparable接口,并在compareTo中进行比较,返回负数则表示传入的类大于该类,需要比较的时候调用collections.sort(list)
 3.没有限制
   在需要比较时new comparator(),调用compareTo()
 

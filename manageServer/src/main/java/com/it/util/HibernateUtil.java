@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 /**
  * 正常使用时,先获取session,然后如果是对表进行增删改,就先开始事务,操作完毕后提交事务
  * 如果只是查询,不用开启事务,也不用提交事务;
- *
+ * <p>
  * 如果使用sessionFactory进行测试,先进行initSessionFactory,再获取session,然后操作
  */
 public class HibernateUtil {
@@ -60,10 +60,22 @@ public class HibernateUtil {
         return jdbcTemplate;
     }
 
+    //增删改
     public static Session openSession() {
         if (session == null) {
             session = sessionFactory.openSession();
         }
+        session.clear();
+        return session;
+    }
+
+    //查,只读
+    public static Session openSessionRead() {
+        if (session == null) {
+            session = sessionFactory.openSession();
+            session.setDefaultReadOnly(true);
+        }
+        session.clear();
         return session;
     }
 

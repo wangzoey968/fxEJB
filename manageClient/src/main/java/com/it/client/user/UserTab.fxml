@@ -10,20 +10,20 @@
     <children>
         <ToolBar>
             <items>
-                <TextField fx:id="tfKey" />
-                <Button fx:id="btnSearch" mnemonicParsing="false" text="搜索" />
-                <Button fx:id="btnAdd" mnemonicParsing="false" text="添加" />
-                <Button fx:id="btnUpdate" mnemonicParsing="false" text="修改" />
-                <Button fx:id="btnDelete" mnemonicParsing="false" text="删除" />
+                <Button fx:id="btnDelete" mnemonicParsing="false" text="删除"/>
+                <Button fx:id="btnUpdate" mnemonicParsing="false" text="修改"/>
+                <TextField fx:id="tfKey"/>
+                <Button fx:id="btnAdd" mnemonicParsing="false" text="添加"/>
+                <Button fx:id="btnSearch" mnemonicParsing="false" text="搜索"/>
             </items>
         </ToolBar>
         <TableView fx:id="tvUser" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="tcId" prefWidth="75.0" text="id" />
-                <TableColumn fx:id="tcLoginname" prefWidth="100.0" text="登录名" />
-                <TableColumn fx:id="tcUsername" prefWidth="75.0" text="用户名" />
-                <TableColumn fx:id="tcEnable" prefWidth="75.0" text="可用" />
-                <TableColumn fx:id="tcEmail" prefWidth="150.0" text="email" />
+                <TableColumn fx:id="tcId" prefWidth="75.0" text="id"/>
+                <TableColumn fx:id="tcLoginname" prefWidth="100.0" text="登录名"/>
+                <TableColumn fx:id="tcUsername" prefWidth="75.0" text="用户名"/>
+                <TableColumn fx:id="tcEnable" prefWidth="75.0" text="可用"/>
+                <TableColumn fx:id="tcEmail" prefWidth="150.0" text="email"/>
             </columns>
         </TableView>
     </children>

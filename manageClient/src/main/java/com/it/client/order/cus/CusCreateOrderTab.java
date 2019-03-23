@@ -4,18 +4,12 @@ import com.it.api.table.order.Tb_Order;
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.util.FxmlUtil;
-import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -25,6 +19,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -36,9 +32,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by wangzy on 2018/9/5.
@@ -89,7 +89,7 @@ public class CusCreateOrderTab extends Tab {
                 new SimpleStringProperty(formatTime(factory.getValue().order.getCreateTime()))
         );
         tcFileName.setCellValueFactory(factory ->
-                new SimpleStringProperty(factory.getValue().file.getAbsolutePath())
+                new SimpleStringProperty(factory.getValue().toString())
         );
         tcOrderType.setCellFactory(new Callback<TableColumn<MakeOrder, String>, TableCell<MakeOrder, String>>() {
             @Override
@@ -192,13 +192,44 @@ public class CusCreateOrderTab extends Tab {
                         if (empty) {
                             this.setText(null);
                         } else {
-                            MakeOrder order = (MakeOrder) this.getTableRow().getItem();
-                            if (order != null) {
-                                ProgressBar bar = new ProgressBar();
-                                bar.progressProperty().unbind();
-                                //NumberBinding divide = Bindings.divide(order.uploadedSize, order.totalSize);
-                                bar.progressProperty().bind(order.task.progressProperty());
-                                setGraphic(bar);
+                            MakeOrder bean = (MakeOrder) this.getTableRow().getItem();
+                            if (bean == null) return;
+
+                            Label label = new Label();
+                            label.setTextAlignment(TextAlignment.CENTER);
+                            label.textProperty().unbind();
+                            label.textProperty().bind(Bindings.concat(bean.uploadedSize + "/" + bean.totalSize));
+
+                            ProgressBar bar = new ProgressBar();
+
+                            Bindings.divide(bean.uploadedSize, bean.totalSize).addListener(new ChangeListener<Number>() {
+                                @Override
+                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                    MakeOrder order = (MakeOrder) getTableRow().getItem();
+                                    if (order != null) {
+                                        double percent = order.uploadedSize.doubleValue() / order.totalSize.doubleValue();
+                                        double d = Double.parseDouble(String.format("%.2f", percent));
+                                        bar.setProgress(d);
+                                    }
+                                }
+                            });
+
+                            switch (bean.orderStatus) {
+                                case 0:
+                                    this.setText("等待上传");
+                                    break;
+                                case 1:
+                                    //this.setGraphic(bar);
+                                    break;
+                                case 2:
+                                    this.setText("已取消");
+                                    break;
+                                case 3:
+                                    this.setText("已删除");
+                                    break;
+                                case 4:
+                                    this.setText("上传完成");
+                                    break;
                             }
                         }
                     }
@@ -217,9 +248,7 @@ public class CusCreateOrderTab extends Tab {
                             this.setText(null);
                         } else {
                             MakeOrder bean = (MakeOrder) this.getTableRow().getItem();
-                            if (bean != null) {
-                                this.setText(bean.order.getPackCount().toString());
-                            }
+                            if (bean != null) setText(bean.order.getAmount().toString());
                         }
                     }
                 };
@@ -236,6 +265,7 @@ public class CusCreateOrderTab extends Tab {
                             this.setText(null);
                         } else {
                             MakeOrder bean = (MakeOrder) this.getTableRow().getItem();
+                            if (bean != null) setText(bean.order.getTotalMoney().toString());
                         }
                     }
                 };
@@ -260,8 +290,16 @@ public class CusCreateOrderTab extends Tab {
                                 Button btnCancel = new Button("取消");
                                 btnCancel.setStyle("-fx-background-color: gray");
                                 btnUpload.setOnAction(action -> {
-                                    bean.uploadFile();
-                                    tvOrder.refresh();
+                                    MakeOrder b = (MakeOrder) this.getTableRow().getItem();
+                                    if (b != null) {
+                                        b.uploadFile();
+                                        ProgressBar bar = (ProgressBar) tcStatus.getGraphic();
+                                        if (bar != null) {
+                                            bar.progressProperty().unbind();
+                                            bar.progressProperty().bind(b.task.progressProperty());
+                                        }
+                                        tvOrder.refresh();
+                                    }
                                 });
                                 btnCancel.setOnAction(action -> {
                                     cancelTask(bean);
@@ -319,8 +357,15 @@ public class CusCreateOrderTab extends Tab {
             MakeOrder bean = new MakeOrder();
             bean.file = file;
             bean.orderStatus = 0;
-            bean.order.setCreateTime(System.currentTimeMillis());
-            bean.order.setOrderType(orderType);
+            Tb_Order order = bean.order;
+            order.setOrderId(UUID.randomUUID().toString());
+            order.setOrderTitle(file.getName());
+            order.setOrderType(orderType);
+            order.setCreatorName(EJB.getUsername());
+            order.setCustomerId(EJB.getUserId());
+            order.setCustomerName(EJB.getUsername());
+            order.setPresetDeadlineTime(System.currentTimeMillis());
+            order.setIncomeId(10L);
             tvOrder.getItems().add(bean);
             tvOrder.refresh();
         } catch (Exception e) {
@@ -367,7 +412,7 @@ public class CusCreateOrderTab extends Tab {
         public Task task = null;
 
         public void uploadFile() {
-            //totalSize.set(file.length());
+            totalSize.set(file.length());
             task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
@@ -381,19 +426,19 @@ public class CusCreateOrderTab extends Tab {
                             }
                             ins = new FileInputStream(file);
                             outs = new FileOutputStream(path + File.separator + file.getName());
-                            byte[] b = new byte[1024 * 1024];//大小为1M
+                            byte[] b = new byte[1024 * 1024 * 10];//大小为1M
                             int len;
                             Long uploaded = 0L;
                             while ((len = ins.read(b)) > 0) {
-                                orderStatus = Bean_MakeOrderStatus.UPLOADING;
+                                orderStatus = MakeOrderStatus.UPLOADING;
                                 outs.write(b, 0, len);
                                 uploaded += len;
-                                //uploadedSize.set(uploaded / 1024 / 1024D);
+                                uploadedSize.set(uploaded);
                                 updateProgress(uploaded, file.length());
-                                Thread.sleep(20);
+                                Thread.sleep(200);
                             }
                             EJB.getOrderService().makeOrder(EJB.getSessionId(), order);
-                            orderStatus = Bean_MakeOrderStatus.UPLOADED;
+                            orderStatus = MakeOrderStatus.UPLOADED;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

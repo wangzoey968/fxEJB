@@ -28,7 +28,7 @@ public class UserDao {
         Session session = HibernateUtil.openSession();
         session.getTransaction().begin();
         Tb_User u = (Tb_User) session.createQuery("from Tb_User where id=:id").setParameter("id", user.getId()).uniqueResult();
-        session.merge(user);
+        //session.merge(user);
         session.update(u);
         session.getTransaction().commit();
         u.setPassword("******");

@@ -34,21 +34,11 @@ timeStamp类的对象的赋值
 	Gson gson=new Gson();
 	List<Tb_RoleAuth> auths = gson.fromJson(arrayStr, new TypeToken<List<Tb_RoleAuth>>() {}.getType());
 
-//去重
-	static ArrayList<Tb_RoleAuth> removeDuplicateByCondition(List<Tb_RoleAuth> auths) {
-		Set<Tb_RoleAuth> set = new TreeSet<Tb_RoleAuth>(new Comparator<Tb_RoleAuth>() {
-			@Override
-			int compare(Tb_RoleAuth r1, Tb_RoleAuth r2) {
-				//字符串,则按照asicc码升序排列
-				return r1.authName.compareTo(r2.authName)
-			}
-		});
-		set.addAll(auths);
-		return new ArrayList<Tb_RoleAuth>(set);
-	}
-
 读取mybatis-config.xml的配置文件
 import sun.security.util.Resources
 String resource="mybatis-config.xml"
 InputStream is=Resources.getResourceAsStream(resource)
 SqlSessionFactory sqlSessionFactory=new SqlSessionFactoryBuilder().build(is)
+
+//java中新增的stream方法,收集item的id
+List<Long> ids = tvOrder.getSelectionModel().getSelectedItems().stream().map(m -> m.getId()).collect(Collectors.toList());

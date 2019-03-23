@@ -22,12 +22,15 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.time.*;
+import java.util.*;
 
 /**
  * Created by wangzy on 2018/5/5.
@@ -140,13 +143,26 @@ public class LittleTest {
     public void s2() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(format.format(1532509295010L));
+
+        Timestamp timestamp = new Timestamp(1550304833914L);
+        System.out.println(timestamp);
     }
 
     @Test
     public void ss11() {
         String s = DigestUtils.md5Hex("123");
-        System.out.println(System.getProperty("user.dir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml");
+        //System.out.println(System.getProperty("user.dir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml");
 
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().plusDays(3));
+        System.out.println(timestamp.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String s0 = format.format(timestamp.getTime());
+        System.out.println(s0);
+    }
+
+    @Test
+    public void s1sss() {
+        System.out.println(DateDirUtil.getRootDir());
     }
 
 }

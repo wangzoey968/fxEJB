@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.it.client.EJB;
 import com.it.client.util.ConfigUtil;
 import com.it.client.util.FxmlUtil;
+import com.it.client.util.MacUtil;
 import com.it.client.util.httpClient.task.HttpPostTask;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -49,32 +50,8 @@ public class RegComputer extends Dialog {
                 return null;
             }
         });
-        cmbRegNI.getItems().addAll(getNetworkInterfaces());
+        cmbRegNI.getItems().addAll(MacUtil.getNetworkInterfaces());
         cmbRegNI.getSelectionModel().selectFirst();
-    }
-
-
-    public static List<NetworkInterface> getNetworkInterfaces() {
-        List<NetworkInterface> res = new ArrayList<>();
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface ni = interfaces.nextElement();
-                if (ni.getHardwareAddress().length == 6) res.add(ni);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public static String toMac(byte[] mac) {
-        if (mac == null) return null;
-        String str = "";
-        for (int i = 0; i < mac.length; i++) {
-            str += String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : "");
-        }
-        return str;
     }
 
     public void showAndRun() {

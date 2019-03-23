@@ -130,7 +130,7 @@ public class UserService {
         session.getTransaction().begin();
         Tb_Role r = (Tb_Role) session.createQuery("from Tb_Role where id=:id").setParameter("id", role.getId()).uniqueResult();
         if (r == null) throw new Exception("请刷新");
-        session.merge(role);
+        //session.merge(role);
         session.update(r);
         session.getTransaction().commit();
         return role;
@@ -198,7 +198,7 @@ public class UserService {
         session.getTransaction().begin();
         Tb_Auth a = (Tb_Auth) session.createQuery("from Tb_Auth where id=:id").setParameter("id", auth.getId()).uniqueResult();
         if (a == null) throw new Exception("请刷新");
-        session.merge(auth);
+        //session.merge(auth);
         session.update(a);
         session.getTransaction().commit();
         return auth;

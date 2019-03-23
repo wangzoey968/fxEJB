@@ -110,7 +110,7 @@ public class Core {
                 }
                 System.out.println("session检查,定时任务");
             }
-        }, 60, 60, TimeUnit.SECONDS);
+        }, 60, 60, TimeUnit.MINUTES);
 
     }
 

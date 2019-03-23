@@ -1,6 +1,6 @@
 package com.it.client.order.cus;
 
-public class Bean_MakeOrderStatus {
+public class MakeOrderStatus {
 
     public static final Integer NOT_UPLOAD = 0;
     public static final Integer UPLOADING = 1;

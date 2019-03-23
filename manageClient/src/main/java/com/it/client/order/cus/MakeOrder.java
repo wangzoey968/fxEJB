@@ -99,7 +99,7 @@ public class MakeOrder {
                         int len;
                         Long uploaded = 0L;
                         while ((len = ins.read(b)) > 0) {
-                            setOrderStatus(Bean_MakeOrderStatus.UPLOADING);
+                            setOrderStatus(MakeOrderStatus.UPLOADING);
                             outs.write(b, 0, len);
                             uploaded += len;
                             Long finalUploaded = uploaded;
@@ -109,7 +109,7 @@ public class MakeOrder {
                             Thread.sleep(20);
                         }
                         EJB.getOrderService().makeOrder(EJB.getSessionId(), getOrder());
-                        setOrderStatus(Bean_MakeOrderStatus.UPLOADED);
+                        setOrderStatus(MakeOrderStatus.UPLOADED);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -97,7 +97,6 @@ public class LoginStage extends Stage {
                 e.printStackTrace();
             }
         });
-
         this.show();
     }
 

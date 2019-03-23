@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.cell.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <TextArea layoutX="36.0" layoutY="77.0" prefHeight="260.0" prefWidth="528.0" />
-   </children>
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ToolBar>
+            <items>
+                <Label text="创建时间: "/>
+                <DatePicker fx:id="dpFrom" prefWidth="120.0"/>
+                <DatePicker fx:id="dpTo" prefWidth="120.0"/>
+                <TextField fx:id="tfKey" prefWidth="120.0"/>
+                <Button fx:id="btnSearch" mnemonicParsing="false" text="查询"/>
+            </items>
+        </ToolBar>
+        <TableView fx:id="tvOrder" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="tcCreateTime" prefWidth="120.0" text="创建时间"/>
+                <TableColumn fx:id="tcOrderType" prefWidth="75.0" text="订单类型">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="orderType"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcTitle" prefWidth="120.0" text="订单标题">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="orderTitle"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcParam" prefWidth="300.0" text="参数"/>
+                <TableColumn fx:id="tcAmount" prefWidth="75.0" text="数量">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="amount"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcMoney" prefWidth="75.0" text="金额">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="totalMoney"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcStatus" prefWidth="75.0" text="状态">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="activated"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcOperate" prefWidth="100.0" text="操作"/>
+            </columns>
+        </TableView>
+    </children>
+</VBox>
