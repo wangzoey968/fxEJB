@@ -1,12 +1,13 @@
 package com.it.client.util;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-public class MacUtil {
+public class MacIPUtil {
 
     //获取网卡名称,再使用getDisplayName即可
     public static List<NetworkInterface> getNetworkInterfaces() {
@@ -33,6 +34,25 @@ public class MacUtil {
             mac += String.format("%02X%s", hardwareAddress[i], i < hardwareAddress.length - 1 ? "-" : "");
         }
         return mac;
+    }
+
+    //获取ip地址
+    public String getIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (!"unKnown".equalsIgnoreCase(ip)) {
+            //多次反向代理后会有多个ip值，第一个ip才是真实ip
+            int index = ip.indexOf(",");
+            if (index != -1) {
+                return ip.substring(0, index);
+            } else {
+                return ip;
+            }
+        }
+        ip = request.getHeader("X-Real-IP");
+        if (!"unKnown".equalsIgnoreCase(ip)) {
+            return ip;
+        }
+        return request.getRemoteAddr();
     }
 
 }

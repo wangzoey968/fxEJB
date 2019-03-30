@@ -1,5 +1,6 @@
 package com.it.test;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.it.entity.Tb_Auth;
 import com.it.util.WebBack;
 import javafx.application.Platform;
@@ -20,6 +21,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.net.NetworkInterface;
@@ -162,7 +164,17 @@ public class LittleTest {
 
     @Test
     public void s1sss() {
-        System.out.println(DateDirUtil.getRootDir());
+        List<String> base = Arrays.asList("制版", "印刷", "模切", "打码", "覆膜", "成品", "出库");
+        List<String> process = Arrays.asList("印刷", "出库", "打码", "模切");
+
+        List<String> list = new ArrayList<>();
+        base.forEach(e -> {
+                    if (process.contains(e)) {
+                        list.add(e);
+                        System.out.println(e);
+                    }
+                }
+        );
     }
 
 }

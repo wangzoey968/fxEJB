@@ -5,6 +5,7 @@ import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.order.dialog.OrderEditor;
 import com.it.client.order.dialog.OrderInfo;
+import com.it.client.order.process.ProcessDialog;
 import com.it.client.util.ExceptionUtil;
 import com.it.client.util.FxmlUtil;
 import javafx.beans.property.SimpleObjectProperty;
@@ -38,7 +39,7 @@ public class OrderTab extends Tab {
     @FXML
     private TextField tfKey;
     @FXML
-    private Button btnSearch;
+    private Button btnSearch, btnProcess;
     @FXML
     private TableView<Tb_Order> tvOrder;
     @FXML
@@ -184,6 +185,14 @@ public class OrderTab extends Tab {
             event.consume();
             editOrder();
         });
+        btnProcess.setOnAction(event -> {
+            event.consume();
+            processSort();
+        });
+    }
+
+    private void processSort() {
+        new ProcessDialog().showAndWait();
     }
 
     private void doSearch() {

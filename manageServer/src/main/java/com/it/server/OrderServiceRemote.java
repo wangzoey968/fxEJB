@@ -2,6 +2,7 @@ package com.it.server;
 
 import com.it.api.OrderServiceLocal;
 import com.it.api.table.order.Tb_Order;
+import com.it.api.table.order.Tb_OrderProcess;
 import com.it.web.order.service.OrderService;
 import com.it.web.user.service.Core;
 
@@ -37,5 +38,10 @@ public class OrderServiceRemote implements OrderServiceLocal {
     @Override
     public void delOrders(String sessionId, List<Long> orderIds) throws Exception {
         OrderService.delOrders(sessionId, orderIds);
+    }
+
+    @Override
+    public List<Tb_OrderProcess> listProcess(String sessionId, String key) throws Exception {
+        return OrderService.listProcess(sessionId, key);
     }
 }

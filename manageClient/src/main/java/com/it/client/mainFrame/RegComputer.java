@@ -1,24 +1,15 @@
 package com.it.client.mainFrame;
 
-import com.google.gson.JsonObject;
-import com.it.client.EJB;
-import com.it.client.util.ConfigUtil;
 import com.it.client.util.FxmlUtil;
-import com.it.client.util.MacUtil;
+import com.it.client.util.MacIPUtil;
 import com.it.client.util.httpClient.task.HttpPostTask;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 
 public class RegComputer extends Dialog {
 
@@ -50,7 +41,7 @@ public class RegComputer extends Dialog {
                 return null;
             }
         });
-        cmbRegNI.getItems().addAll(MacUtil.getNetworkInterfaces());
+        cmbRegNI.getItems().addAll(MacIPUtil.getNetworkInterfaces());
         cmbRegNI.getSelectionModel().selectFirst();
     }
 

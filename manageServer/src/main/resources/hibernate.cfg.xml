@@ -16,6 +16,7 @@
 
         <!--订单-->
         <mapping class="com.it.api.table.order.Tb_Order"/>
+        <mapping class="com.it.api.table.order.Tb_OrderProcess"/>
 
         <!--供应商-->
         <mapping class="com.it.api.table.customer.Tb_Supplier"/>

@@ -1,6 +1,10 @@
 javafx中可以设计一个类,继承service(fx包下的),进行上传进度的控制
 executors,可以用来设计线程池
 
+获取listview的cell中的graphic(checkbox)
+1.直接在类中天加checkbox
+2.listview.lookupall("checkbox")后,再转为List
+
 this.getDialogPane().lookupButton(ButtonType.OK).addEventFilter(ActionEvent.ACTION, {
 	it.consume()//清除事件
 	Tb_whWare ware = tbWare.getSelectionModel().getSelectedItem()

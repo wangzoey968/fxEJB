@@ -1,13 +1,14 @@
 package com.it.web.order.service;
 
 import com.it.api.table.order.Tb_Order;
-import com.it.api.table.order.Tb_OrderPost;
+import com.it.api.table.order.Tb_OrderProcess;
 import com.it.api.table.user.Tb_User;
 import com.it.util.HibernateUtil;
 import com.it.web.user.service.Core;
 import com.sun.tools.corba.se.idl.constExpr.Times;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.junit.Test;
 
 import javax.ejb.EJB;
@@ -24,9 +25,6 @@ public class OrderService {
         //if (!Core.getUserAllAuths(user).contains("下单")) throw new Exception("没有下单权限");
         Session session = HibernateUtil.openSession();
         session.save(order);
-        Tb_OrderPost post = new Tb_OrderPost();
-        post.setOrderId(order.getOrderId());
-        post.setPresetPostmanId();
         return order;
     }
 
@@ -54,6 +52,18 @@ public class OrderService {
         session.getTransaction().begin();
         session.createQuery("delete from Tb_Order  where id in:oids").setParameterList("oids", orderIds).executeUpdate();
         session.getTransaction().commit();
+    }
+
+    public static List<Tb_OrderProcess> listProcess(String sessionId, String key) throws Exception {
+        Session session = HibernateUtil.openSession();
+        Query query = session.createQuery("from Tb_OrderProcess where orderType like :k");
+        List<Tb_OrderProcess> list = query.setParameter("k", key == null ? "" : "%" + key.trim() + "%").list();
+        return list;
+    }
+
+    public static Tb_OrderProcess editProcess(String sessionId, Tb_OrderProcess process) throws Exception {
+        Session session = HibernateUtil.openSession();
+        return null;
     }
 
 }

@@ -12,43 +12,41 @@
     <children>
         <ToolBar>
             <items>
-                <Label text="创建时间: "/>
-                <DatePicker fx:id="dpFrom" prefWidth="120.0"/>
-                <DatePicker fx:id="dpTo" prefWidth="120.0"/>
-                <TextField fx:id="tfKey" prefWidth="120.0"/>
-                <Button fx:id="btnSearch" mnemonicParsing="false" text="查询"/>
+                <Label text="创建时间: " />
+                <DatePicker fx:id="dpFrom" prefWidth="120.0" />
+                <DatePicker fx:id="dpTo" prefWidth="120.0" />
+                <TextField fx:id="tfKey" prefWidth="120.0" />
+                <Button fx:id="btnSearch" mnemonicParsing="false" text="查询" />
+                <HBox HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnProcess" mnemonicParsing="false" text="订单处理排序" />
             </items>
         </ToolBar>
         <TableView fx:id="tvOrder" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="tcCreateTime" prefWidth="120.0" text="创建时间"/>
+                <TableColumn fx:id="tcCreateTime" prefWidth="120.0" text="创建时间" />
                 <TableColumn fx:id="tcOrderType" prefWidth="75.0" text="订单类型">
                     <cellValueFactory>
-                        <PropertyValueFactory property="orderType"/>
+                        <PropertyValueFactory property="orderType" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcTitle" prefWidth="120.0" text="订单标题">
                     <cellValueFactory>
-                        <PropertyValueFactory property="orderTitle"/>
+                        <PropertyValueFactory property="orderTitle" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="tcParam" prefWidth="300.0" text="参数"/>
+                <TableColumn fx:id="tcParam" prefWidth="300.0" text="参数" />
                 <TableColumn fx:id="tcAmount" prefWidth="75.0" text="数量">
                     <cellValueFactory>
-                        <PropertyValueFactory property="amount"/>
+                        <PropertyValueFactory property="amount" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="tcMoney" prefWidth="75.0" text="金额">
                     <cellValueFactory>
-                        <PropertyValueFactory property="totalMoney"/>
+                        <PropertyValueFactory property="totalMoney" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="tcStatus" prefWidth="75.0" text="状态">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="activated"/>
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="tcOperate" prefWidth="100.0" text="操作"/>
+                <TableColumn fx:id="tcStatus" prefWidth="75.0" text="状态" />
+                <TableColumn fx:id="tcOperate" prefWidth="100.0" text="操作" />
             </columns>
         </TableView>
     </children>
