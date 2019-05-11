@@ -1,5 +1,6 @@
 package com.it.util;
 
+import com.google.gson.Gson;
 import com.it.api.table.order.Tb_Order;
 import com.it.api.table.user.Tb_Auth;
 import com.it.api.table.user.Tb_Role;
@@ -7,18 +8,22 @@ import com.it.api.table.user.Tb_User;
 import com.sun.javafx.application.PlatformImpl;
 import com.sun.javafx.tk.Toolkit;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.hibernate.Session;
 import org.junit.Test;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -84,13 +89,9 @@ public class LittleTest {
 
     @Test
     public void mapTest() {
-        HashMap<String, Boolean> map = new HashMap<>();
-        //只能有一个key
-        map.put("权限1", true);
-        map.put("权限2", true);
-        map.put("权限1", true);
-        map.put("权限2", false);
-        System.out.println(map.toString());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String s = format.format(System.currentTimeMillis());
+        System.out.println(s);
     }
 
     //fibonacci
@@ -111,10 +112,20 @@ public class LittleTest {
 
     @Test
     public void lambda() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        list.forEach(System.out::println);
+        Gson gson = new Gson();
+        List<String> list = Arrays.asList("制版", "印刷", "打码", "覆膜");
+        ObservableList<String> items = FXCollections.observableList(list);
+        System.out.println(gson.toJson(items));
+    }
+
+    @Test
+    public void ssssss() {
+        try {
+            ServerSocket socket = new ServerSocket(8080);
+            socket.accept();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.List;
 public class ORDER_PROCESS {
 
     public static String XIA_DAN = "下单";
+    public static String ZHI_BAN = "制版";
     public static String YIN_SHUA = "印刷";
     public static String MO_QIE = "模切";
     public static String YA_HEN = "压痕";
@@ -19,7 +20,7 @@ public class ORDER_PROCESS {
     public static String YUAN_JIAO = "圆角";
 
     public static List<String> getAllProcess() {
-        return Arrays.asList(XIA_DAN, YIN_SHUA, MO_QIE, YA_HEN, YA_CHI, FU_MO, CAI_QIE, DA_MA, YUAN_JIAO);
+        return Arrays.asList(XIA_DAN, ZHI_BAN, YIN_SHUA, MO_QIE, YA_HEN, YA_CHI, FU_MO, CAI_QIE, DA_MA, YUAN_JIAO);
     }
 
 }

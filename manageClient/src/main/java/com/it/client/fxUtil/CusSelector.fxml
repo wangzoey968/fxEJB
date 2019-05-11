@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ToolBar>
+            <items>
+                <Label text="条件: "/>
+                <TextField fx:id="tfKey"/>
+                <Button fx:id="btnSearch" mnemonicParsing="false" text="查询"/>
+                <HBox HBox.hgrow="ALWAYS" prefWidth="200.0"/>
+                <Button fx:id="btnAdd" mnemonicParsing="false" text="添加"/>
+            </items>
+        </ToolBar>
+        <TableView fx:id="tvCus" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="tcCusname" prefWidth="120.0" text="用户名">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="cusname"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcLoginname" prefWidth="100.0" text="登录名">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="loginname"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcCreateTime" prefWidth="140.0" text="创建时间">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="createTime"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcAddress" prefWidth="100.0" text="地址">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="address"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcProvince" prefWidth="75.0" text="省">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="province"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcCity" prefWidth="75.0" text="市">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="city"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcCounty" prefWidth="75.0" text="县">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="county"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcTown" prefWidth="75.0" text="乡">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="town"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcDetail" prefWidth="75.0" text="详细">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="detail"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcPhone" prefWidth="100.0" text="固话">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="phone"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcTelephone" prefWidth="140.0" text="手机">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="telephone"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcQQ" prefWidth="100.0" text="QQ">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="qq"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcWechat" prefWidth="100.0" text="微信">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="wechat"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tcNote" prefWidth="150.0" text="备注">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="note"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+        <Pagination fx:id="pagination"/>
+    </children>
+</VBox>

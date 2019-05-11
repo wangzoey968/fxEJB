@@ -4,6 +4,7 @@ import com.it.api.table.order.Tb_Order;
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.util.FxmlUtil;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -209,7 +210,10 @@ public class CusCreateOrderTab extends Tab {
                                     if (order != null) {
                                         double percent = order.uploadedSize.doubleValue() / order.totalSize.doubleValue();
                                         double d = Double.parseDouble(String.format("%.2f", percent));
-                                        bar.setProgress(d);
+                                        Platform.runLater(() -> {
+                                            System.out.println(d);
+                                            bar.setProgress(d);
+                                        });
                                     }
                                 }
                             });

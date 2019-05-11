@@ -13,6 +13,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import org.hibernate.engine.jdbc.internal.DDLFormatterImpl;
 
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
@@ -22,17 +24,26 @@ import java.nio.file.Paths;
 
 public class OrderInfo extends Dialog {
 
+    @FXML
+    private VBox vbLeft, vbRight;
+
     public OrderInfo(Tb_Order order) {
         setTitle("订单详情");
         getDialogPane().setContent(FxmlUtil.loadFXML(this));
-        getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        OrderEditor editor = new OrderEditor();
+        vbLeft.getChildren().add(FxmlUtil.loadFXML(editor));
+        editor.viewOrder(order);
+
         try {
             //Image image = new Image("file:C:/download/wzyDesktop/微信图片_20180728185358.png");
-
             String s = Paths.get(System.getProperty("user.dir") + "/manageClient/skin/icon/locked.png").toUri().toURL().toString();
-            Image image = new Image(s);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public OrderInfo view() {
+        getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        return this;
     }
 }

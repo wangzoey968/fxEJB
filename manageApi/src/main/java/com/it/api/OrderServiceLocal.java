@@ -12,7 +12,7 @@ public interface OrderServiceLocal {
 
     public Tb_Order makeOrder(String sessionId, Tb_Order order) throws Exception;
 
-    public List<Tb_Order> listOrders(String sessionId, String timeFrom, String timeTo, String key) throws Exception;
+    public List<Tb_Order> listOrders(String sessionId, List<String> types, String timeFrom, String timeTo, String key) throws Exception;
 
     public Tb_Order editOrder(String sessionId, Tb_Order order) throws Exception;
 
@@ -20,4 +20,9 @@ public interface OrderServiceLocal {
 
     public List<Tb_OrderProcess> listProcess(String sessionId, String key) throws Exception;
 
+    public Tb_OrderProcess makeOrderProcess(String sessionId, Tb_OrderProcess process) throws Exception;
+
+    public Tb_OrderProcess editProcess(String sessionId, Tb_OrderProcess process) throws Exception;
+
+    public void delProcess(String sessionId, Tb_OrderProcess process) throws Exception;
 }

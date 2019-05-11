@@ -1,4 +1,4 @@
-package com.it.util;
+package com.it.api.common.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,11 +7,9 @@ import com.google.gson.JsonParser;
 
 public class GsonUtil {
 
-    public static JsonParser jsonParser = new JsonParser();
-
     public static Gson gson = new Gson();
 
-    public static Gson gsonTimeFormat = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    public static JsonParser jsonParser = new JsonParser();
 
     public static Long verifyInfo(String jsonStr) {
         JsonObject json = jsonParser.parse(jsonStr).getAsJsonObject();

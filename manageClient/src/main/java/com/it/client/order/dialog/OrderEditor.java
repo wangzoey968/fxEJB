@@ -3,6 +3,7 @@ package com.it.client.order.dialog;
 import com.it.api.common.constant.ORDER_TYPE;
 import com.it.api.common.constant.POLICY_AREA;
 import com.it.api.table.order.Tb_Order;
+import com.it.api.table.order.Tb_OrderProcess;
 import com.it.client.EJB;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.util.ExceptionUtil;
@@ -16,7 +17,9 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class OrderEditor extends Dialog {
 
@@ -32,7 +35,6 @@ public class OrderEditor extends Dialog {
     public OrderEditor() {
         initOwner(MainFrame.getInstance());
         getDialogPane().setContent(FxmlUtil.loadFXML(this));
-        cmbOrderType.getItems().addAll(ORDER_TYPE.getAllTypes());
         cmbOrderType.getSelectionModel().selectFirst();
         cmbCusname.getItems().addAll("东方彩印", "上海印刷", "浦东印刷");
         cmbCusname.getSelectionModel().selectFirst();
@@ -41,6 +43,17 @@ public class OrderEditor extends Dialog {
         cmbPolicyArea.getItems().addAll(POLICY_AREA.getAllArea());
         cmbPolicyArea.getSelectionModel().selectFirst();
         tfPackNote.disableProperty().bind(rbPack.selectedProperty().not());
+        loadOrderType();
+    }
+
+    private void loadOrderType() {
+        try {
+            List<Tb_OrderProcess> list = EJB.getOrderService().listProcess(EJB.getSessionId(), null);
+            List<String> collect = list.stream().map(e -> e.getOrderType()).collect(Collectors.toList());
+            cmbOrderType.getItems().addAll(collect);
+        } catch (Exception e) {
+            ExceptionUtil.showException(e);
+        }
     }
 
     public Tb_Order addOrder() {
@@ -133,6 +146,11 @@ public class OrderEditor extends Dialog {
         rbFetch.setSelected(o.getPostWay().equals("自提"));
         rbPost.setSelected(o.getPostWay().equals("送货"));
         rbExpress.setSelected(o.getPostWay().equals("快递"));
+    }
+
+    public void viewOrder(Tb_Order o){
+        System.out.println(o.toString());
+        applyForm(o);
     }
 
 }

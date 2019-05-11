@@ -1,7 +1,7 @@
 查询每科都大于80的学生姓名
 SELECT * FROM tb_sj_mapping AS map GROUP BY map.tb_SpareParts_Id HAVING MIN(tb_Job_Id)>80;
 
-数据库查询的时候,limit 0,100,表示从起始的为值开始查询,共查询100条
+数据库查询的时候,limit 0,100,表示从起始的位置开始查询,共查询100条
 
 根据某个字段的后4位排序,使用order by right(orderId,4)
 SELECT orderId FROM tb_order ORDER BY RIGHT(orderId,4) LIMIT 0,10
@@ -84,12 +84,6 @@ spring中的传播机制(PROPAGATION)
 6、PROPAGATION_NEVER：		以非事务方式执行，如果当前存在事务，则抛出异常。
 7、PROPAGATION_NESTED：		如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。
 
-JPA提供的四种标准用法为TABLE,SEQUENCE,IDENTITY,AUTO.
-TABLE：使用一个特定的数据库表格来保存主键。
-SEQUENCE：根据底层数据库的序列来生成主键，条件是数据库支持序列。
-IDENTITY：主键由数据库自动生成（主要是自动增长型）
-AUTO：主键由程序控制。
-
 映射表的头
 @Entity
 @Table(name = "tb_group_auth",
@@ -99,8 +93,13 @@ AUTO：主键由程序控制。
                 @Index(name = "authIndex", columnList = "tb_auth_id")
         })
 
+JPA提供的四种标准用法为TABLE,SEQUENCE,IDENTITY,AUTO.
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+@GeneratedValue(strategy = GenerationType.IDENTITY)//直接是单个表的主键自增,最常用
+TABLE：使用一个特定的数据库表格来保存主键。
+SEQUENCE：根据底层数据库的序列来生成主键，条件是数据库支持序列。
+IDENTITY：主键由数据库自动生成（主要是自动增长型）
+AUTO：主键由程序控制。
 
 @Column(columnDefinition = "INT NOT NULL DEFAULT 0 ")//进行自己定义数据类型
 

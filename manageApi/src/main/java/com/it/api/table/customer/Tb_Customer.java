@@ -15,10 +15,10 @@ public class Tb_Customer implements Serializable {
     private Long id;
 
     @Column(length = 255, nullable = false)
-    private String loginname;
+    private String cusname;
 
     @Column(length = 255, nullable = false)
-    private String username;
+    private String loginname;
 
     @Column(length = 255, nullable = false)
     private String password;
@@ -36,76 +36,58 @@ public class Tb_Customer implements Serializable {
     private String address;
 
     @Column
+    private String province;
+
+    @Column
+    private String city;
+
+    @Column
+    private String county;
+
+    @Column
+    private String town;
+
+    @Column
+    private String detail;
+
+    /*固定电话*/
+    @Column
     private String phone;
+
+    /*移动电话*/
+    @Column
+    private String telephone;
+
+    @Column
+    private String qq;
+
+    @Column
+    private String wechat;
 
     @Column
     private String note;
 
-    public Tb_Customer() {
-    }
-
-    public Tb_Customer(Long createTime, String username, String password, String address, String phone, String note) {
-        this.createTime = createTime;
-        this.username = username;
-        this.password = password;
-        this.address = address;
-        this.phone = phone;
-        this.note = note;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
+    @Override
+    public String toString() {
+        return "Tb_Customer{" +
+                "id=" + id +
+                ", cusname='" + cusname + '\'' +
+                ", loginname='" + loginname + '\'' +
+                ", password='" + password + '\'' +
+                ", superPassword='" + superPassword + '\'' +
+                ", enable=" + enable +
+                ", createTime=" + createTime +
+                ", address='" + address + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", county='" + county + '\'' +
+                ", town='" + town + '\'' +
+                ", detail='" + detail + '\'' +
+                ", phone='" + phone + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", qq='" + qq + '\'' +
+                ", wechat='" + wechat + '\'' +
+                ", note='" + note + '\'' +
+                '}';
     }
 }

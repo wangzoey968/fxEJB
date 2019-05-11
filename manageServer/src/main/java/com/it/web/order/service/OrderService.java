@@ -28,11 +28,12 @@ public class OrderService {
         return order;
     }
 
-    public static List<Tb_Order> listOrders(String sessionId, String timeFrom, String timeTo, String key) throws Exception {
+    public static List<Tb_Order> listOrders(String sessionId, List<String> types, String timeFrom, String timeTo, String key) throws Exception {
         Session session = HibernateUtil.openSession();
         Long from = Timestamp.valueOf(timeFrom).getTime();
         Long to = Timestamp.valueOf(timeTo).getTime();
-        List<Tb_Order> list = (List<Tb_Order>) session.createQuery("from Tb_Order where createTime >:f and createTime<:t and orderTitle like :k")
+        List<Tb_Order> list = (List<Tb_Order>) session.createQuery("from Tb_Order where orderType in :ot and createTime >:f and createTime<:t and orderTitle like :k")
+                .setParameterList("ot", types)
                 .setParameter("f", from)
                 .setParameter("t", to)
                 .setParameter("k", key == null ? "%%" : "%" + key.trim() + "%").list();
@@ -54,16 +55,34 @@ public class OrderService {
         session.getTransaction().commit();
     }
 
+    public static Tb_OrderProcess makeProcess(String sessionId, Tb_OrderProcess process) throws Exception {
+        Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        session.save(process);
+        session.getTransaction().commit();
+        return process;
+    }
+
     public static List<Tb_OrderProcess> listProcess(String sessionId, String key) throws Exception {
         Session session = HibernateUtil.openSession();
         Query query = session.createQuery("from Tb_OrderProcess where orderType like :k");
-        List<Tb_OrderProcess> list = query.setParameter("k", key == null ? "" : "%" + key.trim() + "%").list();
+        List<Tb_OrderProcess> list = query.setParameter("k", key == null ? "%%" : "%" + key.trim() + "%").list();
         return list;
     }
 
     public static Tb_OrderProcess editProcess(String sessionId, Tb_OrderProcess process) throws Exception {
         Session session = HibernateUtil.openSession();
-        return null;
+        session.getTransaction().begin();
+        session.saveOrUpdate(process);
+        session.getTransaction().commit();
+        return process;
+    }
+
+    public static void delProcess(String sessionId, Tb_OrderProcess process) throws Exception {
+        Session session = HibernateUtil.openSession();
+        session.getTransaction().begin();
+        session.delete(process);
+        session.getTransaction().commit();
     }
 
 }

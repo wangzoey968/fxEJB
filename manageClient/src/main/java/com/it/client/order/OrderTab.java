@@ -1,7 +1,12 @@
 package com.it.client.order;
 
+import com.it.api.common.util.DateUtil;
+import com.it.api.common.util.StrUtil;
+import com.it.api.table.customer.Tb_Customer;
 import com.it.api.table.order.Tb_Order;
 import com.it.client.EJB;
+import com.it.client.fxUtil.CusSelector;
+import com.it.client.fxUtil.OrderTypeSelector;
 import com.it.client.mainFrame.MainFrame;
 import com.it.client.order.dialog.OrderEditor;
 import com.it.client.order.dialog.OrderInfo;
@@ -16,28 +21,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class OrderTab extends Tab {
 
     @FXML
+    private ToolBar tbRoot;
+    @FXML
     private DatePicker dpFrom, dpTo;
     @FXML
-    private TextField tfKey;
+    private TextField tfOrderType, tfKey;
     @FXML
     private Button btnSearch, btnProcess;
     @FXML
@@ -63,8 +66,19 @@ public class OrderTab extends Tab {
     public OrderTab() {
         this.setText("订单");
         this.setContent(FxmlUtil.loadFXML(this));
-        dpFrom.setValue(LocalDate.now().minusDays(3));
+        dpFrom.setValue(LocalDate.now().minusDays(7));
         dpTo.setValue(LocalDate.now());
+        tfOrderType.setOnMouseClicked(event -> {
+            event.consume();
+            try {
+                OrderTypeSelector selector = OrderTypeSelector.class.newInstance();
+                List<String> list = selector.itemClick();
+                if (list == null) return;
+                tfOrderType.setText(list.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         tvOrder.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tvOrder.setRowFactory(new Callback<TableView<Tb_Order>, TableRow<Tb_Order>>() {
             @Override
@@ -84,7 +98,7 @@ public class OrderTab extends Tab {
                 row.setOnMouseClicked(event -> {
                     event.consume();
                     if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                        new OrderInfo(row.getItem()).showAndWait();
+                        new OrderInfo(row.getItem()).view().showAndWait();
                     }
                 });
                 return row;
@@ -98,9 +112,9 @@ public class OrderTab extends Tab {
                     protected void updateItem(Timestamp item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
-                            this.setText(null);
+                            setText(null);
                         } else {
-                            this.setText(item.toString().substring(0, 16));
+                            setText(DateUtil.format.format(item));
                         }
                     }
                 };
@@ -145,7 +159,7 @@ public class OrderTab extends Tab {
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
-                            //设置graphic的时候此处不能判断item是否为空
+                            //设置graphic的时候此处不能判断item是否为null
                             setText(null);
                         } else {
                             Tb_Order order = (Tb_Order) getTableRow().getItem();
@@ -192,16 +206,24 @@ public class OrderTab extends Tab {
     }
 
     private void processSort() {
-        new ProcessDialog().showAndWait();
+        //new ProcessDialog().showAndWait();
+        List<Tb_Customer> list = new CusSelector().getSelectCuzz();
+        if (list == null) {
+            System.out.println("----s");
+        } else {
+            System.out.println(list.size());
+        }
     }
 
     private void doSearch() {
         try {
             btnSearch.setDisable(true);
             tvOrder.getItems().clear();
+            List<String> list = StrUtil.toList(tfOrderType.getText());
+            if (list == null) return;
             String from = dpFrom.getEditor().getText();
             String to = dpTo.getEditor().getText();
-            List<Tb_Order> orders = EJB.getOrderService().listOrders(EJB.getSessionId(), from + " 00:00:00", to + " 23:59:59", tfKey.getText());
+            List<Tb_Order> orders = EJB.getOrderService().listOrders(EJB.getSessionId(), list, from + " 00:00:00", to + " 23:59:59", tfKey.getText());
             tvOrder.getItems().addAll(orders);
             tvOrder.refresh();
         } catch (Exception e) {

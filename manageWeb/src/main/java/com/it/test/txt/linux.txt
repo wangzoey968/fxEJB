@@ -1,0 +1,190 @@
+---------------------------windows----------------------
+查看所有的局域网ip:arp -a
+查看本机ip及相关配置:ipconfig /all
+
+////////////////////////////////////////
+禁止在虚拟机的配置中还原默认设置================
+////////////////////////////////////////
+
+----------------------------linux-------------
+查看网络配置:ifconfig
+切换用户权限:su root.如果要设置为其他用户,直接su admin
+重启网卡:service network restart
+
+配置ip
+/etc/sysconfig/network-scripts/ifcfg-eth
+配置使用nat模式的时候不能使用dhcp(自动分配ip)模式,否则ip混乱
+
+//查看端口的使用情况
+netstat -tunlp |grep 8080
+netstat -ntlp
+
+//查看端口
+ss -lnt
+
+//xshell连接之前进行的配置
+vi /etc/ssh/sshd_config
+开启端口,ip,远程连接,密码认证
+然后service ssh start
+
+linux下的查找
+find(不常用)
+一般使用whereis和locate进行查找,一般在使用locate之前要先进行更新数据库updatedb
+
+pwd(print working directory)打印当前工作空间
+
+source /etc/profile 更新环境变量,使之重新生效
+
+chmod修改权限
+
+chmod 600 auth.smb修改权限为root读写
+
+man一下可以查看命令的具体写法
+
+cat filename 显示文件的内容
+
+grep 过滤
+
+ps命令用于查看系统中的进程状态 ps aux
+
+top 相当于window的资源管理器
+
+pidof 查询某个进程的 id 如pidof httpd
+
+kill 2156 杀死2156进程
+killall 杀死所有进程
+
+who 查看当前登入主机的用户终端信息
+
+last命令用于查看所有系统的登录记录
+
+history命令用于显示历史执行过的命令
+
+touch命令用于创建空白文件或设置文件的时间
+
+vmnet0是桥接模式使用的,vmnet1是仅主机使用时的,vmnet8是nat模式使用的
+bootproto='static'静态ip
+dhcp也就是动态分配ip地址,一般在使用nat模式的时候取消勾选
+
+/etc/resolv.conf域名解析配置文件
+
+at 定时任务
+atrm 移除定时任务
+
+crontab -e//创建任务
+长期计划任务需要使用crond服务程序，参数格式是“分、时、日、月、星期 命令”。
+
+把ls命令的正常输出信息追加写入到error.txt文件中的命令是什么？
+答：ls >> error.txt
+
+修改主机名称
+vim /etc/hosthome
+
+//条件格式
+if…then…elif…then…else…fi
+
+
+解压
+xzvf
+压缩
+czvf
+
+用户
+useradd 添加用户
+usermod 修改用户
+userdel 删除用户
+groupadd 添加组
+
+对目录文件来说，“可读”表示能够读取目录内的文件列表；“可写”表示能够在目录内新增、删除、重命名文件；而“可执行”则表示能够进入该目录。
+
+权限分配	文件所有者	    文件所属组	    其他用户
+权限项	    读	写	执行	读	写	执行	读	写	执行
+字符表示	r	w	x	    r	w	x	    r	w	x
+数字表示	4	2	1	    4	2	1	    4	2	1
+
+mount/umount 挂载磁盘
+mount /dev/dd backup 把dd挂载到backup
+
+df -h命令来查看挂载状态和硬盘使用量信息
+
+fdisk 对磁盘进行添加,删除,转化分区等操作
+
+ln -s readme.txt readit.txt 创建软链接(-s),不带-s为硬链接
+
+防火墙保存
+service iptables save
+
+nmcli connection show//查看连接状态
+
+ssh ip地址 远程登录
+
+添加到开机启动
+systemctl start httpd
+systemctl enable httpd
+
+SELinux服务有三种配置模式，具体如下。
+	enforcing：强制启用安全策略模式，将拦截服务的不合法请求。
+	permissive：遇到服务越权访问时，只发出警告而不强制拦截。
+	disabled：对于越权的行为不警告也不拦截。
+
+getenforce 获取当前的selinux的运行模式
+
+setenforce 1
+
+semanage命令 管理selinux
+
+ftp
+
+ftp 192.168.10.10 连接到某个ip
+默认用户名anonymous 密码为空
+
+chown 更改拥有者
+chown -Rf ftp /var/ftp/pub
+
+Samba服务程序现在已经成为在Linux系统与Windows系统之间共享文件的最佳选择。
+
+https://www.linuxprobe.com/chapter-20.html配置nginx开机启动
+
+在局域网中做集群计算机的话可以在每台计算机上的hosts文件里写上每台计算机的主机名，
+这样互相就可以通过主机名来访问了，不需要记住每台计算机的IP地址，Linux下的可以在  /etc路径下找到hosts文件。再 vim /etc/hosts即可。
+
+桥接模式: 使用桥接模式的虚拟系统和宿主机器的关系，就像连接在同一个Hub上的两台电脑。想让它们相互通讯，你就需要为虚拟系统配置IP地址和子网掩码，否则就无法通信。
+如果你想利用VMWare在局域网内新建一个虚拟服务器，为局域网用户提供网络服务，就应该选择桥接模式。可能和局域网的其他ip冲突,需要手动配置ip等数据
+使用vmnet0
+
+NAT模式,通过宿主机器所在的网络来访问internet
+会在虚拟机中建立一个虚拟网关，开辟一个新的网段，win和虚拟机中的虚拟网卡都连接在这个网关中
+NAT模式下的虚拟系统的TCP/IP配置信息是由VMnet8(NAT)虚拟网络的DHCP服务器提供的，无法进行手工修改，因此虚拟系统也就无法和本局域网中的其他真实主机进行通讯。
+一般不使用DHCP分配ip
+使用vmnet8
+
+host-only模式使用虚拟网卡vmnet1,一般不用
+
+//查看jdk
+rpm -qa|grep jdk
+
+centos7下
+停止防火墙
+systemctl stop firewalld.service
+
+
+//nat模式下,ifcfg-ens33的具体配置
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=e57da40a-790b-4313-8458-d088e85035d7
+DEVICE=ens33
+ONBOOT=yes
+IPADDR=192.168.116.1
+PREFIXO=24
+GATEWAY=192.168.116.2
+DNS1=8.8.8.8

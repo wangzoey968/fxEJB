@@ -26,8 +26,8 @@ public class OrderServiceRemote implements OrderServiceLocal {
     }
 
     @Override
-    public List<Tb_Order> listOrders(String sessionId, String timeFrom, String timeTo, String key) throws Exception {
-        return OrderService.listOrders(sessionId, timeFrom, timeTo, key);
+    public List<Tb_Order> listOrders(String sessionId, List<String> types, String timeFrom, String timeTo, String key) throws Exception {
+        return OrderService.listOrders(sessionId, types, timeFrom, timeTo, key);
     }
 
     @Override
@@ -43,5 +43,20 @@ public class OrderServiceRemote implements OrderServiceLocal {
     @Override
     public List<Tb_OrderProcess> listProcess(String sessionId, String key) throws Exception {
         return OrderService.listProcess(sessionId, key);
+    }
+
+    @Override
+    public Tb_OrderProcess makeOrderProcess(String sessionId, Tb_OrderProcess process) throws Exception {
+        return OrderService.makeProcess(sessionId, process);
+    }
+
+    @Override
+    public Tb_OrderProcess editProcess(String sessionId, Tb_OrderProcess process) throws Exception {
+        return OrderService.editProcess(sessionId, process);
+    }
+
+    @Override
+    public void delProcess(String sessionId, Tb_OrderProcess process) throws Exception {
+        OrderService.delProcess(sessionId, process);
     }
 }

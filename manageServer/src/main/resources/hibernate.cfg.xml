@@ -18,6 +18,9 @@
         <mapping class="com.it.api.table.order.Tb_Order"/>
         <mapping class="com.it.api.table.order.Tb_OrderProcess"/>
 
+        <!--客户-->
+        <mapping class="com.it.api.table.customer.Tb_Customer"/>
+
         <!--供应商-->
         <mapping class="com.it.api.table.customer.Tb_Supplier"/>
 
