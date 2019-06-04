@@ -121,8 +121,8 @@ public class LittleTest {
     @Test
     public void ssssss() {
         try {
-            ServerSocket socket = new ServerSocket(8080);
-            socket.accept();
+            //ServerSocket socket = new ServerSocket(8080);
+            //socket.accept();
         } catch (Exception e) {
             e.printStackTrace();
         }

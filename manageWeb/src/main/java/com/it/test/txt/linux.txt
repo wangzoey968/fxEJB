@@ -1,19 +1,24 @@
 ---------------------------windows----------------------
-查看所有的局域网ip:arp -a
-查看本机ip及相关配置:ipconfig /all
+//查看所有的监听
+netstat -a或者netstat -na
+开启telnet服务器和客户端
+控制面板->程序和功能->开启windows功能->复选框勾选
+控制面板->windows防火墙->入站规则,进行查看
+//查看局域网内的所有ip
+arp -a
+//查看本机ip及相关配置
+ipconfig /all
+//使用ip之前先ping下,看能否ping通,如果通说明有人在使用
+
 
 ////////////////////////////////////////
-禁止在虚拟机的配置中还原默认设置================
+禁止在vmware中还原虚拟机的配置================
 ////////////////////////////////////////
 
-----------------------------linux-------------
+----------------------------linux-------------------------
 查看网络配置:ifconfig
 切换用户权限:su root.如果要设置为其他用户,直接su admin
 重启网卡:service network restart
-
-配置ip
-/etc/sysconfig/network-scripts/ifcfg-eth
-配置使用nat模式的时候不能使用dhcp(自动分配ip)模式,否则ip混乱
 
 //查看端口的使用情况
 netstat -tunlp |grep 8080
@@ -31,11 +36,7 @@ linux下的查找
 find(不常用)
 一般使用whereis和locate进行查找,一般在使用locate之前要先进行更新数据库updatedb
 
-pwd(print working directory)打印当前工作空间
-
 source /etc/profile 更新环境变量,使之重新生效
-
-chmod修改权限
 
 chmod 600 auth.smb修改权限为root读写
 
@@ -46,6 +47,8 @@ cat filename 显示文件的内容
 grep 过滤
 
 ps命令用于查看系统中的进程状态 ps aux
+
+pwd(print working directory)打印当前工作空间
 
 top 相当于window的资源管理器
 
@@ -61,10 +64,6 @@ last命令用于查看所有系统的登录记录
 history命令用于显示历史执行过的命令
 
 touch命令用于创建空白文件或设置文件的时间
-
-vmnet0是桥接模式使用的,vmnet1是仅主机使用时的,vmnet8是nat模式使用的
-bootproto='static'静态ip
-dhcp也就是动态分配ip地址,一般在使用nat模式的时候取消勾选
 
 /etc/resolv.conf域名解析配置文件
 
@@ -82,7 +81,6 @@ vim /etc/hosthome
 
 //条件格式
 if…then…elif…then…else…fi
-
 
 解压
 xzvf
@@ -118,10 +116,6 @@ nmcli connection show//查看连接状态
 
 ssh ip地址 远程登录
 
-添加到开机启动
-systemctl start httpd
-systemctl enable httpd
-
 SELinux服务有三种配置模式，具体如下。
 	enforcing：强制启用安全策略模式，将拦截服务的不合法请求。
 	permissive：遇到服务越权访问时，只发出警告而不强制拦截。
@@ -138,12 +132,12 @@ ftp
 ftp 192.168.10.10 连接到某个ip
 默认用户名anonymous 密码为空
 
-chown 更改拥有者
-chown -Rf ftp /var/ftp/pub
-
 Samba服务程序现在已经成为在Linux系统与Windows系统之间共享文件的最佳选择。
 
 https://www.linuxprobe.com/chapter-20.html配置nginx开机启动
+
+vmnet0是桥接模式使用的,vmnet1是仅主机使用时的,vmnet8是nat模式使用的
+bootproto='static'静态ip
 
 在局域网中做集群计算机的话可以在每台计算机上的hosts文件里写上每台计算机的主机名，
 这样互相就可以通过主机名来访问了，不需要记住每台计算机的IP地址，Linux下的可以在  /etc路径下找到hosts文件。再 vim /etc/hosts即可。
@@ -153,26 +147,57 @@ https://www.linuxprobe.com/chapter-20.html配置nginx开机启动
 使用vmnet0
 
 NAT模式,通过宿主机器所在的网络来访问internet
+nat的意思就是把ip地址转换成运营商提供的公网ip,来访问网络
 会在虚拟机中建立一个虚拟网关，开辟一个新的网段，win和虚拟机中的虚拟网卡都连接在这个网关中
 NAT模式下的虚拟系统的TCP/IP配置信息是由VMnet8(NAT)虚拟网络的DHCP服务器提供的，无法进行手工修改，因此虚拟系统也就无法和本局域网中的其他真实主机进行通讯。
-一般不使用DHCP分配ip
+一般不使用DHCP(动态分配ip地址,一般在使用nat模式的时候取消勾选)分配ip
 使用vmnet8
 
 host-only模式使用虚拟网卡vmnet1,一般不用
 
-//查看jdk
-rpm -qa|grep jdk
+//通用的网卡配置,在最后面添加
+#nat模式
+IPADDR=192.168.116.1//.....
+NETMASK=255.255.255.0
+GATEWAY=192.168.116.2
+DNS1=8.8.8.8//需使用dns1/dns2,不能直接写dns
+DNS2=114.114.114.114
+#桥接模式
+IPADDR=192.168.0.214
+NETMASK=255.255.240.0
+GATEWAY=192.168.6.1
+DNS=192.168.6.1//此处写dns
+
+删除文件和文件夹
+rm -rf xxx
+
+设置文件夹下文件的拥有者为mysql
+chown -R mysql:mysql /usr/local/env/mysql57/data/
 
 centos7下
 停止防火墙
 systemctl stop firewalld.service
+添加到开机启动
+systemctl start httpd
+systemctl enable httpd
 
+//显示service
+chkconfig --list
+
+//监听所有
+ip monitor all
+
+///////////////////////////////////////////安装centos7,开始配置系统
+
+配置ip
+/etc/sysconfig/network-scripts/ifcfg-eth
+配置使用nat模式的时候不能使用dhcp(自动分配ip)模式,否则ip混乱
 
 //nat模式下,ifcfg-ens33的具体配置
 TYPE=Ethernet
 PROXY_METHOD=none
 BROWSER_ONLY=no
-BOOTPROTO=static
+BOOTPROTO=static//要修改的
 DEFROUTE=yes
 IPV4_FAILURE_FATAL=no
 IPV6INIT=yes
@@ -183,8 +208,88 @@ IPV6_ADDR_GEN_MODE=stable-privacy
 NAME=ens33
 UUID=e57da40a-790b-4313-8458-d088e85035d7
 DEVICE=ens33
-ONBOOT=yes
-IPADDR=192.168.116.1
+ONBOOT=yes//要修改的
+IPADDR=192.168.116.1//.....
 PREFIXO=24
 GATEWAY=192.168.116.2
-DNS1=8.8.8.8
+DNS1=8.8.8.8//需使用dns1/dns2,不能直接写dns
+DNS2=114.114.114.114
+
+//配置java环境
+//查看jdk
+rpm -qa|grep jdk
+卸载原装的openjdk
+rpm -qa|grep openjdk
+rpm -e --nodeps java-1.7.0-openjdk-headless
+配置环境变量在etc/profile
+export JAVA_HOME=/usr/local/its/env/jdk1.8.0_181
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+//mysql的安装
+公司的centos上linux,mysql的用户和密码,
+root密码是Zoey_91968
+sql_admin密码是Sql_admin1(为用户使用)
+配置编码为utf8
+记得把mysql配置为远程连接,不然外网会拒绝连接,
+在防火墙中,开放3306端口
+windows下进行远程登录,mysql -h 127.0.0.1 -P 3306 -u root -p
+
+//配置jboss
+export WILDFLY_HOME=/usr/local/its/env/wildfly-14.0.1.Final
+export PATH=$WILDFLY_HOME/bin   :$JAVA_HOME/bin:$PATH
+管理员用户和密码
+rootUser
+root_pwd1
+//普通连接时用,abc,abc
+//jboss启动的时候注意的问题
+默认是8080端口访问
+启动的时候./standalone.sh -b 0.0.0.0 &
+记得开启9990端口(管理端口),外网才可访问
+//配置mysql-connector的时候,直接通过控制台deployment上传即可,配置数据源的时候,注意要连接的数据库是哪个,别搞错了(xa property下有行小字,记得看下),写成datasourcename=mdb的形式
+
+//创建用户
+CREATE USER 'username'@'host' IDENTIFIED BY 'password';
+
+//创建用户,并为用户授权,可以远程登录
+GRANT ALL PRIVILEGES ON *.* TO yonghuming@'%' IDENTIFIED BY 'mima' WITH GRANT OPTION;
+
+
+//永久开启8080端口
+firewall-cmd --permanent --zone=public --add-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --zone=public --query-port=8080/tcp  //检查是否生效
+
+netstat -antp     #查看所有建立的TCP连接
+iptables -L       #查看防火墙规则
+
+jboss启动
+sh standalone.sh &
+jboss关闭
+./jboss-cli.bat --connect --command=:shutdown
+
+进入到bin目录下直接输入./standalone.sh命令,退出窗口后jboss退出
+进入到bin目录下直接输入 nohup ./standalone.sh & 为后台运行
+ps -ef|grep jboss 查看jboss进程
+ps jboss 查看jboss进程
+kill 9 杀死进程. 9是jboss的pid
+
+
+///////////////////////////////////////////////////////////////////////////centos6.10安装
+不想格式化之前磁盘的数据,选择保留之前数据的安装方式
+选择desktop版本(桌面和命令行都有,是基本的机器配置)
+
+系统用户密码
+root/zoey91968
+admin/wangzoey
+
+//防火墙的操作
+service iptables restart
+chkconfig iptables on//开机启动
+
+//把虚拟机当做服务器的时候,使用桥接模式
+ip和主机不同,但是在同一个网段
+NETMASK=255.255.240.0
+IPADDR=192.168.0.214
+GATEWAY=192.168.6.1
+DNS=192.168.6.1

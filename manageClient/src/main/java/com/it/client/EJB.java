@@ -73,8 +73,8 @@ public class EJB {
             jndiProp.put("remote.connection.default.host", ConfigUtil.getServerAddress());
             jndiProp.put("remote.connection.default.port", ConfigUtil.getServerPort());
             //使用jboss的security时候用的到
-            //jndiProp.put("remote.connection.default.username", "wangzoey911");
-            //jndiProp.put("remote.connection.default.password", "lighter110");
+            jndiProp.put("remote.connection.default.username","abc");
+            jndiProp.put("remote.connection.default.password","abc");
             context = new InitialContext(jndiProp);
         } catch (Exception e) {
             e.printStackTrace();
