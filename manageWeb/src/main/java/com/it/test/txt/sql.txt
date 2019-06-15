@@ -152,6 +152,12 @@ end ;
 call insertToUserMessage(500);
 //mysql循环插入数据--------------------------------------end
 
+mysql中字段是timestamp类型的使用
+select * from tb_order where createTime>='2019-06-11 08:00:00' and createTime<'2019-06-15 08:00:00'
+
+字段以数字/或者字母开头,使用正则表达式进行匹配
+select * where orderId REGEXP '^[0-9]';
+
 SELECT
 	orderId AS '订单号',
 	orderType AS '订单类型',
@@ -164,18 +170,18 @@ SELECT
 	realityDeliveryTime AS '实际送货时间',
 	realityDeliveryMan AS '实际送货人',
 	CASE deleted
-WHEN TRUE THEN
-	'已删除'
-WHEN FALSE THEN
-	'在'
-END '是否删除',
- CASE delivered
-WHEN TRUE THEN
-	'已送达'
-WHEN FALSE THEN
-	'未'
-ELSE
-	'数据无效'
-END '是否送达'
+        WHEN TRUE THEN
+            '已删除'
+        WHEN FALSE THEN
+            '在'
+        END '是否删除',
+    CASE delivered
+        WHEN TRUE THEN
+            '已送达'
+        WHEN FALSE THEN
+            '未'
+        ELSE
+            '数据无效'
+        END '是否送达'
 FROM
 	tb_order

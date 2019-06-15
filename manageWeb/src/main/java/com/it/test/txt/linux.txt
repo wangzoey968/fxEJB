@@ -1,6 +1,4 @@
 ---------------------------windows----------------------
-//查看所有的监听
-netstat -a或者netstat -na
 开启telnet服务器和客户端
 控制面板->程序和功能->开启windows功能->复选框勾选
 控制面板->windows防火墙->入站规则,进行查看
@@ -10,6 +8,12 @@ arp -a
 ipconfig /all
 //使用ip之前先ping下,看能否ping通,如果通说明有人在使用
 
+//查看所有的监听
+netstat -a或者netstat -na
+windows查杀进程
+netstat -ano//查看所有进程
+netstat -ano|findstr 8080//查询8080端口相应的进程
+找到对应的pid,再在任务管理器中结束进程
 
 ////////////////////////////////////////
 禁止在vmware中还原虚拟机的配置================
@@ -234,6 +238,14 @@ sql_admin密码是Sql_admin1(为用户使用)
 记得把mysql配置为远程连接,不然外网会拒绝连接,
 在防火墙中,开放3306端口
 windows下进行远程登录,mysql -h 127.0.0.1 -P 3306 -u root -p
+//使用rpm安装后,文件的存放位置
+data默认放在：/var/lib/mysql
+mysql默认安装在了：/usr/share/mysql中
+//创建用户
+CREATE USER 'username'@'host' IDENTIFIED BY 'password';
+//创建用户,并为用户授权,可以远程登录
+GRANT ALL PRIVILEGES ON *.* TO yonghuming@'%' IDENTIFIED BY 'mima' WITH GRANT OPTION;
+
 
 //配置jboss
 export WILDFLY_HOME=/usr/local/its/env/wildfly-14.0.1.Final
@@ -241,19 +253,12 @@ export PATH=$WILDFLY_HOME/bin   :$JAVA_HOME/bin:$PATH
 管理员用户和密码
 rootUser
 root_pwd1
-//普通连接时用,abc,abc
+//添加普通用户abc/abc,连接时用,abc,abc
 //jboss启动的时候注意的问题
 默认是8080端口访问
 启动的时候./standalone.sh -b 0.0.0.0 &
-记得开启9990端口(管理端口),外网才可访问
+记得开启9990端口(管理的端口),外网才可进行管理
 //配置mysql-connector的时候,直接通过控制台deployment上传即可,配置数据源的时候,注意要连接的数据库是哪个,别搞错了(xa property下有行小字,记得看下),写成datasourcename=mdb的形式
-
-//创建用户
-CREATE USER 'username'@'host' IDENTIFIED BY 'password';
-
-//创建用户,并为用户授权,可以远程登录
-GRANT ALL PRIVILEGES ON *.* TO yonghuming@'%' IDENTIFIED BY 'mima' WITH GRANT OPTION;
-
 
 //永久开启8080端口
 firewall-cmd --permanent --zone=public --add-port=8080/tcp
@@ -263,8 +268,6 @@ firewall-cmd --zone=public --query-port=8080/tcp  //检查是否生效
 netstat -antp     #查看所有建立的TCP连接
 iptables -L       #查看防火墙规则
 
-jboss启动
-sh standalone.sh &
 jboss关闭
 ./jboss-cli.bat --connect --command=:shutdown
 
@@ -273,6 +276,36 @@ jboss关闭
 ps -ef|grep jboss 查看jboss进程
 ps jboss 查看jboss进程
 kill 9 杀死进程. 9是jboss的pid
+
+
+//安装samba服务(共享文件夹)
+https://www.cnblogs.com/kevingrace/p/8550810.html
+添加系统用户useradd zoey.添加密码zoeyshare,把zoey设置为共享文件系统的用户,并设置密码为zoeyshare
+//------------------------------------具体步骤
+firewall-cmd --add-service samba --permanent
+firewall-cmd --reload
+//修改防火墙
+firewall-cmd --zone=public --add-port=139/tcp --permanent
+firewall-cmd --zone=public --add-port=445/tcp --permanent
+firewall-cmd --zone=public --add-port=137/udp --permanent
+firewall-cmd --zone=public --add-port=138/udp --permanent
+//https://blog.csdn.net/ztguang/article/details/51011405
+一定要关闭,此处为临时关闭,永久关闭为在/etc/selinux/config,编辑文件为disabled
+    setenforce 0
+如果不关闭,可以编辑smb.conf,在global之前添加
+    setsebool -P samba_domain_controller on
+    setsebool -P samba_enable_home_dirs on
+配置文件(smb.conf)最后添加
+[kevin]                                                    //这个是共享文件夹标识，表示登录samba打开时显示的文件夹名称。配置了多少个共享文件夹标识，登录samba时就会显示多少文件夹。
+       comment = please do not modify it all will          //comment是对该共享的描述，可以是任意字符串
+       path= /home/kevin                                   //共享的路径
+       writable = yes                                      //是否写入
+       public = no                                         //是否公开
+
+useradd -d /home/kevin -s /sbin/nologin kevin
+pdbedit -a -u kevin
+chown -Rf kevin.kevin /home/kevin
+systemctl enable smb
 
 
 ///////////////////////////////////////////////////////////////////////////centos6.10安装

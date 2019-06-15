@@ -44,7 +44,7 @@ public class TreeTableDrag extends Application {
         tree.getColumns().addAll(clmName, clmPwd);
         tree.setPrefHeight(400);
         tree.setPrefWidth(600);
-
+        tree.setShowRoot(false);
         tree.setRowFactory(new Callback<TreeTableView<Tb_User>, TreeTableRow<Tb_User>>() {
             @Override
             public TreeTableRow<Tb_User> call(TreeTableView<Tb_User> param) {
