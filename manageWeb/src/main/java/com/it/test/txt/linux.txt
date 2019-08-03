@@ -13,7 +13,7 @@ netstat -a或者netstat -na
 windows查杀进程
 netstat -ano//查看所有进程
 netstat -ano|findstr 8080//查询8080端口相应的进程
-找到对应的pid,再在任务管理器中结束进程
+找到对应的pid,再在任务管理器中结束进程/或者直接在cmd中taskkill -f -pid xxxxxx
 
 ////////////////////////////////////////
 禁止在vmware中还原虚拟机的配置================

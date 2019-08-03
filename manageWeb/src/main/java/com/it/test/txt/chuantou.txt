@@ -1,0 +1,14 @@
+使用nat123进行内网穿透
+nat123账号
+用户名wangzoey919
+密码123456ABCDEF
+邮箱1324633295@qq.com
+
+配置的ip
+名称its.zoey.com
+映射出去的ip是its.nat123.cc
+
+花生壳
+域名255z1652i1.zicp.vip
+访问http://255z1652i1.zicp.vip
+用户名密码同上

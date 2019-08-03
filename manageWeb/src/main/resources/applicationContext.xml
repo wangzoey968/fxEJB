@@ -21,7 +21,7 @@
     <!--导入数据库配置文件-->
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:hibernate.properties"/>
+        <property name="location" value="classpath:/hibernate.properties"/>
     </bean>
     <!-- 配置数据源 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
