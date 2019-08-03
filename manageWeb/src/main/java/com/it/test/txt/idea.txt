@@ -8,3 +8,5 @@ alt+left/right:左右切换代码页;
 
 ctrl+shift+f:项目查找字符串;
 ctrl+shift+r:项目替换字符串;
+
+在idea中发布项目的地方配置(deployment),配置application context

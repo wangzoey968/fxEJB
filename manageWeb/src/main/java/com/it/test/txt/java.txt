@@ -1,3 +1,7 @@
+在jsp中
+<%   %> 代表写javacode
+<%=  %>返回某个值,相当于取值
+
 println request.getPathInfo()//        null
 println request.getPathTranslated()//  null			
 println request.getServletPath()//    /order/yinShuaCraft/listPaperByProductType.do   就是不带项目名称的请求路径

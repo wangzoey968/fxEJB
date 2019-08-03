@@ -1,4 +1,5 @@
 Caused by: org.hibernate.MappingException: Unknown entity:  ***"
+可能的原因是在该模块的pom.xml中没有引入被依赖模块依赖
 原因是使用Hibernate 如果存在实体在web引用的jar包中,必须在persistence.xml声明这些实体:
      <persistence ...>
         <persistence-unit ...>
