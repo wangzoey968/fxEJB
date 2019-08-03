@@ -1,0 +1,17 @@
+Caused by: org.hibernate.MappingException: Unknown entity:  ***"
+原因是使用Hibernate 如果存在实体在web引用的jar包中,必须在persistence.xml声明这些实体:
+     <persistence ...>
+        <persistence-unit ...>
+            <class>x.y.z.model.A</class>
+            <class>x.y.z.model.B</class>
+            <class>x.y.z.model.C</class>
+            ....
+        </persistence-unit>
+    </persistence>
+   或者
+    <persistence ...>
+           <jar-file>classpath:../lib/model.jar</jar-file>
+    </persistence>
+
+ hibernate问题
+ https://blog.csdn.net/xiewenbo/article/details/10002703
