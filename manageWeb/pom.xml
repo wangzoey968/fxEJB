@@ -29,6 +29,12 @@
             <version>4.11</version>
             <!--<scope>test</scope>-->
         </dependency>
+        <!--此处加上模块依赖,不然无法识别被依赖模块的类-->
+        <dependency>
+            <groupId>com.it.sample</groupId>
+            <artifactId>manageApi</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
