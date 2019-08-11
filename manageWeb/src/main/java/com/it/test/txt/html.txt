@@ -1,6 +1,15 @@
 <a href="http://www.runoob.com/" target="_blank">访问菜鸟教程!</a>
-<a href="#tips">访问有用的提示部分</a> 
+<a href="#tips">访问有用的提示部分</a>
 
+响应式布局图片和文字
+<div style="border: 2px solid green;">
+    <div class=" clearfix" style="overflow: auto;">
+        <img src="../../img/less.jpg" alt="An Image" style="float: right;max-width: 100%;">
+        <p>
+            好多了！  好多了！  好多了！  好多了！  好多了！  好多了！  好多了！  好多了！  好多了！
+        </p>
+    </div>
+</div>
 
 <img> 是空标签，意思是说，它只包含属性，并且没有闭合标签。
 alt 属性用来为图像定义一串预备的可替换的文本

@@ -6,6 +6,11 @@ background-attachment:fixed使背景固定
 
 float:left 使某个div浮动显示,不换行
 
+在class中添加clearfix的时候代表清除浮动,就是同时浮动,同时撑开父容器
+overflow:auto
+
+使图片自适应,宽高等比例变化,可以不为父容器指定宽高,同时设置图片的max-width:100%
+
 可以进行图片定位,当浏览器变宽或者变窄的时候,显示图片的中间部分
 <div style='width: 100%;height:530px;background-position:center;background-image: url("images/bannerWeb.png");'>
 </div>
