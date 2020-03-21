@@ -20,6 +20,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -150,31 +151,11 @@ public class LittleTest {
         System.out.println(timestamp);
     }
 
-    @Test
-    public void ss11() {
-        String s = DigestUtils.md5Hex("123");
-        //System.out.println(System.getProperty("user.dir") + "/src/main/java/com/it/util/ftpServer/ConfigServer.xml");
-
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().plusDays(3));
-        System.out.println(timestamp.getTime());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String s0 = format.format(timestamp.getTime());
-        System.out.println(s0);
-    }
 
     @Test
     public void s1sss() {
-        List<String> base = Arrays.asList("制版", "印刷", "模切", "打码", "覆膜", "成品", "出库");
-        List<String> process = Arrays.asList("印刷", "出库", "打码", "模切");
-
-        List<String> list = new ArrayList<>();
-        base.forEach(e -> {
-                    if (process.contains(e)) {
-                        list.add(e);
-                        System.out.println(e);
-                    }
-                }
-        );
+        HashMap<String, String> map = new HashMap<>();
+        
     }
 
 }

@@ -22,9 +22,11 @@ public class Logging {
    public void afterAdvice(){
       System.out.println("Student profile has been setup.");
    }
-   
+
+   //pointcut相当于一类被织入的方法
    @AfterReturning(pointcut = "selectAll()", returning="retVal")
    public void afterReturningAdvice(Object retVal){
+      //此处相当于织入,通知
       System.out.println("Returning:" + retVal.toString() );
    }
    

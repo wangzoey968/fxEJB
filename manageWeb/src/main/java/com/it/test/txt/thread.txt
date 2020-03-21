@@ -1,4 +1,4 @@
-java内存结构:堆内存(heap),栈(stack),方法区
+java内存结构:堆内存(heap)数据,栈(stack)方法,方法区
 
 heap包括年轻代,老年代
 --------年轻代:eden,from survivor,to survivor

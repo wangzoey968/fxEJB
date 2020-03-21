@@ -1,0 +1,13 @@
+名orcl.168.127.1
+sysdba
+admin123
+密码inspire919
+
+输入sqlplus
+再用户名处输入conn as sysdba,作为dba链接
+创建用户create user zzg identified by zzg123;
+为用户授权grant create session,create table,create view,create sequence,unlimited tablespace to zzg;
+grant connect,resource,dba to zzg123;
+
+创建表空间
+create tablespace data_test datafile 'e:\oracle\oradata\test\data_1.dbf' size 2000M
