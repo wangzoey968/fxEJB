@@ -1,6 +1,17 @@
 classpath* 它会搜索所有的 classpath，找到所有符合条件的文件，包括jar文件中的配置文件。而classpath不会到jar文件中去寻找。
 classpath* 存在可移植性问题，遇到问题时，应该使用classpath.
 
+
+Jdk代理
+只能通过接口进行动态代理
+Cglib基于继承实现代理
+1. 如果目标对象实现了接口，默认情况下会采用JDK的动态代理实现AOP
+2、如果目标对象实现了接口，可以强制使用CGLIB实现AOP
+3、如果目标对象没有实现了接口，必须采用CGLIB库，spring会自动在JDK动态代理和CGLIB之间转换
+
+如果目标对象实现了接口，默认采用jdk代理
+如果没有实现接口，采用cglib进行动态代理
+
 @aspect 定义切面, 常定义在类上,也就是pointCut的类上
 
 @pointCut 就是具体的执行方法 ,常标记在方法上,

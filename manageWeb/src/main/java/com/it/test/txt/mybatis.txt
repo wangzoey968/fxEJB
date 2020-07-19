@@ -1,0 +1,6 @@
+Cookie只能存string类型
+Session可以存储对象
+Sql语句加上limit 1,可以只查询一条,增加效率,避免继续向下继续查询记录
+
+Mybatis一级缓存的作用域市session
+二级缓存作用域是一个mapper的namespace,并且可以跨session

@@ -33,3 +33,28 @@ Callable 是一个接口，它只包含一个call()方法。Callable是一个返
 
 FutureTask可用于异步获取执行结果或取消执行任务的场景。可以在外部通过FutureTask的get方法异步获取执行结果，
 FutureTask还可以确保即使调用了多次run方法，它都只会执行一次Runnable或者Callable任务，
+
+///////////////////////////////////////////////////////////////////////
+对象锁(不同的对象可以同时拥有锁)
+可以使用局部的不同的object lock1=new object(),通过synchronized对对象加锁,再一个对象中同时运行多个线程.  直接使用synchronized this{}即可
+非静态方法锁,再方法上直接加上synchronized即可,public synchronized void sss(){}.
+
+类锁(只能在同一时刻被一个对象拥有)
+形式1,synchronized 	加在静态方法上,不加static无效, new thread(instance),
+形式2synchronized(类.class)	在具体方法内加上synchronized(类.class){具体的执行代码},这个方法不用加static
+
+两个线程访问两个对象的同步方法,锁不生效
+抛出异常后,释放锁,自动释放
+运行时异常不强制要求捕获,runtimeexception,
+
+可重入:同一线程的外层函数获取锁之后,内层函数可以直接再次获取该锁
+
+Synchronized通过monitorenter和monitorexit进行锁定和解锁
+
+反编译javap -verbose xx.class 打印出反编译的详细信息
+
+Synchronize缺陷,不能设置超时,效率低,无法知道是否获取了锁
+
+优先使用java.util中的工具类,然后synchronized 再lock
+///////////////////////////////////////////////////////////////////////////
+
